@@ -1,7 +1,7 @@
 **Backend API List**
 
 fasthash = Some hashing function that is very quick and simple.
-userhash = The result of fasthash(UserID + Username + Email), we may just end up using user ID for this.
+userhash = The result of fasthash(UserID + Email + RandomValue), RandomValue is stored in the User's Table. We may just end up using user ID for this.
 
 *Users*
 
