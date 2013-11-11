@@ -14,9 +14,6 @@ userhash = The result of fasthash(UserID + Email + RandomValue), RandomValue is 
          - This is not secure, but will work for Flock alpha.
      - Returns: userhash
          - Stored on device.
- - Logout User
-     - Params: userhash
-     - Returns: True on successful deauthentication
  - Edit User (may not be used in Flock alpha)
      - Params: All user information fields
      - Returns: userhash
@@ -48,6 +45,18 @@ userhash = The result of fasthash(UserID + Email + RandomValue), RandomValue is 
  - Send peck to friend
      - Params: userhash, friend UserID
      - Returns: True if the peck was successfully sent.
+     - 
+*Notifications*
+
+ - Get Notifications
+     - Params: userhash
+     - Returns: peck and friend request data in json object
+ - Delete Notification (may not be used in Flock alpha)
+     - Params: userhash, notification id
+     - Returns: True on successful deletion
+ - Delete All Notifications
+     - Params: userhash
+     - Returns: True on successful deletion
      
 *Location*
 
