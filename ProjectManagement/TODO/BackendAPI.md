@@ -33,9 +33,9 @@ userhash = The result of fasthash(UserID + Email + RandomValue), RandomValue is 
  - Issue Friend Request
      - Params: userhash (current user), UserID of requested friend.
      - Returns: True on successful request.
- - Accept Friend Request
-     - Params: userhash (current user), UserID of friend to accept.
-     - Returns: True on successful add.
+ - Accept/Deline Friend Request
+     - Params: userhash (current user), UserID of friend, boolean to accept/decline (T/F).
+     - Returns: True on successful accept/decline.
  - Remove Friend
      - Params: userhash, UserID of friend to remove.
      - Returns: True on successful removal.
