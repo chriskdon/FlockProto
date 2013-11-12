@@ -1,7 +1,9 @@
 **Backend API List**
 
-fasthash = Some hashing function that is very quick and simple.
-userhash = The result of fasthash(UserID + Email + RandomValue), RandomValue is stored in the User's Table. We may just end up using user ID for this.
+`fasthash = Some hashing function that is very quick and simple.`
+
+`userhash = The result of fasthash(UserID + Email + RandomValue), RandomValue is stored in the User's Table.` 
+ - We may just end up using  UserID for this instead of a hash.
 
 *User*
 
@@ -45,7 +47,7 @@ userhash = The result of fasthash(UserID + Email + RandomValue), RandomValue is 
  - Send peck to friend
      - Params: userhash, friend UserID
      - Returns: True if the peck was successfully sent.
-     - 
+
 *Notifications*
 
  - Get Notifications
