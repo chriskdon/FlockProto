@@ -66,4 +66,7 @@ userhash = The result of fasthash(UserID + Email + RandomValue), RandomValue is 
  - Set Visibility (set your own visibility to other users)
      - Params: userhash, visibility status
      - Returns: True on successful change of status
+ - Get Location of ALL Friends
+     - Params: userhash
+     - Returns: json object of latitude and longitude of all available Friend locations.
      
