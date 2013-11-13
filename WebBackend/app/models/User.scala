@@ -46,9 +46,11 @@ class User(var id:Long, var username:String, var firstname:String, var lastname:
 
   /**
    * Save the current user to the database.
+   *
    * @return The user that was saved with updated fields (e.g. ID).
    */
   def save():User = {
+    // TODO: This should use a single `if exits` query but it's not working in MySQL
     val queryUpdate =
       """
         UPDATE Users SET
