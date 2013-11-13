@@ -16,8 +16,8 @@ import scala.collection.mutable.ListBuffer
  * @param salt              Salt for the password.
  * @param email             The email of the user.
  */
-class User(val id:Int, val username:String, val firstname:String, val lastname:String,
-           val saltedPassword:String, val salt:String, val email:String) {
+class User(var id:Long, var username:String, var firstname:String, var lastname:String,
+           var saltedPassword:String, var salt:String, var email:String) {
 
   /**
    * Create a new user that isn't in the database.
@@ -49,7 +49,49 @@ class User(val id:Int, val username:String, val firstname:String, val lastname:S
    * @return The user that was saved with updated fields (e.g. ID).
    */
   def save():User = {
-    return null;
+    val queryUpdate =
+      """
+        UPDATE Users SET
+          Username = {username},
+          Firstname = {firstname},
+          Lastname = {lastname},
+          SaltedPassword = {saltedPassword},
+          Salt = {salt},
+          Email = {email}
+        WHERE ID = {id};
+    """.stripMargin
+
+    val queryInsert =
+      """
+        INSERT INTO Users (Username, Firstname, Lastname, SaltedPassword, Salt, Email)
+        VALUES ({username}, {firstname}, {lastname}, {saltedPassword}, {salt}, {email})
+      """.stripMargin
+
+    DB.withConnection { implicit conn =>
+      if(!this.isInDatabase) {
+        val id:Option[Long] = SQL(queryInsert).on('username -> username,
+                                            'firstname -> firstname,
+                                            'lastname -> lastname,
+                                            'saltedPassword -> saltedPassword,
+                                            'salt -> salt,
+                                            'email -> email).executeInsert()
+
+        if(id.isDefined) {
+          this.id = id.get // Update object ID
+        }
+      } else {
+          SQL(queryUpdate).on('username -> username,
+                              'firstname -> firstname,
+                              'lastname -> lastname,
+                              'saltedPassword -> saltedPassword,
+                              'salt -> salt,
+                              'email -> email,
+                              'id -> this.id).executeUpdate()
+      }
+
+    }
+
+    return this;
   }
 }
 
@@ -61,7 +103,7 @@ object User {
    * @return The user object generated from that row.
    */
   protected def rowToUser(row:SqlRow): User = {
-    return new User(row[Int]("ID"), row[String]("Username"), row[String]("Firstname"), row[String]("Lastname"),
+    return new User(row[Long]("ID"), row[String]("Username"), row[String]("Firstname"), row[String]("Lastname"),
                     row[String]("SaltedPassword"), row[String]("Salt"), row[String]("Email"))
   }
 
@@ -75,7 +117,7 @@ object User {
       """
         SELECT ID, Username, Firstname, Lastname, SaltedPassword, Salt, Email
         FROM Users
-      """
+      """.stripMargin
 
     var userList = new ListBuffer[User] // List of returned users
 

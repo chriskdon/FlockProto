@@ -12,6 +12,13 @@ object Users extends Controller {
   }
 
   def authenticate = Action {
-    Ok(User.all()(0).name)
+    var u = new User("test3","test","test","test","test","et")
+
+    u.save()
+
+    u.username = "TEST_EDIT_3"
+    u.save()
+
+    Ok(u.username)
   }
 }
