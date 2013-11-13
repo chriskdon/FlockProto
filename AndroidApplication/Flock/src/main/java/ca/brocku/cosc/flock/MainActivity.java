@@ -1,28 +1,27 @@
 package ca.brocku.cosc.flock;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.Button;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener{
+    Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.add(R.id.main_fragment, new MainFragment());
+        transaction.commit();
+
+        btn = (Button)findViewById(R.id.click_me_btn);
+        btn.setOnClickListener(this);
     }
 
 
@@ -46,19 +45,12 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    @Override
+    public void onClick(View v) {
+        Button clkBtn = (Button)v;
 
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
+        if (clkBtn.getText().toString().equals("Can You Click Me? :(")) {
+            btn.setText("YAY :)");
         }
     }
 
