@@ -6,12 +6,12 @@ import api.json.models.JsonModelBase;
  * Response to a user being successfully logged in.
  */
 public class LoginUserResponseModel extends JsonModelBase {
-    private Long id;
+    private String userHash;
 
-    public Long getId() { return id; }
-    public void setId(Long value) { id = value; }
+    public String getUserHash() { return userHash; }
+    public void setUserHash(String value) { userHash = value; }
 
-    public LoginUserResponseModel(Long id) {
-        setId(id);
+    public LoginUserResponseModel(String userHash) {
+        setUserHash(userHash);
     }
 }

@@ -40,14 +40,14 @@ public class User extends Model {
     public String email;
 
     @Constraints.Required
-    @Column(name ="Random")
-    public String random;
+    @Column(name ="UserHash")
+    public String userHash;
     // =========================
 
     public User() {}
 
     public User(String username, String firstname, String lastname, String saltedPassword, String salt, String email,
-                String random) {
+                String userHash) {
 
         this.username = username;
         this.firstname = firstname;
@@ -55,7 +55,7 @@ public class User extends Model {
         this.saltedPassword = saltedPassword;
         this.salt = salt;
         this.email = email;
-        this.random = random;
+        this.userHash = userHash;
     }
 
     public static Finder<Long,User> find = new Finder<Long,User>(Long.class, User.class);

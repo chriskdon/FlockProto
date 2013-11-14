@@ -35,7 +35,7 @@ public class UserController extends Controller {
                 newUser.save();
             }
 
-            return ok((new UserRegisteredResponseModel(newUser.id)).toJsonString());
+            return ok((new LoginUserResponseModel(newUser.userHash)).toJsonString());
         } catch (IOException ex) {
             return ok((new GenericErrorModel()).toJsonString());
         }
@@ -53,7 +53,7 @@ public class UserController extends Controller {
             User user = User.find.where().eq("username", loginModel.getUsername()).findUnique();
 
             if(user != null && auth.checkPassword(user, loginModel.getPassword())) { // User found now test password.
-                return ok((new LoginUserResponseModel(user.id)).toJsonString());
+                return ok((new LoginUserResponseModel(user.userHash)).toJsonString());
             } else {
                 return ok((new GenericErrorModel("Login Error").toJsonString()));
             }
@@ -72,7 +72,7 @@ public class UserController extends Controller {
     public static Result delete() {
         try {
             DeleteUserRequestModel deleteModel = DeleteUserRequestModel.revive(request().body().asJson());
-            User user = User.find.byId(deleteModel.getId());
+            User user = User.find.where().eq("UserHash",deleteModel.getUserHash()).findUnique();
 
             if(user != null && auth.checkPassword(user, deleteModel.getPassword())) {
                 user.delete();

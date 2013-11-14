@@ -10,8 +10,7 @@ POST        /api/users/register        controllers.api.UserController.register
 POST        /api/users/login           controllers.api.UserController.login
 POST        /api/users/delete          controllers.api.UserController.delete
 
-#GET         /api/connections/list                    controllers.api.Connections.list
-#POST        /api/connections/add                     controllers.api.Connections.add
+POST        /api/connections/add       controllers.api.ConnectionController.ask
 
 
 # Map static resources from the /public folder to the /assets URL path
