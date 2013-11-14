@@ -9,11 +9,11 @@ import java.io.IOException;
  * Created by chriskellendonk on 11/14/2013.
  */
 public class DeleteUserRequestModel extends JsonModelBase {
-    private String userHash;    // hash
+    private String secret;
     private String password;    // Password
 
-    public String getUserHash() { return userHash; }
-    public void setUserHash(String value) { userHash = value; }
+    public String getSecret() { return secret; }
+    public void setSecret(String value) { secret = value; }
 
     public String getPassword() { return password; }
     public void setPassword(String value) { password = value; }
