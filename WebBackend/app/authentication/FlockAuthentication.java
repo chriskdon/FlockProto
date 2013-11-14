@@ -28,7 +28,7 @@ public class FlockAuthentication {
     }
 
     public String generateSalt() {
-       return UUID.randomUUID().toString();
+       return UUID.randomUUID().toString().replace("-","");
     }
 
     public String generateSaltedPassword(String password, String salt) {
