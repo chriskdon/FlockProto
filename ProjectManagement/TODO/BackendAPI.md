@@ -20,9 +20,9 @@
      - Params: All user information fields
      - Returns: userhash
          - return userhash as email may have changed.
- - Delete User
-     - Params: userhash, password
-     - Returns: True on successful deletion
+ - ~~Delete User~~
+     - ~~Params: userhash, password~~
+     - ~~Returns: True on successful deletion~~
           
 *Connections/Friends*
 
