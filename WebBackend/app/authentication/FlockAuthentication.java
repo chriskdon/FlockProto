@@ -34,7 +34,7 @@ public class FlockAuthentication {
         return new String(Hex.encodeHex(md.digest((password + salt).getBytes())));
     }
 
-    public boolean checkPasswod(String saltedPassword, String password, String salt) {
+    public boolean checkPassword(String saltedPassword, String password, String salt) {
         return (generateSaltedPassowrd(password, salt) == saltedPassword);
     }
 }

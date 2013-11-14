@@ -2,6 +2,7 @@ package controllers.api;
 
 import api.json.models.ErrorResponseModel;
 import api.json.models.RegisterUserRequestModel;
+import api.json.models.UserRegisteredResponseModel;
 import authentication.FlockAuthentication;
 import models.User;
 import org.apache.commons.codec.binary.Hex;
@@ -10,6 +11,11 @@ import java.util.UUID;
 import java.security.*;
 
 public class UserController extends Controller {
+    /**
+     * Register a new user.
+     *
+     * @return JSON Response with UserID if successful.
+     */
     public static Result register() {
         try {
             RegisterUserRequestModel model = RegisterUserRequestModel.revive(request().body().asJson());
@@ -21,9 +27,15 @@ public class UserController extends Controller {
                                     saltedPassword, salt, model.getEmail(),
                                     FlockAuthentication.getInstance().generateSalt());
 
-            newUser.save();
+            // Check if username is already taken
+            boolean usernameTaken = (User.find.where().eq("username",model.getUsername()).findRowCount() > 0);
+            if(usernameTaken) {
+                return ok((new ErrorResponseModel("Username Taken")).toJsonString()); // Error username taken
+            } else {
+                newUser.save();
+            }
 
-            return ok(newUser.id.toString());
+            return ok((new UserRegisteredResponseModel(newUser.id)).toJsonString());
         } catch (Exception ex) {
             return ok((new ErrorResponseModel()).toJsonString());
         }
