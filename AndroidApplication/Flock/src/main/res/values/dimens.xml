@@ -4,6 +4,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="title_padding">16dp</dimen>
+    <dimen name="title_fontSize">25dp</dimen>
+    <dimen name="title_unfocused_fontSize">20dp</dimen>
+
 
     <dimen name="input_long_horizontalMargin">24dp</dimen>
     <dimen name="input_long_verticalMargin">30dp</dimen>
