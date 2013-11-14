@@ -29,9 +29,9 @@
  - Search (for users when adding friends)
      - Params: Search text
      - Returns: json object with array of user information matching request.
- - Issue Friend Request
-     - Params: userhash (current user), UserID of requested friend.
-     - Returns: True on successful request.
+ - ~~Issue Friend Request~~
+     - ~~Params: userhash (current user), UserID of requested friend.~~
+     - ~~Returns: True on successful request.~~
  - Accept/Deline Friend Request
      - Params: userhash (current user), UserID of friend, boolean to accept/decline (T/F).
      - Returns: True on successful accept/decline.
