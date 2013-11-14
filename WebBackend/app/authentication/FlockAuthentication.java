@@ -30,11 +30,11 @@ public class FlockAuthentication {
        return UUID.randomUUID().toString();
     }
 
-    public String generateSaltedPassowrd(String password, String salt) {
+    public String generateSaltedPassword(String password, String salt) {
         return new String(Hex.encodeHex(md.digest((password + salt).getBytes())));
     }
 
     public boolean checkPassword(String saltedPassword, String password, String salt) {
-        return (generateSaltedPassowrd(password, salt) == saltedPassword);
+        return generateSaltedPassword(password, salt).equalsIgnoreCase(saltedPassword);
     }
 }

@@ -3,11 +3,11 @@
 # ~~~~
 
 # Start
-GET        /                                        controllers.Application.index
+GET         /                              controllers.Application.index
 
 # API
-POST        /api/users/register                     controllers.api.UserController.register
-#GET         /api/users/authenticate                controllers.api.Users.authenticate
+POST         /api/users/register            controllers.api.UserController.register
+POST         /api/users/login               controllers.api.UserController.login
 
 #GET         /api/connections/list                    controllers.api.Connections.list
 #POST        /api/connections/add                     controllers.api.Connections.add
