@@ -7,10 +7,10 @@
 
 *User*
 
- - Register User (i.e. Add new user)
-     - Parms: All user information fields.
-     - Returns: userhash to save in application for future requests.
-         - This is not a very secure way of doing things but will work as a very basic authentication mechanism for Flock alpha version
+ - ~~Register User (i.e. Add new user)~~
+     - ~~Parms: All user information fields.~~
+     - ~~Returns: userhash to save in application for future requests.~~
+         - ~~This is not a very secure way of doing things but will work as a very basic authentication mechanism for Flock alpha version~~
  - Login User
      - Params: Username, Password
          - This is not secure, but will work for Flock alpha.
