@@ -27,7 +27,13 @@ public class UserController extends Controller {
                                     saltedPassword, salt, model.getEmail(),
                                     FlockAuthentication.getInstance().generateSalt());
 
-            newUser.save();
+            // Check if username is already taken
+            boolean usernameTaken = (User.find.where().eq("username",model.getUsername()).findRowCount() > 0);
+            if(usernameTaken) {
+                return ok((new ErrorResponseModel("Username Taken")).toJsonString()); // Error username taken
+            } else {
+                newUser.save();
+            }
 
             return ok((new UserRegisteredResponseModel(newUser.id)).toJsonString());
         } catch (Exception ex) {
