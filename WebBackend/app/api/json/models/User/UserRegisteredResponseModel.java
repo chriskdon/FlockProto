@@ -1,4 +1,6 @@
-package api.json.models;
+package api.json.models.User;
+
+import api.json.models.JsonModelBase;
 
 /**
  * Response to a user being succefful registered.

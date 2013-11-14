@@ -1,8 +1,7 @@
-package api.json.models;
+package api.json.models.User;
 
+import api.json.models.JsonModelBase;
 import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
 

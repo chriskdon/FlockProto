@@ -1,6 +1,7 @@
 package controllers.api;
 
 import api.json.models.*;
+import api.json.models.User.*;
 import authentication.FlockAuthentication;
 import models.User;
 import play.mvc.*;
@@ -29,14 +30,14 @@ public class UserController extends Controller {
             // Check if username is already taken
             boolean usernameTaken = (User.find.where().eq("username",model.getUsername()).findRowCount() > 0);
             if(usernameTaken) {
-                return ok((new ErrorResponseModel("Username Taken")).toJsonString()); // Error username taken
+                return ok((new GenericErrorModel("Username Taken")).toJsonString()); // Error username taken
             } else {
                 newUser.save();
             }
 
             return ok((new UserRegisteredResponseModel(newUser.id)).toJsonString());
         } catch (IOException ex) {
-            return ok((new ErrorResponseModel()).toJsonString());
+            return ok((new GenericErrorModel()).toJsonString());
         }
     }
 
@@ -54,13 +55,13 @@ public class UserController extends Controller {
             if(user != null && auth.checkPassword(user, loginModel.getPassword())) { // User found now test password.
                 return ok((new LoginUserResponseModel(user.id)).toJsonString());
             } else {
-                return ok((new ErrorResponseModel("Login Error").toJsonString()));
+                return ok((new GenericErrorModel("Login Error").toJsonString()));
             }
 
         } catch(IOException ex) { }
 
         // If we got this far an error occurred
-        return ok((new ErrorResponseModel()).toJsonString());
+        return ok((new GenericErrorModel()).toJsonString());
     }
 
     /**
@@ -77,10 +78,10 @@ public class UserController extends Controller {
                 user.delete();
                 return ok((new GenericSuccessModel("User Deleted")).toJsonString());
             } else {
-                return ok((new ErrorResponseModel("Couldn't Delete User")).toJsonString());
+                return ok((new GenericErrorModel("Couldn't Delete User")).toJsonString());
             }
         } catch(IOException ex) { }
 
-        return ok((new ErrorResponseModel()).toJsonString());
+        return ok((new GenericErrorModel()).toJsonString());
     }
 }

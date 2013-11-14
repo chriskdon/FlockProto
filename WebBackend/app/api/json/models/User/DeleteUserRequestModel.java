@@ -1,5 +1,6 @@
-package api.json.models;
+package api.json.models.User;
 
+import api.json.models.JsonModelBase;
 import org.codehaus.jackson.JsonNode;
 
 import java.io.IOException;

@@ -1,17 +1,15 @@
 package api.json.models;
 
-import java.io.IOException;
-
 /**
  * Error response JSON POJO.
  */
-public class ErrorResponseModel extends JsonModelBase {
+public class GenericErrorModel extends JsonModelBase {
     private String message;
 
     /**
      * Error response without message
      */
-    public ErrorResponseModel() {
+    public GenericErrorModel() {
         this(null);
     }
 
@@ -20,7 +18,7 @@ public class ErrorResponseModel extends JsonModelBase {
      *
      * @param message Message to send.
      */
-    public ErrorResponseModel(String message) {
+    public GenericErrorModel(String message) {
         setStatus(STATUS_ERROR);
         setMessage(message);
     }
