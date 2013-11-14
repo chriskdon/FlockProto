@@ -1,5 +1,6 @@
 package authentication;
 
+import models.User;
 import org.apache.commons.codec.binary.Hex;
 
 import java.security.MessageDigest;
@@ -36,5 +37,9 @@ public class FlockAuthentication {
 
     public boolean checkPassword(String saltedPassword, String password, String salt) {
         return generateSaltedPassword(password, salt).equalsIgnoreCase(saltedPassword);
+    }
+
+    public boolean checkPassword(User user, String password) {
+        return checkPassword(user.saltedPassword, password, user.salt);
     }
 }

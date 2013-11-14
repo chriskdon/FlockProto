@@ -1,17 +1,15 @@
 package api.json.models;
 
-import java.io.IOException;
-
 /**
- * Error response JSON POJO.
+ * Created by chriskellendonk on 11/14/2013.
  */
-public class ErrorResponseModel extends JsonModelBase {
+public class GenericSuccessModel extends JsonModelBase {
     private String message;
 
     /**
      * Error response without message
      */
-    public ErrorResponseModel() {
+    public GenericSuccessModel() {
         this(null);
     }
 
@@ -20,8 +18,7 @@ public class ErrorResponseModel extends JsonModelBase {
      *
      * @param message Message to send.
      */
-    public ErrorResponseModel(String message) {
-        setStatus(STATUS_ERROR);
+    public GenericSuccessModel(String message) {
         setMessage(message);
     }
 
@@ -33,7 +30,7 @@ public class ErrorResponseModel extends JsonModelBase {
         try {
             return mapper.writeValueAsString(this);
         } catch (Exception ex) {
-            return "{\"status\":" + STATUS_ERROR + ",\"message\":null}";
+            return "{\"status\":" + STATUS_OKAY + ",\"message\":null}";
         }
     }
 }

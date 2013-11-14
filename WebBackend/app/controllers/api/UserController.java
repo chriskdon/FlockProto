@@ -51,7 +51,7 @@ public class UserController extends Controller {
             LoginUserRequestModel loginModel = LoginUserRequestModel.revive(request().body().asJson());
             User user = User.find.where().eq("username", loginModel.getUsername()).findUnique();
 
-            if(user != null && auth.checkPassword(user.saltedPassword, loginModel.getPassword(), user.salt)) { // User found now test password.
+            if(user != null && auth.checkPassword(user, loginModel.getPassword())) { // User found now test password.
                 return ok((new LoginUserResponseModel(user.id)).toJsonString());
             } else {
                 return ok((new ErrorResponseModel("Login Error").toJsonString()));
@@ -60,6 +60,27 @@ public class UserController extends Controller {
         } catch(IOException ex) { }
 
         // If we got this far an error occurred
+        return ok((new ErrorResponseModel()).toJsonString());
+    }
+
+    /**
+     * Delete a user.
+     *
+     * @return
+     */
+    public static Result delete() {
+        try {
+            DeleteUserRequestModel deleteModel = DeleteUserRequestModel.revive(request().body().asJson());
+            User user = User.find.byId(deleteModel.getId());
+
+            if(user != null && auth.checkPassword(user, deleteModel.getPassword())) {
+                user.delete();
+                return ok((new GenericSuccessModel("User Deleted")).toJsonString());
+            } else {
+                return ok((new ErrorResponseModel("Couldn't Delete User")).toJsonString());
+            }
+        } catch(IOException ex) { }
+
         return ok((new ErrorResponseModel()).toJsonString());
     }
 }
