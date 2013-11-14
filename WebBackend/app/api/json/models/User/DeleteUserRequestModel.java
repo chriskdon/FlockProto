@@ -17,8 +17,4 @@ public class DeleteUserRequestModel extends JsonModelBase {
 
     public String getPassword() { return password; }
     public void setPassword(String value) { password = value; }
-
-    public static DeleteUserRequestModel revive(JsonNode json) throws IOException {
-        return mapper.readValue(json, DeleteUserRequestModel.class);
-    }
 }

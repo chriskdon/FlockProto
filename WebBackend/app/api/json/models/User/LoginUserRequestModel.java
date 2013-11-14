@@ -16,8 +16,4 @@ public class LoginUserRequestModel extends JsonModelBase {
 
     public String getPassword() { return password; }
     public void setPassword(String value) { password = value; }
-
-    public static LoginUserRequestModel revive(JsonNode json) throws IOException {
-        return mapper.readValue(json, LoginUserRequestModel.class);
-    }
 }

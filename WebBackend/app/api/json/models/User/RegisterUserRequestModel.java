@@ -10,7 +10,6 @@ import java.io.IOException;
  */
 
 public class RegisterUserRequestModel extends JsonModelBase {
-    // JSON FIELDS
     private String username, firstname, lastname, password, email;
 
     public String getUsername() { return username; }
@@ -27,9 +26,4 @@ public class RegisterUserRequestModel extends JsonModelBase {
 
     public String getEmail() { return email; }
     public void setEmail(String value) { email = value; }
-    // =========
-
-    public static RegisterUserRequestModel revive(JsonNode json) throws IOException {
-        return mapper.readValue(json, RegisterUserRequestModel.class);
-    }
 }

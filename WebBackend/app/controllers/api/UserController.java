@@ -4,12 +4,14 @@ import api.json.models.*;
 import api.json.models.User.*;
 import authentication.FlockAuthentication;
 import models.User;
+import org.codehaus.jackson.map.ObjectMapper;
 import play.mvc.*;
 
 import java.io.IOException;
 
 public class UserController extends Controller {
     private static final FlockAuthentication auth = FlockAuthentication.getInstance();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     /**
      * Register a new user.
@@ -18,7 +20,7 @@ public class UserController extends Controller {
      */
     public static Result register() {
         try {
-            RegisterUserRequestModel model = RegisterUserRequestModel.revive(request().body().asJson());
+            RegisterUserRequestModel model = mapper.readValue(request().body().asJson(), RegisterUserRequestModel.class);
 
             String salt = auth.generateSalt();
             String saltedPassword = auth.generateSaltedPassword(model.getPassword(), salt);
@@ -49,7 +51,7 @@ public class UserController extends Controller {
     public static Result login() {
         try {
             // Data
-            LoginUserRequestModel loginModel = LoginUserRequestModel.revive(request().body().asJson());
+            LoginUserRequestModel loginModel = mapper.readValue(request().body().asJson(), LoginUserRequestModel.class);
             User user = User.find.where().eq("username", loginModel.getUsername()).findUnique();
 
             if(user != null && auth.checkPassword(user, loginModel.getPassword())) { // User found now test password.
@@ -71,7 +73,7 @@ public class UserController extends Controller {
      */
     public static Result delete() {
         try {
-            DeleteUserRequestModel deleteModel = DeleteUserRequestModel.revive(request().body().asJson());
+            DeleteUserRequestModel deleteModel = mapper.readValue(request().body().asJson(), DeleteUserRequestModel.class);
             User user = User.find.where().eq("UserHash",deleteModel.getSecret()).findUnique();
 
             if(user != null && auth.checkPassword(user, deleteModel.getPassword())) {

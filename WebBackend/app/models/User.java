@@ -9,6 +9,7 @@ import play.data.validation.*;
 @Entity
 @Table(name="Users")
 public class User extends Model {
+    public static Finder<Long,User> find = new Finder<Long,User>(Long.class, User.class);
 
     // ===== DATABASE COLUMNS =====
     @Id
@@ -58,5 +59,8 @@ public class User extends Model {
         this.secret = secret;
     }
 
-    public static Finder<Long,User> find = new Finder<Long,User>(Long.class, User.class);
+    public static User findBySecret(String secret) {
+        return find.where().eq("Secret", secret).findUnique();
+    }
+
 }
