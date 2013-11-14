@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity$PlaceholderFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/title_padding"
+        android:background="@color/blue_unsaturated"
+        android:text="Login"
+        android:id="@+id/login_label"/>
+
+    <TextView
+        android:text="Register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_label"
+        android:background="@color/blue_main"
+        android:padding="@dimen/title_padding"
+        android:id="@+id/register_label"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/register_label"
+        android:layout_marginLeft="@dimen/input_long_horizontalMargin"
+        android:layout_marginRight="@dimen/input_long_horizontalMargin"
+        android:layout_marginTop="@dimen/input_long_verticalMargin"
+        android:hint="first name"
+        android:id="@+id/firstName_input"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/firstName_input"
+        android:layout_marginLeft="@dimen/input_long_horizontalMargin"
+        android:layout_marginRight="@dimen/input_long_horizontalMargin"
+        android:layout_marginTop="@dimen/input_long_verticalMargin"
+        android:hint="last name"
+        android:id="@+id/lastName_input"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lastName_input"
+        android:layout_marginLeft="@dimen/input_long_horizontalMargin"
+        android:layout_marginRight="@dimen/input_long_horizontalMargin"
+        android:layout_marginTop="@dimen/input_long_verticalMargin"
+        android:hint="username"
+        android:id="@+id/username_input"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username_input"
+        android:layout_marginLeft="@dimen/input_long_horizontalMargin"
+        android:layout_marginRight="@dimen/input_long_horizontalMargin"
+        android:layout_marginTop="@dimen/input_long_verticalMargin"
+        android:inputType="textPassword"
+        android:hint="password"
+        android:id="@+id/password_input"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/password_input"
+        android:layout_marginLeft="@dimen/input_long_horizontalMargin"
+        android:layout_marginRight="@dimen/input_long_horizontalMargin"
+        android:layout_marginTop="@dimen/input_long_verticalMargin"
+        android:text="Submit"
+        android:id="@+id/login_btn"/>
+
+</RelativeLayout>

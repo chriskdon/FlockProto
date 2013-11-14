@@ -16,6 +16,14 @@
         <activity
             android:name="ca.brocku.cosc.flock.MainActivity"
             android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="ca.brocku.cosc.flock.LoginActivity"
+            android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name="ca.brocku.cosc.flock.RegisterActivity"
+            android:label="@string/title_activity_register" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

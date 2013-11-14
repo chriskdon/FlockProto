@@ -1,0 +1,6 @@
+<resources>
+
+    <style name="FullscreenTheme" parent="android:Theme.Holo">
+    </style>
+
+</resources>
