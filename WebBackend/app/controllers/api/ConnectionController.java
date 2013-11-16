@@ -1,6 +1,7 @@
 package controllers.api;
 
 import api.json.models.Connection.AskFriendRequestModel;
+import api.json.models.Connection.ResponseFriendRequestModel;
 import api.json.models.GenericErrorModel;
 import api.json.models.GenericSuccessModel;
 import models.Connection;
@@ -12,10 +13,9 @@ import play.mvc.*;
 import java.io.IOException;
 
 /**
- * Created by chriskellendonk on 11/14/2013.
+ * Controller to handle connections/friends in the application.
  */
-public class ConnectionController extends Controller {
-    private static final ObjectMapper mapper = new ObjectMapper();
+public class ConnectionController extends ApiControllerBase {
 
     /**
      * Create a request to become "friends"/start a connection with
@@ -39,5 +39,28 @@ public class ConnectionController extends Controller {
         } catch(IOException ex) { }
 
         return ok((new GenericErrorModel()).toJsonString());
+    }
+
+    /**
+     * Respond to friend request (accept/deny)
+     * @return
+     */
+    public static Result respond() {
+         try {
+             ResponseFriendRequestModel responseModel = mapper.readValue(request().body().asJson(),
+                                                                         ResponseFriendRequestModel.class);
+
+             User userA = User.findBySecret(responseModel.getSecret());
+
+             if(responseModel.getAccept()) {
+                Connection.acceptConnection(userA.id, responseModel.getFriendUserID());
+             } else {
+                Connection.declineConnection(userA.id, responseModel.getFriendUserID());
+             }
+
+             return ok((new GenericSuccessModel()).toJsonString());
+         } catch(Exception ex) {
+             return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+         }
     }
 }

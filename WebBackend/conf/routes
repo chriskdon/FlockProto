@@ -3,15 +3,15 @@
 # ~~~~
 
 # Start
-GET         /                          controllers.Application.index
+GET         /                               controllers.Application.index
 
 # API
-POST        /api/users/register        controllers.api.UserController.register
-POST        /api/users/login           controllers.api.UserController.login
-POST        /api/users/delete          controllers.api.UserController.delete
+POST        /api/users/register             controllers.api.UserController.register
+POST        /api/users/login                controllers.api.UserController.login
+POST        /api/users/delete               controllers.api.UserController.delete
 
-POST        /api/connections/ask       controllers.api.ConnectionController.ask
-
+POST        /api/connections/ask            controllers.api.ConnectionController.ask
+POST        /api/connections/respond        controllers.api.ConnectionController.respond
 
 # Map static resources from the /public folder to the /assets URL path
 #GET        /assets/*file                             controllers.Assets.at(path="/public", file)

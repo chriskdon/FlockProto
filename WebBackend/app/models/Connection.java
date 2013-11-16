@@ -1,11 +1,13 @@
 package models;
 
 import com.avaje.ebean.Expr;
+import com.avaje.ebean.Expression;
+import com.avaje.ebean.ExpressionList;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
+import scala.annotation.unchecked.uncheckedStable;
 
 import javax.persistence.*;
-import java.beans.Expression;
 import java.util.List;
 
 /**
@@ -38,17 +40,54 @@ public class Connection extends Model {
     }
 
     /**
+     * Accept a connection between two people.
+     *
+     * @param userAID
+     * @param userBID
+     */
+    public static void acceptConnection(long userAID, long userBID) throws Exception {
+        Connection conn = getConnection(userAID, userBID).findUnique();
+
+        if(conn == null) { throw new Exception("Invalid Connection"); }
+
+        conn.accepted = true;
+        conn.save();
+    }
+
+    /**
+     * Remove the connection from the database, it was declined.
+     *
+     * @param userAID User A ID
+     * @param userBID User B ID
+     */
+    public static void declineConnection(long userAID, long userBID) {
+        Connection conn = getConnection(userAID, userBID).findUnique();
+
+        if(conn != null) { conn.delete(); }
+    }
+
+    /**
      * Is this friend request already in the database.
      *
      * @param userAID
      * @param userBID
      * @return
      */
-    public static boolean alreadyExists(Long userAID, Long userBID) {
-        com.avaje.ebean.Expression a = Expr.and(Expr.eq("UserA", userAID), Expr.eq("UserB", userBID));
-        com.avaje.ebean.Expression b = Expr.and(Expr.eq("UserB", userAID), Expr.eq("UserA", userBID));
+    public static boolean alreadyExists(long userAID, long userBID) {
+        return (getConnection(userAID, userBID).findRowCount() > 0);
+    }
 
-        return (find.where().or(a, b).findRowCount() > 0);
+    /**
+     * Get the connection involving these two users.
+     *
+     * @param userAID
+     * @param userBID
+     */
+    private static ExpressionList<Connection> getConnection(long userAID, long userBID) {
+        Expression a = Expr.and(Expr.eq("UserA", userAID), Expr.eq("UserB", userBID));
+        Expression b = Expr.and(Expr.eq("UserB", userAID), Expr.eq("UserA", userBID));
+
+        return find.where().or(a, b);
     }
 
     /**

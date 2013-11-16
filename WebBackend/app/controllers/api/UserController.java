@@ -9,9 +9,7 @@ import play.mvc.*;
 
 import java.io.IOException;
 
-public class UserController extends Controller {
-    private static final FlockAuthentication auth = FlockAuthentication.getInstance();
-    private static final ObjectMapper mapper = new ObjectMapper();
+public class UserController extends ApiControllerBase {
 
     /**
      * Register a new user.
