@@ -2,6 +2,7 @@ package controllers.api;
 
 import api.json.models.GenericErrorModel;
 import api.json.models.GenericSuccessModel;
+import api.json.models.UserActionModel;
 import api.json.models.location.FriendLocationRequestModel;
 import api.json.models.location.SetLocationRequestModel;
 import api.json.models.location.UserLocationModel;
@@ -38,11 +39,20 @@ public class LocationController extends ApiControllerBase {
     }
 
     /**
-     * Set your own visibility.
+     * Remove all location information.
+     *
      * @return
      */
-    public static Result visibility() {
-        return ok("VIS");
+    public static Result hide() {
+        try {
+            UserActionModel request = mapper.readValue(request().body().asJson(), UserActionModel.class);
+
+            Location.find.byId(User.findBySecret(request.secret).id).delete();
+
+            return ok((new GenericSuccessModel("Location Hidden/Deleted")).toJsonString());
+        } catch(Exception ex) {
+            return ok((new GenericErrorModel()).toJsonString());
+        }
     }
 
     /**

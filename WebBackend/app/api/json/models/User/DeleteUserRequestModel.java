@@ -1,10 +1,10 @@
 package api.json.models.user;
 
-import api.json.models.JsonModelBase;
+import api.json.models.UserActionModel;
 
 /**
- * Created by chriskellendonk on 11/14/2013.
+ * Delete a user.
  */
-public class DeleteUserRequestModel extends JsonModelBase {
-    public String secret, password;
+public class DeleteUserRequestModel extends UserActionModel {
+    public String password;
 }

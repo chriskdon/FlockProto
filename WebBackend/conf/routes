@@ -17,7 +17,7 @@ POST        /api/connections/remove          controllers.api.ConnectionControlle
 POST        /api/connections/get             controllers.api.ConnectionController.get
 
 POST        /api/locations/set               controllers.api.LocationController.set
-POST        /api/locations/visibility        controllers.api.LocationController.visibility
+POST        /api/locations/hide              controllers.api.LocationController.hide
 POST        /api/locations/get               controllers.api.LocationController.get
 POST        /api/locations/friends           controllers.api.LocationController.friends
 
