@@ -67,10 +67,10 @@
  - ~~Get Location of Friend~~
      - ~~Params: userhash, friend's UserID~~
      - ~~Returns: json object of latitude and longitude, or False if there was an error (e.g. they aren't a friend, or they are invisible)~~
- - Set Visibility (set your own visibility to other users)
-     - Params: userhash, visibility status
-     - Returns: True on successful change of status
- - Get Location of ALL Friends
-     - Params: userhash
-     - Returns: json object of latitude and longitude of all available Friend locations.
+ - ~~Set Visibility (set your own visibility to other users)~~
+     - ~~Params: userhash, visibility status~~
+     - ~~Returns: True on successful change of status~~
+ - ~~Get Location of ALL Friends~~
+     - ~~Params: userhash~~
+     - ~~Returns: json object of latitude and longitude of all available Friend locations.~~
      
