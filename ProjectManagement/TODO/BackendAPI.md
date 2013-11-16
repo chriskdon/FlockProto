@@ -23,12 +23,12 @@
  - ~~Delete User~~
      - ~~Params: userhash, password~~
      - ~~Returns: True on successful deletion~~
+ - ~~Search (for users when adding friends)~~
+     - ~~Params: Search text~~
+     - ~~Returns: json object with array of user information matching request.~~
           
 *Connections/Friends*
 
- - Search (for users when adding friends)
-     - Params: Search text
-     - Returns: json object with array of user information matching request.
  - ~~Issue Friend Request~~
      - ~~Params: userhash (current user), UserID of requested friend.~~
      - ~~Returns: True on successful request.~~
