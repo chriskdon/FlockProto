@@ -32,9 +32,9 @@
  - ~~Issue Friend Request~~
      - ~~Params: userhash (current user), UserID of requested friend.~~
      - ~~Returns: True on successful request.~~
- - Accept/Deline Friend Request
-     - Params: userhash (current user), UserID of friend, boolean to accept/decline (T/F).
-     - Returns: True on successful accept/decline.
+ - ~~Accept/Decline Friend Request~~
+     - ~~Params: userhash (current user), UserID of friend, boolean to accept/decline (T/F).~~
+     - ~~Returns: True on successful accept/decline.~~
  - Remove Friend
      - Params: userhash, UserID of friend to remove.
      - Returns: True on successful removal.
