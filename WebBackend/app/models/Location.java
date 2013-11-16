@@ -43,4 +43,18 @@ public class Location extends Model {
         this.longitude = longitude;
         this.timestamp = timestamp;
     }
+
+    /**
+     * Save the model data.
+     */
+    @Override
+    public void save() {
+        // Try update - if doesn't exist then save
+        // TODO: The model needs to be changed so that the ID is a foreign primary key.
+        try {
+            this.update();
+        } catch(Exception ex) {
+            this.save();
+        }
+    }
 }

@@ -26,13 +26,7 @@ public class LocationController extends ApiControllerBase {
                                              setRequest.latitude, setRequest.longitude,
                                              Calendar.getInstance().getTime());
 
-            // Try update - if doesn't exist then save
-            // TODO: The model needs to be changed so that the ID is a foreign primary key.
-            try {
-                location.update();
-            } catch(Exception ex) {
-                location.save();
-            }
+            location.save();
 
             return ok((new GenericSuccessModel("Location Updated")).toJsonString());
         } catch(Exception ex) {
