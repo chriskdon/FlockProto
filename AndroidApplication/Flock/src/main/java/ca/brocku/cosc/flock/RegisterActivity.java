@@ -13,6 +13,8 @@ import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
 
+import ca.brocku.cosc.flock.data.ApplicationSettings;
+
 public class RegisterActivity extends Activity {
     private Button submitButton; // Button to register a new user
     private EditText firstNameInput, lastNameInput, usernameInput, passwordInput;
@@ -22,6 +24,9 @@ public class RegisterActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         getActionBar().hide();
+
+        // Initialze Application Settings
+        ApplicationSettings.initialize(getBaseContext());
 
         // Bind Controls
         submitButton = (Button)findViewById(R.id.submit_registration_button);
@@ -62,7 +67,7 @@ public class RegisterActivity extends Activity {
     private class RegisterSubmitHandler implements Button.OnClickListener {
         @Override
         public void onClick(View v) {
-            firstNameInput.setText("Test");
+
         }
     }
 }
