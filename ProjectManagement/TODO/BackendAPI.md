@@ -61,7 +61,9 @@
      - Returns: True on successful deletion
      
 *Location*
-
+ - Set location of Self
+     - Params: userhash, currendLocation (lat, long)
+     - Returns: True on successful update.
  - Get Location of Friend
      - Params: userhash, friend's UserID
      - Returns: json object of latitude and longitude, or False if there was an error (e.g. they aren't a friend, or they are invisible)
