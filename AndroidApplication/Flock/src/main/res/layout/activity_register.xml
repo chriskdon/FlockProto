@@ -1,7 +1,96 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:context=".RegisterActivity$PlaceholderFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_expand_wrapper">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/title_padding"
+            android:background="@color/blue_unsaturated"
+            android:textSize="@dimen/title_unfocused_fontSize"
+            android:text="Login"
+            android:id="@+id/login_label"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="@dimen/title_padding"
+            android:background="@drawable/layer__0001s_0012_plus"/>
+    </FrameLayout>
+
+    <TextView
+        android:text="Register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_expand_wrapper"
+        android:background="@color/blue_main"
+        android:padding="@dimen/title_padding"
+        android:textSize="@dimen/title_fontSize"
+        android:id="@+id/register_label"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/register_label">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/input_long_horizontalMargin"
+                android:layout_marginRight="@dimen/input_long_horizontalMargin"
+                android:layout_marginTop="@dimen/input_long_verticalMargin"
+                android:hint="first name"
+                android:id="@+id/firstName_input"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/input_long_horizontalMargin"
+                android:layout_marginRight="@dimen/input_long_horizontalMargin"
+                android:layout_marginTop="@dimen/input_long_verticalMargin"
+                android:hint="last name"
+                android:id="@+id/lastName_input"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/input_long_horizontalMargin"
+                android:layout_marginRight="@dimen/input_long_horizontalMargin"
+                android:layout_marginTop="@dimen/input_long_verticalMargin"
+                android:hint="username"
+                android:id="@+id/username_input"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/input_long_horizontalMargin"
+                android:layout_marginRight="@dimen/input_long_horizontalMargin"
+                android:layout_marginTop="@dimen/input_long_verticalMargin"
+                android:inputType="textPassword"
+                android:hint="password"
+                android:id="@+id/password_input"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/input_long_horizontalMargin"
+                android:layout_marginRight="@dimen/input_long_horizontalMargin"
+                android:layout_marginTop="@dimen/input_long_verticalMargin"
+                android:layout_marginBottom="@dimen/input_long_verticalMargin"
+                android:text="Submit"
+                android:id="@+id/submit_registration_button"/>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

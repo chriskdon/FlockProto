@@ -10,8 +10,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.widget.Button;
+import android.widget.EditText;
 
 public class RegisterActivity extends Activity {
+    private Button submitButton; // Button to register a new user
+    private EditText firstNameInput, lastNameInput, usernameInput, passwordInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,11 +23,15 @@ public class RegisterActivity extends Activity {
         setContentView(R.layout.activity_register);
         getActionBar().hide();
 
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+        // Bind Controls
+        submitButton = (Button)findViewById(R.id.submit_registration_button);
+        firstNameInput = (EditText)findViewById(R.id.firstName_input);
+        lastNameInput = (EditText)findViewById(R.id.lastName_input);
+        usernameInput = (EditText)findViewById(R.id.username_input);
+        passwordInput = (EditText)findViewById(R.id.password_input);
+
+        // Bind Handlers
+        submitButton.setOnClickListener(new RegisterSubmitHandler());
     }
 
 
@@ -48,19 +56,13 @@ public class RegisterActivity extends Activity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
+     * Handles the user clicking the submit button when trying to register
+     * as a new user.
      */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
+    private class RegisterSubmitHandler implements Button.OnClickListener {
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_register, container, false);
-            return rootView;
+        public void onClick(View v) {
+            firstNameInput.setText("Test");
         }
     }
-
 }
