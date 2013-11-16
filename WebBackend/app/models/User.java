@@ -62,5 +62,4 @@ public class User extends Model {
     public static User findBySecret(String secret) {
         return find.where().eq("Secret", secret).findUnique();
     }
-
 }

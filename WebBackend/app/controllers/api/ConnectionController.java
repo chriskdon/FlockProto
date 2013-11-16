@@ -4,6 +4,7 @@ import api.json.models.Connection.ConnectionInvolvingFriendRequest;
 import api.json.models.Connection.ResponseFriendRequestModel;
 import api.json.models.GenericErrorModel;
 import api.json.models.GenericSuccessModel;
+import api.json.models.User.UserInformationModel;
 import models.Connection;
 import models.User;
 import play.mvc.*;
@@ -62,6 +63,11 @@ public class ConnectionController extends ApiControllerBase {
          }
     }
 
+    /**
+     * Remove a friend.
+     *
+     * @return JSON Response
+     */
     public static Result remove() {
         try {
             ConnectionInvolvingFriendRequest request = mapper.readValue(request().body().asJson(),
@@ -72,6 +78,28 @@ public class ConnectionController extends ApiControllerBase {
             Connection.declineConnection(user.id, request.getFriendUserID());
 
             return ok((new GenericSuccessModel("Friend Removed")).toJsonString());
+        } catch(Exception ex) {
+            return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+        }
+    }
+
+    /**
+     * Get information on a friend.
+     *
+     * @return JSON Result of information
+     */
+    public static Result get() {
+        try {
+            ConnectionInvolvingFriendRequest request = mapper.readValue(request().body().asJson(),
+                                                                        ConnectionInvolvingFriendRequest.class);
+
+            User friend = Connection.getFriendInformation(User.findBySecret(request.getSecret()).id,
+                                                          request.getFriendUserID());
+
+            UserInformationModel userInfo = new UserInformationModel(friend.username, friend.firstname,
+                                                                     friend.lastname, friend.email);
+
+            return ok(userInfo.toJsonString());
         } catch(Exception ex) {
             return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
         }

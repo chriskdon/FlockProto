@@ -2,9 +2,7 @@ package controllers.api;
 
 import api.json.models.*;
 import api.json.models.User.*;
-import authentication.FlockAuthentication;
 import models.User;
-import org.codehaus.jackson.map.ObjectMapper;
 import play.mvc.*;
 
 import java.io.IOException;

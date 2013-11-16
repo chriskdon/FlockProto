@@ -123,4 +123,22 @@ public class Connection extends Model {
     private static List<Connection> searchByUser(String column, User user) {
         return find.where().eq(column,user.id).findList();
     }
+
+    /**
+     * Get friend information.
+     *
+     * Throw exception if they are not friends.
+     *
+     * @param currentUserID
+     * @param friendUserID
+     * @return
+     */
+    public static User getFriendInformation(long currentUserID, long friendUserID) throws Exception {
+        Connection conn = Connection.getConnection(currentUserID, friendUserID).findUnique();
+
+        // Make sure they are actually friends
+        if(conn == null || !conn.accepted) { throw new Exception("No Friend Connection"); }
+
+        return User.find.byId(friendUserID);
+    }
 }
