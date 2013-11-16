@@ -13,7 +13,10 @@ import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ca.brocku.cosc.flock.data.ApplicationSettings;
+import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
 
 public class RegisterActivity extends Activity {
     private Button submitButton; // Button to register a new user
@@ -67,7 +70,8 @@ public class RegisterActivity extends Activity {
     private class RegisterSubmitHandler implements Button.OnClickListener {
         @Override
         public void onClick(View v) {
-
+            // TODO: Register a new user
+            firstNameInput.setText((new GenericSuccessModel("Test")).toJsonString());
         }
     }
 }
