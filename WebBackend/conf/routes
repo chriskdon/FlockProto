@@ -9,6 +9,7 @@ GET         /                               controllers.Application.index
 POST        /api/users/register             controllers.api.UserController.register
 POST        /api/users/login                controllers.api.UserController.login
 POST        /api/users/delete               controllers.api.UserController.delete
+POST        /api/users/search               controllers.api.UserController.search
 
 POST        /api/connections/ask            controllers.api.ConnectionController.ask
 POST        /api/connections/respond        controllers.api.ConnectionController.respond

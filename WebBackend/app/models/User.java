@@ -62,4 +62,18 @@ public class User extends Model {
     public static User findBySecret(String secret) {
         return find.where().eq("Secret", secret).findUnique();
     }
+
+    /**
+     * Search for users with the `usernameQuery` text in they're username.
+     *
+     * Returns top 25
+     *
+     * @param usernameQuery
+     * @return List of users matching the query.
+     */
+    public static List<User> queryByUsername(String usernameQuery) {
+        return find.where().like("Username", "%" + usernameQuery + "%")
+                           .setMaxRows(25).orderBy("Username ASC")
+                           .findList();
+    }
 }

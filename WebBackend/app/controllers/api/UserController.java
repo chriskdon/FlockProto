@@ -6,6 +6,8 @@ import models.User;
 import play.mvc.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserController extends ApiControllerBase {
 
@@ -81,5 +83,32 @@ public class UserController extends ApiControllerBase {
         } catch(IOException ex) { }
 
         return ok((new GenericErrorModel()).toJsonString());
+    }
+
+    /**
+     * Search for users by username.
+     *
+     * @return JSON List matching the username.
+     */
+    public static Result search() {
+        try {
+            SearchUserRequestModel search = mapper.readValue(request().body().asJson(), SearchUserRequestModel.class);
+
+            List<User> users = User.queryByUsername(search.getUsernameQuery());
+
+            ArrayList<SearchUserResponseModel.UserSearchResult> resultList =
+                    new ArrayList<SearchUserResponseModel.UserSearchResult>(users.size());
+
+            for(User u : users) {
+                resultList.add(new SearchUserResponseModel.UserSearchResult(u.username, u.id));
+            }
+
+            SearchUserResponseModel response = new SearchUserResponseModel();
+            response.setUserList(resultList);
+
+            return ok(response.toJsonString());
+        } catch(Exception ex) {
+            return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+        }
     }
 }
