@@ -3,6 +3,7 @@ package models;
 import java.util.*;
 import javax.persistence.*;
 
+import com.avaje.ebean.Ebean;
 import play.db.ebean.*;
 import play.data.validation.*;
 
@@ -64,8 +65,8 @@ public class Location extends Model {
      * @throws Exception The user's are not friends.
      */
     public static Location getFriendLocation(long currentUserID, long friendUserID) throws Exception {
-        if(!Connection.areFriends(currentUserID, friendUserID)) {
-            throw new Exception("Not Friends");
+        if(!Connection.areFriends(currentUserID, friendUserID) || !Connection.isVisible(currentUserID, friendUserID)) {
+            throw new Exception("Not Friends or Not Visible");
         }
 
         return find.byId(friendUserID);

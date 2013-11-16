@@ -30,7 +30,7 @@ public class ConnectionController extends ApiControllerBase {
 
             // Make sure they aren't already friends
             if(userID != askModel.friendUserID && !Connection.alreadyExists(userID, askModel.friendUserID)) {
-                (new Connection(userID, askModel.friendUserID, false)).save(); // Insert new record
+                (new Connection(userID, askModel.friendUserID, false, true)).save(); // Insert new record
                 return ok((new GenericSuccessModel("Friend request sent.")).toJsonString());
             } else {
                 return ok((new GenericErrorModel("Friend request already sent.")).toJsonString());

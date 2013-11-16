@@ -30,13 +30,18 @@ public class Connection extends Model {
     @Constraints.Required
     @Column(name ="Accepted")
     public Boolean accepted;
+
+    @Constraints.Required
+    @Column(name ="Visible")
+    public Boolean visible;
     // =============================
 
     public Connection() { }
-    public Connection(long userAID, long userBID, boolean accepted) {
+    public Connection(long userAID, long userBID, boolean accepted, boolean visible) {
         this.userAID = userAID;
         this.userBID = userBID;
         this.accepted = accepted;
+        this.visible = visible;
     }
 
     /**
@@ -151,5 +156,18 @@ public class Connection extends Model {
         Connection conn = Connection.getConnection(currentUserID, friendUserID).findUnique();
 
         return (conn != null && conn.accepted);
+    }
+
+    /**
+     * Check if the current user can see the friend.
+     *
+     * @param currentUserID
+     * @param friendUserID
+     * @return
+     */
+    public static boolean isVisible(long currentUserID, long friendUserID) {
+        Connection conn = Connection.getConnection(currentUserID, friendUserID).findUnique();
+
+        return (conn != null && conn.visible);
     }
 }
