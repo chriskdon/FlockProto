@@ -35,9 +35,9 @@
  - ~~Accept/Decline Friend Request~~
      - ~~Params: userhash (current user), UserID of friend, boolean to accept/decline (T/F).~~
      - ~~Returns: True on successful accept/decline.~~
- - Remove Friend
-     - Params: userhash, UserID of friend to remove.
-     - Returns: True on successful removal.
+ - ~~Remove Friend~~
+     - ~~Params: userhash, UserID of friend to remove.~~
+     - ~~Returns: True on successful removal.~~
  - Get friend information (only for approved friends)
      - Params: userhash, friend's user id
      - Returns: Friend's profile information in json object.
