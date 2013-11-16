@@ -134,11 +134,22 @@ public class Connection extends Model {
      * @return
      */
     public static User getFriendInformation(long currentUserID, long friendUserID) throws Exception {
-        Connection conn = Connection.getConnection(currentUserID, friendUserID).findUnique();
-
         // Make sure they are actually friends
-        if(conn == null || !conn.accepted) { throw new Exception("No Friend connection"); }
+        if(!areFriends(currentUserID, friendUserID)) { throw new Exception("No Friend connection"); }
 
         return User.find.byId(friendUserID);
+    }
+
+    /**
+     * Check if two user's are friends.
+     *
+     * @param currentUserID
+     * @param friendUserID
+     * @return
+     */
+    public static boolean areFriends(long currentUserID, long friendUserID) {
+        Connection conn = Connection.getConnection(currentUserID, friendUserID).findUnique();
+
+        return (conn != null && conn.accepted);
     }
 }

@@ -2,7 +2,9 @@ package controllers.api;
 
 import api.json.models.GenericErrorModel;
 import api.json.models.GenericSuccessModel;
+import api.json.models.location.FriendLocationRequestModel;
 import api.json.models.location.SetLocationRequestModel;
+import api.json.models.location.UserLocationModel;
 import models.Location;
 import models.User;
 import play.mvc.*;
@@ -15,6 +17,7 @@ import java.util.Calendar;
 public class LocationController extends ApiControllerBase {
     /**
      * Set your own location.
+     *
      * @return
      */
     public static Result set() {
@@ -22,7 +25,7 @@ public class LocationController extends ApiControllerBase {
             SetLocationRequestModel setRequest = mapper.readValue(request().body().asJson(),
                                                                   SetLocationRequestModel.class);
 
-            Location location = new Location(User.findBySecret(setRequest.secret).id, setRequest.secret,
+            Location location = new Location(User.findBySecret(setRequest.secret).id,
                                              setRequest.latitude, setRequest.longitude,
                                              Calendar.getInstance().getTime());
 
@@ -47,7 +50,17 @@ public class LocationController extends ApiControllerBase {
      * @return
      */
     public static Result get() {
-        return ok("get");
+        try {
+            FriendLocationRequestModel request = mapper.readValue(request().body().asJson(),
+                                                                  FriendLocationRequestModel.class);
+
+            Location friendLocation = Location.getFriendLocation(User.findBySecret(request.secret).id,
+                                                                 request.friendUserID);
+
+            return ok((new UserLocationModel(friendLocation)).toJsonString());
+        } catch(Exception ex) {
+            return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+        }
     }
 
     /**

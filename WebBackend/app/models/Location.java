@@ -12,15 +12,11 @@ import play.data.validation.*;
 @Entity
 @Table(name="Locations")
 public class Location extends Model {
-    public static Finder<Long,User> find = new Finder<Long,User>(Long.class, User.class);
+    public static Finder<Long,Location> find = new Finder<Long,Location>(Long.class, Location.class);
 
     @Id
-
     @Column(name="UserID")
     public Long userID;
-
-    @Column(name="UserSecret")
-    public String userSecret;
 
     @Constraints.Required
     @Column(name="Latitude")
@@ -36,9 +32,8 @@ public class Location extends Model {
 
     public Location() { }
 
-    public Location(long userID, String userSecret,  long latitude, long longitude, Date timestamp) {
+    public Location(long userID,  long latitude, long longitude, Date timestamp) {
         this.userID = userID;
-        this.userSecret = userSecret;
         this.latitude = latitude;
         this.longitude = longitude;
         this.timestamp = timestamp;
@@ -54,7 +49,25 @@ public class Location extends Model {
         try {
             this.update();
         } catch(Exception ex) {
-            this.save();
+            super.save();
         }
+    }
+
+    /**
+     * Get the current location of a user's friend.
+     *
+     * @param currentUserID
+     * @param friendUserID
+     *
+     * @return The location of the friend.
+     *
+     * @throws Exception The user's are not friends.
+     */
+    public static Location getFriendLocation(long currentUserID, long friendUserID) throws Exception {
+        if(!Connection.areFriends(currentUserID, friendUserID)) {
+            throw new Exception("Not Friends");
+        }
+
+        return find.byId(friendUserID);
     }
 }
