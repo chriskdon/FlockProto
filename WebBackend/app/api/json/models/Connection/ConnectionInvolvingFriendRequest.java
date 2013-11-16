@@ -3,7 +3,7 @@ package api.json.models.Connection;
 /**
  * Asking to make two users friends.
  */
-public class AskFriendRequestModel extends ConnectionRequestBase {
+public class ConnectionInvolvingFriendRequest extends ConnectionRequestBase {
     private Long friendUserID;
 
     public Long getFriendUserID() { return friendUserID; }

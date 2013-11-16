@@ -12,6 +12,7 @@ POST        /api/users/delete               controllers.api.UserController.delet
 
 POST        /api/connections/ask            controllers.api.ConnectionController.ask
 POST        /api/connections/respond        controllers.api.ConnectionController.respond
+POST        /api/connections/remove         controllers.api.ConnectionController.remove
 
 # Map static resources from the /public folder to the /assets URL path
 #GET        /assets/*file                             controllers.Assets.at(path="/public", file)

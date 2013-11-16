@@ -42,11 +42,12 @@ public class Connection extends Model {
     /**
      * Accept a connection between two people.
      *
-     * @param userAID
-     * @param userBID
+     * @param currentUserID
+     * @param friendUserID
      */
-    public static void acceptConnection(long userAID, long userBID) throws Exception {
-        Connection conn = getConnection(userAID, userBID).findUnique();
+    public static void acceptConnection(long currentUserID, long friendUserID) throws Exception {
+        // Only allow a friend to accept a request sent to them
+        Connection conn = Connection.find.where().eq("UserA", friendUserID).eq("UserB", currentUserID).findUnique();
 
         if(conn == null) { throw new Exception("Invalid Connection"); }
 
@@ -60,11 +61,14 @@ public class Connection extends Model {
      * @param userAID User A ID
      * @param userBID User B ID
      */
-    public static void declineConnection(long userAID, long userBID) {
+    public static void declineConnection(long userAID, long userBID) throws Exception {
         Connection conn = getConnection(userAID, userBID).findUnique();
 
-        if(conn != null) { conn.delete(); }
+        if(conn == null) { throw new Exception("Invalid Connection"); }
+
+        conn.delete();
     }
+
 
     /**
      * Is this friend request already in the database.
