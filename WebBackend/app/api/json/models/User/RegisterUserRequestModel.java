@@ -1,11 +1,8 @@
-package api.json.models.User;
+package api.json.models.user;
 
 /**
  * Created by chriskellendonk on 11/16/2013.
  */
 public class RegisterUserRequestModel extends UserInformationModel {
-    String password;
-
-    public String getPassword() { return password; }
-    public void setPassword(String value) { password = value; }
+    public String password;
 }

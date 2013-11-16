@@ -1,4 +1,4 @@
-package api.json.models.User;
+package api.json.models.user;
 
 import api.json.models.JsonModelBase;
 
@@ -6,12 +6,9 @@ import api.json.models.JsonModelBase;
  * Response to a user being successfully logged in.
  */
 public class LoginUserResponseModel extends JsonModelBase {
-    private String secret;
-
-    public String getSecret() { return secret; }
-    public void setSecret(String value) { secret = value; }
+    public String secret;
 
     public LoginUserResponseModel(String secret) {
-        setSecret(secret);
+        this.secret = secret;
     }
 }

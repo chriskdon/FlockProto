@@ -49,7 +49,7 @@ public class Connection extends Model {
         // Only allow a friend to accept a request sent to them
         Connection conn = Connection.find.where().eq("UserA", friendUserID).eq("UserB", currentUserID).findUnique();
 
-        if(conn == null) { throw new Exception("Invalid Connection"); }
+        if(conn == null) { throw new Exception("Invalid connection"); }
 
         conn.accepted = true;
         conn.save();
@@ -58,13 +58,13 @@ public class Connection extends Model {
     /**
      * Remove the connection from the database, it was declined.
      *
-     * @param userAID User A ID
-     * @param userBID User B ID
+     * @param userAID user A ID
+     * @param userBID user B ID
      */
     public static void declineConnection(long userAID, long userBID) throws Exception {
         Connection conn = getConnection(userAID, userBID).findUnique();
 
-        if(conn == null) { throw new Exception("Invalid Connection"); }
+        if(conn == null) { throw new Exception("Invalid connection"); }
 
         conn.delete();
     }
@@ -137,7 +137,7 @@ public class Connection extends Model {
         Connection conn = Connection.getConnection(currentUserID, friendUserID).findUnique();
 
         // Make sure they are actually friends
-        if(conn == null || !conn.accepted) { throw new Exception("No Friend Connection"); }
+        if(conn == null || !conn.accepted) { throw new Exception("No Friend connection"); }
 
         return User.find.byId(friendUserID);
     }

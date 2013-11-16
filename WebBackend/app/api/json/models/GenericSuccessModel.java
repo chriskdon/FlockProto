@@ -4,7 +4,7 @@ package api.json.models;
  * Created by chriskellendonk on 11/14/2013.
  */
 public class GenericSuccessModel extends JsonModelBase {
-    private String message;
+    public String message;
 
     /**
      * Error response without message
@@ -19,11 +19,8 @@ public class GenericSuccessModel extends JsonModelBase {
      * @param message Message to send.
      */
     public GenericSuccessModel(String message) {
-        setMessage(message);
+        this.message = message;
     }
-
-    public String getMessage() { return message; }
-    public void setMessage(String value) { message = value; };
 
     @Override
     public String toJsonString() {

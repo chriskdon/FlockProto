@@ -1,10 +1,10 @@
 package controllers.api;
 
-import api.json.models.Connection.ConnectionInvolvingFriendRequest;
-import api.json.models.Connection.ResponseFriendRequestModel;
+import api.json.models.connection.ConnectionInvolvingFriendRequest;
+import api.json.models.connection.ResponseFriendRequestModel;
 import api.json.models.GenericErrorModel;
 import api.json.models.GenericSuccessModel;
-import api.json.models.User.UserInformationModel;
+import api.json.models.user.UserInformationModel;
 import models.Connection;
 import models.User;
 import play.mvc.*;
@@ -26,11 +26,11 @@ public class ConnectionController extends ApiControllerBase {
         try {
             ConnectionInvolvingFriendRequest askModel = mapper.readValue(request().body().asJson(), ConnectionInvolvingFriendRequest.class);
 
-            long userID = User.findBySecret(askModel.getSecret()).id;
+            long userID = User.findBySecret(askModel.secret).id;
 
             // Make sure they aren't already friends
-            if(userID != askModel.getFriendUserID() && !Connection.alreadyExists(userID, askModel.getFriendUserID())) {
-                (new Connection(userID, askModel.getFriendUserID(), false)).save(); // Insert new record
+            if(userID != askModel.friendUserID && !Connection.alreadyExists(userID, askModel.friendUserID)) {
+                (new Connection(userID, askModel.friendUserID, false)).save(); // Insert new record
                 return ok((new GenericSuccessModel("Friend request sent.")).toJsonString());
             } else {
                 return ok((new GenericErrorModel("Friend request already sent.")).toJsonString());
@@ -49,12 +49,12 @@ public class ConnectionController extends ApiControllerBase {
              ResponseFriendRequestModel responseModel = mapper.readValue(request().body().asJson(),
                                                                          ResponseFriendRequestModel.class);
 
-             User userA = User.findBySecret(responseModel.getSecret());
+             User userA = User.findBySecret(responseModel.secret);
 
-             if(responseModel.getAccept()) {
-                Connection.acceptConnection(userA.id, responseModel.getFriendUserID());
+             if(responseModel.accept) {
+                Connection.acceptConnection(userA.id, responseModel.friendUserID);
              } else {
-                Connection.declineConnection(userA.id, responseModel.getFriendUserID());
+                Connection.declineConnection(userA.id, responseModel.friendUserID);
              }
 
              return ok((new GenericSuccessModel()).toJsonString());
@@ -73,9 +73,9 @@ public class ConnectionController extends ApiControllerBase {
             ConnectionInvolvingFriendRequest request = mapper.readValue(request().body().asJson(),
                                                                         ConnectionInvolvingFriendRequest.class);
 
-             User user = User.findBySecret(request.getSecret());
+             User user = User.findBySecret(request.secret);
 
-            Connection.declineConnection(user.id, request.getFriendUserID());
+            Connection.declineConnection(user.id, request.friendUserID);
 
             return ok((new GenericSuccessModel("Friend Removed")).toJsonString());
         } catch(Exception ex) {
@@ -93,8 +93,7 @@ public class ConnectionController extends ApiControllerBase {
             ConnectionInvolvingFriendRequest request = mapper.readValue(request().body().asJson(),
                                                                         ConnectionInvolvingFriendRequest.class);
 
-            User friend = Connection.getFriendInformation(User.findBySecret(request.getSecret()).id,
-                                                          request.getFriendUserID());
+            User friend = Connection.getFriendInformation(User.findBySecret(request.secret).id, request.friendUserID);
 
             UserInformationModel userInfo = new UserInformationModel(friend.username, friend.firstname,
                                                                      friend.lastname, friend.email);
