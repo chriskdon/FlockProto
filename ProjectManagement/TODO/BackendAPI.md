@@ -38,9 +38,9 @@
  - ~~Remove Friend~~
      - ~~Params: userhash, UserID of friend to remove.~~
      - ~~Returns: True on successful removal.~~
- - Get friend information (only for approved friends)
-     - Params: userhash, friend's user id
-     - Returns: Friend's profile information in json object.
+ - ~~Get friend information (only for approved friends)~~
+     - ~~Params: userhash, friend's user id~~
+     - ~~Returns: Friend's profile information in json object.~~
 
 *Peck*
 
