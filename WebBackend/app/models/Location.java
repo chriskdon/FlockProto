@@ -4,6 +4,7 @@ import java.util.*;
 import javax.persistence.*;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.SqlRow;
 import play.db.ebean.*;
 import play.data.validation.*;
 
@@ -40,6 +41,10 @@ public class Location extends Model {
         this.timestamp = timestamp;
     }
 
+    public Location(SqlRow row) {
+        this(row.getLong("UserID"), row.getLong("Latitude"), row.getLong("Longitude"), row.getDate("Timestamp"));
+    }
+
     /**
      * Save the model data.
      */
@@ -70,5 +75,30 @@ public class Location extends Model {
         }
 
         return find.byId(friendUserID);
+    }
+
+    /**
+     * Get the locations of all a user's friends.
+     *
+     * @param currentUserID
+     * @return
+     */
+    public static List<Location> getFriendLocations(long currentUserID) {
+        String sql = " SELECT L.* " +
+                     " FROM Locations L " +
+                     " LEFT JOIN Connections C ON (C.UserA = L.UserID OR C.UserB = L.UserID) " +
+                     " WHERE " +
+                     " L.UserID <> :UserID AND " +
+                     " C.Visible = 1 AND " +
+                     " (C.UserA = :UserID OR C.UserB = :UserID); ";
+
+        List<SqlRow> data = Ebean.createSqlQuery(sql).setParameter("UserID", currentUserID).findList();
+        ArrayList<Location> locations = new ArrayList<Location>(data.size());
+
+        for(SqlRow r : data) {
+            locations.add(new Location(r));
+        }
+
+        return locations;
     }
 }

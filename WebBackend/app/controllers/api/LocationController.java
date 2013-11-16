@@ -4,13 +4,16 @@ import api.json.models.GenericErrorModel;
 import api.json.models.GenericSuccessModel;
 import api.json.models.UserActionModel;
 import api.json.models.location.FriendLocationRequestModel;
+import api.json.models.location.FriendLocationsListResponseModel;
 import api.json.models.location.SetLocationRequestModel;
 import api.json.models.location.UserLocationModel;
 import models.Location;
 import models.User;
 import play.mvc.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Handle all location based requests.
@@ -79,7 +82,23 @@ public class LocationController extends ApiControllerBase {
      * @return
      */
     public static Result friends() {
-        return ok("get all");
+        try {
+            UserActionModel request = mapper.readValue(request().body().asJson(), UserActionModel.class);
+
+            List<Location> locations = Location.getFriendLocations(User.findBySecret(request.secret).id);
+
+            // Set Locations
+            ArrayList<UserLocationModel> resultList = new ArrayList<UserLocationModel>(locations.size());
+            for(Location l : locations) {
+                resultList.add(new UserLocationModel(l));
+            }
+
+            FriendLocationsListResponseModel response = new FriendLocationsListResponseModel(resultList);
+
+            return ok(response.toJsonString());
+        } catch(Exception ex) {
+            return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+        }
     }
 
 
