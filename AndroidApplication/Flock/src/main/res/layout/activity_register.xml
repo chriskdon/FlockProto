@@ -2,12 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-<<<<<<< HEAD
     tools:context=".RegisterActivity"
     tools:ignore="MergeRootFrame">
-=======
-    tools:context=".RegisterActivity$PlaceholderFragment">
->>>>>>> da57a8cecc6b2d965e8f236ecebddbd651ebe863
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -86,7 +82,6 @@
                 android:hint="password"
                 android:id="@+id/password_input"/>
 
-<<<<<<< HEAD
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -98,26 +93,15 @@
                 android:visibility="invisible"
                 android:id="@+id/login_errorMsg"/>
 
-=======
->>>>>>> da57a8cecc6b2d965e8f236ecebddbd651ebe863
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/input_long_horizontalMargin"
                 android:layout_marginRight="@dimen/input_long_horizontalMargin"
-<<<<<<< HEAD
-                android:layout_marginBottom="@dimen/input_long_verticalMargin"
-                android:text="Submit"
-                android:id="@+id/login_btn"/>
-        </LinearLayout>
-    </ScrollView>
-=======
-                android:layout_marginTop="@dimen/input_long_verticalMargin"
                 android:layout_marginBottom="@dimen/input_long_verticalMargin"
                 android:text="Submit"
                 android:id="@+id/submit_registration_button"/>
         </LinearLayout>
     </ScrollView>
 
->>>>>>> da57a8cecc6b2d965e8f236ecebddbd651ebe863
 </RelativeLayout>
