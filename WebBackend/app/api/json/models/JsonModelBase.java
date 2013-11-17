@@ -12,10 +12,7 @@ public abstract class JsonModelBase {
 
     protected static final ObjectMapper mapper = new ObjectMapper();
 
-    protected int status = STATUS_OKAY;
-
-    public int getStatus() { return status; }
-    public void setStatus(int value) { status = value; }
+    public int status = STATUS_OKAY;
 
     public String toJsonString() throws IOException {
         return mapper.writeValueAsString(this);

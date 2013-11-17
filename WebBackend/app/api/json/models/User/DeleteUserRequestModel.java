@@ -1,24 +1,10 @@
-package api.json.models.User;
+package api.json.models.user;
 
-import api.json.models.JsonModelBase;
-import org.codehaus.jackson.JsonNode;
-
-import java.io.IOException;
+import api.json.models.UserActionModel;
 
 /**
- * Created by chriskellendonk on 11/14/2013.
+ * Delete a user.
  */
-public class DeleteUserRequestModel extends JsonModelBase {
-    private String secret;
-    private String password;    // Password
-
-    public String getSecret() { return secret; }
-    public void setSecret(String value) { secret = value; }
-
-    public String getPassword() { return password; }
-    public void setPassword(String value) { password = value; }
-
-    public static DeleteUserRequestModel revive(JsonNode json) throws IOException {
-        return mapper.readValue(json, DeleteUserRequestModel.class);
-    }
+public class DeleteUserRequestModel extends UserActionModel {
+    public String password;
 }

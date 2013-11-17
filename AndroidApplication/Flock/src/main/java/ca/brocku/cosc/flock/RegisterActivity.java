@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
+<<<<<<< HEAD
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -22,6 +23,17 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     Button registerBtn;
     EditText firstname, lastname, username, password;
     TextView error;
+=======
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import ca.brocku.cosc.flock.data.ApplicationSettings;
+import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
+
+public class RegisterActivity extends Activity {
+    private Button submitButton; // Button to register a new user
+    private EditText firstNameInput, lastNameInput, usernameInput, passwordInput;
+>>>>>>> da57a8cecc6b2d965e8f236ecebddbd651ebe863
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +41,22 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.activity_register);
         getActionBar().hide();
 
+<<<<<<< HEAD
+=======
+        // Initialze Application Settings
+        ApplicationSettings.initialize(getBaseContext());
+
+        // Bind Controls
+        submitButton = (Button)findViewById(R.id.submit_registration_button);
+        firstNameInput = (EditText)findViewById(R.id.firstName_input);
+        lastNameInput = (EditText)findViewById(R.id.lastName_input);
+        usernameInput = (EditText)findViewById(R.id.username_input);
+        passwordInput = (EditText)findViewById(R.id.password_input);
+
+        // Bind Handlers
+        submitButton.setOnClickListener(new RegisterSubmitHandler());
+    }
+>>>>>>> da57a8cecc6b2d965e8f236ecebddbd651ebe863
 
         loginWrapper = (FrameLayout)findViewById(R.id.login_expand_wrapper);
         registerBtn = (Button) findViewById(R.id.login_btn);
@@ -43,6 +71,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
+<<<<<<< HEAD
     public void onClick(View v) {
         int id = v.getId();
 
@@ -70,6 +99,28 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         } else { //inform the user that all fields must be filled in
             error.setText("Please fill in all fields.");
             error.setVisibility(View.VISIBLE);
+=======
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Handles the user clicking the submit button when trying to register
+     * as a new user.
+     */
+    private class RegisterSubmitHandler implements Button.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            // TODO: Register a new user
+            firstNameInput.setText((new GenericSuccessModel("Test")).toJsonString());
+>>>>>>> da57a8cecc6b2d965e8f236ecebddbd651ebe863
         }
     }
 }

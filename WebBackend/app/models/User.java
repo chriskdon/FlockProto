@@ -9,6 +9,7 @@ import play.data.validation.*;
 @Entity
 @Table(name="Users")
 public class User extends Model {
+    public static Finder<Long,User> find = new Finder<Long,User>(Long.class, User.class);
 
     // ===== DATABASE COLUMNS =====
     @Id
@@ -58,5 +59,21 @@ public class User extends Model {
         this.secret = secret;
     }
 
-    public static Finder<Long,User> find = new Finder<Long,User>(Long.class, User.class);
+    public static User findBySecret(String secret) {
+        return find.where().eq("Secret", secret).findUnique();
+    }
+
+    /**
+     * Search for users with the `usernameQuery` text in they're username.
+     *
+     * Returns top 25
+     *
+     * @param usernameQuery
+     * @return List of users matching the query.
+     */
+    public static List<User> queryByUsername(String usernameQuery) {
+        return find.where().like("Username", "%" + usernameQuery + "%")
+                           .setMaxRows(25).orderBy("Username ASC")
+                           .findList();
+    }
 }

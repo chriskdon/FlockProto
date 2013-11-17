@@ -23,24 +23,24 @@
  - ~~Delete User~~
      - ~~Params: userhash, password~~
      - ~~Returns: True on successful deletion~~
+ - ~~Search (for users when adding friends)~~
+     - ~~Params: Search text~~
+     - ~~Returns: json object with array of user information matching request.~~
           
 *Connections/Friends*
 
- - Search (for users when adding friends)
-     - Params: Search text
-     - Returns: json object with array of user information matching request.
- - Issue Friend Request
-     - Params: userhash (current user), UserID of requested friend.
-     - Returns: True on successful request.
- - Accept/Deline Friend Request
-     - Params: userhash (current user), UserID of friend, boolean to accept/decline (T/F).
-     - Returns: True on successful accept/decline.
- - Remove Friend
-     - Params: userhash, UserID of friend to remove.
-     - Returns: True on successful removal.
- - Get friend information (only for approved friends)
-     - Params: userhash, friend's user id
-     - Returns: Friend's profile information in json object.
+ - ~~Issue Friend Request~~
+     - ~~Params: userhash (current user), UserID of requested friend.~~
+     - ~~Returns: True on successful request.~~
+ - ~~Accept/Decline Friend Request~~
+     - ~~Params: userhash (current user), UserID of friend, boolean to accept/decline (T/F).~~
+     - ~~Returns: True on successful accept/decline.~~
+ - ~~Remove Friend~~
+     - ~~Params: userhash, UserID of friend to remove.~~
+     - ~~Returns: True on successful removal.~~
+ - ~~Get friend information (only for approved friends)~~
+     - ~~Params: userhash, friend's user id~~
+     - ~~Returns: Friend's profile information in json object.~~
 
 *Peck*
 
@@ -61,14 +61,16 @@
      - Returns: True on successful deletion
      
 *Location*
-
- - Get Location of Friend
-     - Params: userhash, friend's UserID
-     - Returns: json object of latitude and longitude, or False if there was an error (e.g. they aren't a friend, or they are invisible)
- - Set Visibility (set your own visibility to other users)
-     - Params: userhash, visibility status
-     - Returns: True on successful change of status
- - Get Location of ALL Friends
-     - Params: userhash
-     - Returns: json object of latitude and longitude of all available Friend locations.
+ - ~~Set location of Self~~
+     - ~~Params: userhash, currendLocation (lat, long)~~
+     - ~~Returns: True on successful update.~~
+ - ~~Get Location of Friend~~
+     - ~~Params: userhash, friend's UserID~~
+     - ~~Returns: json object of latitude and longitude, or False if there was an error (e.g. they aren't a friend, or they are invisible)~~
+ - ~~Set Visibility (set your own visibility to other users)~~
+     - ~~Params: userhash, visibility status~~
+     - ~~Returns: True on successful change of status~~
+ - ~~Get Location of ALL Friends~~
+     - ~~Params: userhash~~
+     - ~~Returns: json object of latitude and longitude of all available Friend locations.~~
      

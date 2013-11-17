@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jackson-annotations-2.3.1-20131114.050553-1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Flock/libs/jackson-annotations-2.3.1-20131114.050553-1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

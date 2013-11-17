@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends Activity implements View.OnClickListener{
-    Button btn;
+    private Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +17,10 @@ public class MainActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_main);
         getActionBar().hide();
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+       /* FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.add(R.id.main_fragment, new MainFragment());
         transaction.commit();
+        */
 
         btn = (Button)findViewById(R.id.click_me_btn);
         btn.setOnClickListener(this);
