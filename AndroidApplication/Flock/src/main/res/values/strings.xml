@@ -7,4 +7,6 @@
     <string name="title_activity_login">Flock</string>
     <string name="title_activity_register">RegisterActivity</string>
 
+    <string name="sharedPrefsKey">ca.brocku.cosc.flock.SHARED_PREFERENCES_FILE_KEY</string>
+
 </resources>

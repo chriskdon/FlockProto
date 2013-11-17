@@ -11,4 +11,6 @@
     <dimen name="input_long_horizontalMargin">24dp</dimen>
     <dimen name="input_long_verticalMargin">30dp</dimen>
 
+    <dimen name="text_verticalMargin">15dp</dimen>
+
     </resources>
