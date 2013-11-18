@@ -24,13 +24,25 @@ public class FlockAPIConnection {
     private static final String DEBUG_TAG = "FLOCK_API_CONNECTION";
     private static final String SERVER_ADDRESS = "http://216.121.182.110:9999"; // Flock API Server
 
-    public static void send(String path, JsonModelBase request, Class<? extends JsonModelBase> responseClass, IFlockAPIResponse responseHandler) {
+    /**
+     * Send a request to the Flock API Server
+     *
+     * @param path
+     * @param request
+     * @param responseClass
+     * @param responseHandler
+     */
+    public static void send(String path, JsonModelBase request,
+                            Class<? extends JsonModelBase> responseClass,
+                            IFlockAPIResponse responseHandler) {
+
         // Append slash to front if it is not there
         if(path.length() > 0 && path.charAt(0) != '/') {
             path = "/" + path;
         }
 
-        (new FlockApiNetworkThread(path, request, responseHandler, responseClass)).execute(); // Execute request
+        // Execute request
+        (new FlockApiNetworkThread(path, request, responseHandler, responseClass)).execute();
     }
 
     /**
@@ -42,8 +54,16 @@ public class FlockAPIConnection {
         private JsonModelBase request;
         private String path;
         private IFlockAPIResponse responseHandler;
-        private Class<? extends JsonModelBase> responseClass;
+        private Class<? extends JsonModelBase> responseClass;   // Response class type.
 
+        /**
+         * Setup Constructor
+         *
+         * @param path
+         * @param request
+         * @param responseHandler
+         * @param responseClass
+         */
         public FlockApiNetworkThread(String path, JsonModelBase request, IFlockAPIResponse responseHandler, Class<? extends JsonModelBase> responseClass) {
             this.request = request;
             this.path = path;
@@ -51,6 +71,12 @@ public class FlockAPIConnection {
             this.responseClass = responseClass;
         }
 
+        /**
+         * Make the request to the FlockAPI Server
+         *
+         * @param params
+         * @return
+         */
         @Override
         protected String doInBackground(Void... params) {
             // Make Request
@@ -68,6 +94,11 @@ public class FlockAPIConnection {
             return null;
         }
 
+        /**
+         * Convert the result JSON to a POJO and call the proper handler.
+         *
+         * @param result
+         */
         @Override
         protected void onPostExecute(String result) {
             try {

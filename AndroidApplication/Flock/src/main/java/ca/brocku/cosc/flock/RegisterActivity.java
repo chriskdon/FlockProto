@@ -10,8 +10,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import ca.brocku.cosc.flock.data.api.FlockAPIConnection;
-import ca.brocku.cosc.flock.data.api.FlockUserAPI;
+import ca.brocku.cosc.flock.data.api.actions.FlockUserAPIAction;
 import ca.brocku.cosc.flock.data.api.IFlockAPIResponse;
 import ca.brocku.cosc.flock.data.api.json.models.GenericErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
@@ -83,6 +82,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
     private class RegisterSubmitHandler implements Button.OnClickListener {
         @Override
         public void onClick(View v) {
+            error.setVisibility(View.INVISIBLE);
+
             RegisterUserRequestModel newUser =
                     new RegisterUserRequestModel(usernameInput.getText().toString(),
                                                  firstNameInput.getText().toString(),
@@ -90,7 +91,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
                                                  emailInput.getText().toString(),
                                                  passwordInput.getText().toString());
 
-            FlockUserAPI.register(newUser, new IFlockAPIResponse<LoginUserResponseModel>() {
+            FlockUserAPIAction.register(newUser, new IFlockAPIResponse<LoginUserResponseModel>() {
                 @Override
                 public void onResponse(LoginUserResponseModel loginUserResponseModel) {
                     firstNameInput.setText(loginUserResponseModel.secret);
@@ -98,7 +99,8 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
 
                 @Override
                 public void onError(GenericErrorModel result) {
-                    firstNameInput.setText("Error: " + result.message);
+                    error.setText(result.message);
+                    error.setVisibility(View.VISIBLE);
                 }
             });
         }

@@ -6,6 +6,8 @@ package ca.brocku.cosc.flock.data.api.json.models.user;
 public class RegisterUserRequestModel extends UserInformationModel {
     public String password;
 
+    public RegisterUserRequestModel() {}
+
     public RegisterUserRequestModel(String username, String firstname, String lastname,
                                     String email, String password) {
 
