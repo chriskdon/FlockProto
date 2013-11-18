@@ -25,12 +25,14 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         getActionBar().hide();
 
+        // Bind Controls
         registerWrapper = (FrameLayout) findViewById(R.id.register_expand_wrapper);
         loginButton = (Button) findViewById(R.id.login_btn);
         usernameInput = (EditText) findViewById(R.id.username_input);
         passwordInput = (EditText) findViewById(R.id.password_input);
         error = (TextView) findViewById(R.id.login_errorMsg);
 
+        // Bind Handlers
         registerWrapper.setOnClickListener(new RegisterIntentHandler());
         loginButton.setOnClickListener(new LoginSubmitHandler());
     }
@@ -42,6 +44,8 @@ public class LoginActivity extends Activity {
     private class LoginSubmitHandler implements Button.OnClickListener {
         @Override
         public void onClick(View v) {
+            error.setVisibility(View.INVISIBLE);
+
             if (!usernameInput.getText().toString().isEmpty() && !passwordInput.getText().toString().isEmpty()) {
 
                 //TODO: CODE TO AUTHENTICATE USER/THROW ERROR
