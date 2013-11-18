@@ -62,7 +62,7 @@
                 android:layout_marginLeft="@dimen/input_long_horizontalMargin"
                 android:layout_marginRight="@dimen/input_long_horizontalMargin"
                 android:layout_marginBottom="@dimen/input_long_verticalMargin"
-                android:text="Enter"
+                android:text="Login"
                 android:id="@+id/login_btn"/>
         </LinearLayout>
     </ScrollView>

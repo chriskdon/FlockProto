@@ -80,7 +80,8 @@
                 android:layout_marginRight="@dimen/input_long_horizontalMargin"
                 android:layout_marginTop="@dimen/input_long_verticalMargin"
                 android:hint="email"
-                android:id="@+id/email_input"/>
+                android:id="@+id/email_input"
+                android:inputType="textEmailAddress"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -109,7 +110,7 @@
                 android:layout_marginLeft="@dimen/input_long_horizontalMargin"
                 android:layout_marginRight="@dimen/input_long_horizontalMargin"
                 android:layout_marginBottom="@dimen/input_long_verticalMargin"
-                android:text="Submit"
+                android:text="Register"
                 android:id="@+id/submit_registration_button"/>
         </LinearLayout>
     </ScrollView>

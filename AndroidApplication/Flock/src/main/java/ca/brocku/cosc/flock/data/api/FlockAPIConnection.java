@@ -34,7 +34,7 @@ public class FlockAPIConnection {
      */
     public static void send(String path, JsonModelBase request,
                             Class<? extends JsonModelBase> responseClass,
-                            IFlockAPIResponse responseHandler) {
+                            FlockAPIResponseHandler responseHandler) {
 
         // Append slash to front if it is not there
         if(path.length() > 0 && path.charAt(0) != '/') {
@@ -53,7 +53,7 @@ public class FlockAPIConnection {
 
         private JsonModelBase request;
         private String path;
-        private IFlockAPIResponse responseHandler;
+        private FlockAPIResponseHandler responseHandler;
         private Class<? extends JsonModelBase> responseClass;   // Response class type.
 
         /**
@@ -64,7 +64,7 @@ public class FlockAPIConnection {
          * @param responseHandler
          * @param responseClass
          */
-        public FlockApiNetworkThread(String path, JsonModelBase request, IFlockAPIResponse responseHandler, Class<? extends JsonModelBase> responseClass) {
+        public FlockApiNetworkThread(String path, JsonModelBase request, FlockAPIResponseHandler responseHandler, Class<? extends JsonModelBase> responseClass) {
             this.request = request;
             this.path = path;
             this.responseHandler = responseHandler;
@@ -72,7 +72,7 @@ public class FlockAPIConnection {
         }
 
         /**
-         * Make the request to the FlockAPI Server
+         * Make the request to the FlockAPIAction Server
          *
          * @param params
          * @return

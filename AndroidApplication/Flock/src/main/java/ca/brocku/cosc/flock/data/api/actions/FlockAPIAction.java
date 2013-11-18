@@ -1,4 +1,4 @@
-package ca.brocku.cosc.flock.data.api;
+package ca.brocku.cosc.flock.data.api.actions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -12,7 +12,7 @@ import ca.brocku.cosc.flock.data.api.json.models.user.RegisterUserRequestModel;
  * Student #: 4810800
  * Date: 11/17/2013
  */
-public class FlockAPI {
+public class FlockAPIAction {
     protected static final ObjectMapper mapper = new ObjectMapper();
 
 }

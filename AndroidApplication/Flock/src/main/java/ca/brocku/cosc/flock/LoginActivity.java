@@ -1,28 +1,25 @@
 package ca.brocku.cosc.flock;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class LoginActivity extends Activity implements View.OnClickListener {
+import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
+import ca.brocku.cosc.flock.data.api.actions.FlockUserAPIAction;
+import ca.brocku.cosc.flock.data.api.json.models.GenericErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
+import ca.brocku.cosc.flock.data.settings.UserDataManager;
+
+public class LoginActivity extends Activity {
     private FrameLayout registerWrapper;
     private Button loginBtn;
-    private EditText username;
-    private EditText password;
+    private EditText usernameInput;
+    private EditText passwordInput;
     private TextView error;
 
     @Override
@@ -33,43 +30,59 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         registerWrapper = (FrameLayout) findViewById(R.id.register_expand_wrapper);
         loginBtn = (Button) findViewById(R.id.login_btn);
-        username = (EditText) findViewById(R.id.username_input);
-        password = (EditText) findViewById(R.id.password_input);
+        usernameInput = (EditText) findViewById(R.id.username_input);
+        passwordInput = (EditText) findViewById(R.id.password_input);
         error = (TextView) findViewById(R.id.login_errorMsg);
 
-        registerWrapper.setOnClickListener(this);
-        loginBtn.setOnClickListener(this);
+        registerWrapper.setOnClickListener(new RegisterSwitchViewHandler());
+        loginBtn.setOnClickListener(new LoginSubmitHandler());
     }
 
+    /**
+     * Handle logging in the user when they click the login button.
+     */
+    private class LoginSubmitHandler implements Button.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            error.setVisibility(View.INVISIBLE);
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
+            String username = usernameInput.getText().toString();
+            String password = passwordInput.getText().toString();
 
-        if (id == registerWrapper.getId()) { //clicked Register option
-            finish();
-            startActivity(new Intent(this, RegisterActivity.class));
-        } else if (id == loginBtn.getId()) { //clicked to submit login credentials
-            login();
+            // Make sure fields aren't empty
+            if (!username.isEmpty() && !password.isEmpty()) {
+                FlockUserAPIAction.login(username, password, new FlockAPIResponseHandler<LoginUserResponseModel>() {
+                    @Override
+                    public void onResponse(LoginUserResponseModel loginUserResponseModel) {
+                        // Store secret
+                        (new UserDataManager(LoginActivity.this)).setUserSecret(loginUserResponseModel.secret);
+
+                        // Start Main Activity
+                        finish();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    }
+
+                    @Override
+                    public void onError(GenericErrorModel errorResponse) {
+                        error.setText(errorResponse.message);
+                        error.setVisibility(View.VISIBLE);
+                    }
+                });
+            } else { //inform the user that all fields must be filled in
+                error.setText("Please fill in all fields.");
+                error.setVisibility(View.VISIBLE);
+            }
         }
     }
 
-    private void login() {
-        if (!username.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
-            try {
-                //String secret = API.login(username.getText().toString(), password.getText().toString()); //TODO: call appropriate method to authenticate user and get secret
-                SharedPreferences prefs = getSharedPreferences(getString(R.string.sharedPrefsKey), MODE_PRIVATE);
-                SharedPreferences.Editor prefsEditor = prefs.edit();
-                //prefsEditor.putString("SECRET", secret);
-                finish();
-                startActivity(new Intent(this, MainActivity.class));
-            } catch (Exception e) { //TODO: catch appropriate exception
-                error.setText(e.getMessage());
-                error.setVisibility(View.VISIBLE);
-            }
-        } else { //inform the user that all fields must be filled in
-            error.setText("Please fill in all fields.");
-            error.setVisibility(View.VISIBLE);
+    /**
+     * Switch to the register new user view.
+     */
+    private class RegisterSwitchViewHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            finish();
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         }
     }
 }

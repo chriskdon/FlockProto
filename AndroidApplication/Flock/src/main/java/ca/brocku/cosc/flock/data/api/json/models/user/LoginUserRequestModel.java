@@ -7,4 +7,11 @@ import ca.brocku.cosc.flock.data.api.json.models.JsonModelBase;
  */
 public class LoginUserRequestModel extends JsonModelBase {
     public String username, password;
+
+    public LoginUserRequestModel() {}
+
+    public LoginUserRequestModel(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
 }
