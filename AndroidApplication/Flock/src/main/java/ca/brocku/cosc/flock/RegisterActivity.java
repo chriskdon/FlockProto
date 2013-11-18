@@ -10,23 +10,24 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import ca.brocku.cosc.flock.data.ApplicationSettings;
-import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
+import ca.brocku.cosc.flock.data.api.FlockAPIConnection;
+import ca.brocku.cosc.flock.data.api.FlockUserAPI;
+import ca.brocku.cosc.flock.data.api.IFlockAPIResponse;
+import ca.brocku.cosc.flock.data.api.json.models.GenericErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
+import ca.brocku.cosc.flock.data.api.json.models.user.RegisterUserRequestModel;
 
 public class RegisterActivity extends Activity implements View.OnClickListener {
-    FrameLayout loginWrapper;
+    private FrameLayout loginWrapper;
     private Button registerButton; // Button to register a new user
-    private EditText firstNameInput, lastNameInput, usernameInput, passwordInput;
-    TextView error;
+    private EditText firstNameInput, lastNameInput, usernameInput, passwordInput, emailInput;
+    private TextView error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         getActionBar().hide();
-
-        // Initialze Application Settings
-        ApplicationSettings.initialize(getBaseContext());
 
         // Bind Controls
         loginWrapper = (FrameLayout)findViewById(R.id.login_expand_wrapper);
@@ -35,6 +36,7 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
         lastNameInput = (EditText)findViewById(R.id.lastName_input);
         usernameInput = (EditText)findViewById(R.id.username_input);
         passwordInput = (EditText)findViewById(R.id.password_input);
+        emailInput = (EditText)findViewById(R.id.email_input);
         error = (TextView) findViewById(R.id.login_errorMsg);
 
         // Bind Handlers
@@ -78,11 +80,27 @@ public class RegisterActivity extends Activity implements View.OnClickListener {
      * Handles the user clicking the submit button when trying to register
      * as a new user.
      */
-    class RegisterSubmitHandler implements Button.OnClickListener {
+    private class RegisterSubmitHandler implements Button.OnClickListener {
         @Override
         public void onClick(View v) {
-            // TODO: Register a new user
-            firstNameInput.setText((new GenericSuccessModel("Test")).toJsonString());
+            RegisterUserRequestModel newUser =
+                    new RegisterUserRequestModel(usernameInput.getText().toString(),
+                                                 firstNameInput.getText().toString(),
+                                                 lastNameInput.getText().toString(),
+                                                 emailInput.getText().toString(),
+                                                 passwordInput.getText().toString());
+
+            FlockUserAPI.register(newUser, new IFlockAPIResponse<LoginUserResponseModel>() {
+                @Override
+                public void onResponse(LoginUserResponseModel loginUserResponseModel) {
+                    firstNameInput.setText(loginUserResponseModel.secret);
+                }
+
+                @Override
+                public void onError(GenericErrorModel result) {
+                    firstNameInput.setText("Error: " + result.message);
+                }
+            });
         }
     }
 }

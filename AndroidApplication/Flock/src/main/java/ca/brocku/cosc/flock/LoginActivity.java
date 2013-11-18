@@ -19,11 +19,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class LoginActivity extends Activity implements View.OnClickListener {
-    FrameLayout registerWrapper;
-    Button loginBtn;
-    EditText username;
-    EditText password;
-    TextView error;
+    private FrameLayout registerWrapper;
+    private Button loginBtn;
+    private EditText username;
+    private EditText password;
+    private TextView error;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

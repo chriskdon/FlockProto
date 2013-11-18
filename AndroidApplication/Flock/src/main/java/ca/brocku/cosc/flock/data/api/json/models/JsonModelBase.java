@@ -7,8 +7,8 @@ import java.io.IOException;
 
 @JsonIgnoreProperties({"mapper", "STATUS_OKAY", "STATUS_ERROR"})
 public abstract class JsonModelBase {
-    public final int STATUS_OKAY = 1;
-    public final int STATUS_ERROR = -1;
+    public static final int STATUS_OKAY = 1;
+    public static final int STATUS_ERROR = -1;
 
     protected static final ObjectMapper mapper = new ObjectMapper();
 
