@@ -43,6 +43,7 @@ public class RegisterActivity extends Activity {
         loginWrapper.setOnClickListener(new LoginIntentHandler());
     }
 
+
     /**
      * Handles the user clicking the submit button when trying to register
      * as a new user.
@@ -67,7 +68,7 @@ public class RegisterActivity extends Activity {
                     public void onResponse(LoginUserResponseModel loginUserResponseModel) {
                         SharedPreferences prefs = getSharedPreferences(getString(R.string.sharedPrefsKey), MODE_PRIVATE);
                         SharedPreferences.Editor prefsEditor = prefs.edit();
-                        prefsEditor.putString("SECRET", loginUserResponseModel.secret);
+                        prefsEditor.putString("SECRET", loginUserResponseModel.secret); //save secret
                         finish();
                         startActivity(new Intent(getBaseContext(), MainActivity.class));
                     }

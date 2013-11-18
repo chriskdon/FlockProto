@@ -1,28 +1,22 @@
 package ca.brocku.cosc.flock;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class LoginActivity extends Activity implements View.OnClickListener {
+import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserRequestModel;
+
+public class LoginActivity extends Activity {
     private FrameLayout registerWrapper;
-    private Button loginBtn;
-    private EditText username;
-    private EditText password;
+    private Button loginButton;
+    private EditText usernameInput;
+    private EditText passwordInput;
     private TextView error;
 
     @Override
@@ -32,44 +26,52 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         getActionBar().hide();
 
         registerWrapper = (FrameLayout) findViewById(R.id.register_expand_wrapper);
-        loginBtn = (Button) findViewById(R.id.login_btn);
-        username = (EditText) findViewById(R.id.username_input);
-        password = (EditText) findViewById(R.id.password_input);
+        loginButton = (Button) findViewById(R.id.login_btn);
+        usernameInput = (EditText) findViewById(R.id.username_input);
+        passwordInput = (EditText) findViewById(R.id.password_input);
         error = (TextView) findViewById(R.id.login_errorMsg);
 
-        registerWrapper.setOnClickListener(this);
-        loginBtn.setOnClickListener(this);
+        registerWrapper.setOnClickListener(new RegisterIntentHandler());
+        loginButton.setOnClickListener(new LoginSubmitHandler());
     }
 
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
+    /**
+     * Handles the user clicking the submit button to Login to the application.
+     */
+    private class LoginSubmitHandler implements Button.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            if (!usernameInput.getText().toString().isEmpty() && !passwordInput.getText().toString().isEmpty()) {
 
-        if (id == registerWrapper.getId()) { //clicked Register option
-            finish();
-            startActivity(new Intent(this, RegisterActivity.class));
-        } else if (id == loginBtn.getId()) { //clicked to submit login credentials
-            login();
+                //TODO: CODE TO AUTHENTICATE USER/THROW ERROR
+//                LoginUserRequestModel user =
+//                        new LoginUserRequestModel(usernameInput.getText().toString(),
+//                                                  passwordInput.getText().toString());
+
+                SharedPreferences prefs = getSharedPreferences(getString(R.string.sharedPrefsKey), MODE_PRIVATE);
+                SharedPreferences.Editor prefsEditor = prefs.edit();
+                //TODO: save the secret
+                //prefsEditor.putString("SECRET", loginUserResponseModel.secret); //save secret
+
+                finish();
+                startActivity(new Intent(getBaseContext(), MainActivity.class));
+
+            } else { //inform the user that all fields must be filled in
+                error.setText("Please fill in all fields.");
+                error.setVisibility(View.VISIBLE);
+            }
         }
     }
 
-    private void login() {
-        if (!username.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
-            try {
-                //String secret = API.login(username.getText().toString(), password.getText().toString()); //TODO: call appropriate method to authenticate user and get secret
-                SharedPreferences prefs = getSharedPreferences(getString(R.string.sharedPrefsKey), MODE_PRIVATE);
-                SharedPreferences.Editor prefsEditor = prefs.edit();
-                //prefsEditor.putString("SECRET", secret);
-                finish();
-                startActivity(new Intent(this, MainActivity.class));
-            } catch (Exception e) { //TODO: catch appropriate exception
-                error.setText(e.getMessage());
-                error.setVisibility(View.VISIBLE);
-            }
-        } else { //inform the user that all fields must be filled in
-            error.setText("Please fill in all fields.");
-            error.setVisibility(View.VISIBLE);
+    /**
+     * Handles the user clicking on the Register Tab to switch to the Register Activity.
+     */
+    private class RegisterIntentHandler implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            finish();
+            startActivity(new Intent(getBaseContext(), RegisterActivity.class));
         }
     }
 }
