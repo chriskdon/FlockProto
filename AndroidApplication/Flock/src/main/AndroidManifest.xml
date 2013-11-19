@@ -33,7 +33,7 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAqI_lNQFK97NnJNImN2rH0atlYSsiDobk"/>
+            android:value="AIzaSyDrit5LKX2bm7hZNr5wvVggM2oVF6Ks7Xk"/>
 
         <activity
             android:name="ca.brocku.cosc.flock.MainActivity"
