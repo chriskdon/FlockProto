@@ -40,8 +40,9 @@ public class RegisterActivity extends Activity {
 
         // Bind Handlers
         registerButton.setOnClickListener(new RegisterSubmitHandler());
-        loginWrapper.setOnClickListener(new LoginViewSwitchClickHandler());
+        loginWrapper.setOnClickListener(new LoginIntentHandler());
     }
+
 
     /**
      * Handles the user clicking the submit button when trying to register
@@ -60,7 +61,9 @@ public class RegisterActivity extends Activity {
 
             //if all fields aren't null, try to login
             if (!firstName.isEmpty() && !lastName.isEmpty() && !username.isEmpty() &&
+
                     !password.isEmpty() && !email.isEmpty()) {
+                                                     
 
                 RegisterUserRequestModel newUser = new RegisterUserRequestModel(username, firstName,
                                                                                 lastName, email,
@@ -84,18 +87,18 @@ public class RegisterActivity extends Activity {
                         error.setVisibility(View.VISIBLE);
                     }
                 });
+
             } else { //inform the user that all fields must be filled in
                 error.setText("Please fill in all fields.");
                 error.setVisibility(View.VISIBLE);
             }
-
         }
     }
 
     /**
-     * Show the login screen.
+     * Handles the user clicking the Login tab to switch to the Login Activity.
      */
-    private class LoginViewSwitchClickHandler implements View.OnClickListener {
+    private class LoginIntentHandler implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             finish();

@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
+import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserRequestModel;
 import ca.brocku.cosc.flock.data.api.actions.FlockUserAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.GenericErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
@@ -17,7 +18,7 @@ import ca.brocku.cosc.flock.data.settings.UserDataManager;
 
 public class LoginActivity extends Activity {
     private FrameLayout registerWrapper;
-    private Button loginBtn;
+    private Button loginButton;
     private EditText usernameInput;
     private EditText passwordInput;
     private TextView error;
@@ -28,15 +29,18 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         getActionBar().hide();
 
+        // Bind Controls
         registerWrapper = (FrameLayout) findViewById(R.id.register_expand_wrapper);
-        loginBtn = (Button) findViewById(R.id.login_btn);
+        loginButton = (Button) findViewById(R.id.login_btn);
         usernameInput = (EditText) findViewById(R.id.username_input);
         passwordInput = (EditText) findViewById(R.id.password_input);
         error = (TextView) findViewById(R.id.login_errorMsg);
 
-        registerWrapper.setOnClickListener(new RegisterSwitchViewHandler());
-        loginBtn.setOnClickListener(new LoginSubmitHandler());
+        // Bind Handlers
+        registerWrapper.setOnClickListener(new RegisterIntentHandler());
+        loginButton.setOnClickListener(new LoginSubmitHandler());
     }
+
 
     /**
      * Handle logging in the user when they click the login button.
@@ -76,9 +80,9 @@ public class LoginActivity extends Activity {
     }
 
     /**
-     * Switch to the register new user view.
+     * Handles the user clicking on the Register Tab to switch to the Register Activity.
      */
-    private class RegisterSwitchViewHandler implements View.OnClickListener {
+    private class RegisterIntentHandler implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             finish();

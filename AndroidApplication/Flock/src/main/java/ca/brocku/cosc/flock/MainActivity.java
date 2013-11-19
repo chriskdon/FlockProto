@@ -1,15 +1,19 @@
 package ca.brocku.cosc.flock;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
-public class MainActivity extends Activity implements View.OnClickListener{
-    private Button btn;
+public class MainActivity extends FragmentActivity {
+    private static final int NUM_PAGES = 3;
+    private ViewPager pager;
+    private MainPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,13 +21,12 @@ public class MainActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_main);
         getActionBar().hide();
 
-       /* FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.main_fragment, new MainFragment());
-        transaction.commit();
-        */
+        pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
 
-        btn = (Button)findViewById(R.id.click_me_btn);
-        btn.setOnClickListener(this);
+        pager = (ViewPager) findViewById(R.id.main_pager);
+        pager.setOffscreenPageLimit(2);
+        pager.setAdapter(pagerAdapter);
+        pager.setCurrentItem(1);
     }
 
 
@@ -48,12 +51,32 @@ public class MainActivity extends Activity implements View.OnClickListener{
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onClick(View v) {
-        Button clkBtn = (Button)v;
+    /**
+     * An adapter for the ViewPager. It populates the different pages that can be swiped through.
+     */
+    private static class MainPagerAdapter extends FragmentPagerAdapter {
 
-        if (clkBtn.getText().toString().equals("Can You Click Me? :(")) {
-            btn.setText("YAY :)");
+        public MainPagerAdapter(FragmentManager fragmentManager) {
+            super(fragmentManager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new NotificationsFragment();
+                case 1:
+                    return new RadarFragment();
+                case 2:
+                    return new FriendsFragment();
+                default:
+                    return new RadarFragment();
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
         }
     }
 
