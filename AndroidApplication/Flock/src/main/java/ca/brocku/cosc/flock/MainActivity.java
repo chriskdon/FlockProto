@@ -26,12 +26,13 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        try {
-//            secret = new UserDataManager(this).getUserSecret();
-//        } catch (NoUserSecretException e) {
+        //go to the Registration Activity if there is no secret set on this device
+        try {
+            secret = new UserDataManager(this).getUserSecret();
+        } catch (NoUserSecretException e) {
             finish();
             startActivity(new Intent(this, RegisterActivity.class));
-//        }
+        }
 
         setContentView(R.layout.activity_main);
         getActionBar().hide();

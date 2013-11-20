@@ -45,12 +45,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ca.brocku.cosc.flock.LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:name="ca.brocku.cosc.flock.RegisterActivity"
+            android:label="@string/activity_register" >
         </activity>
         <activity
-            android:name="ca.brocku.cosc.flock.RegisterActivity"
-            android:label="@string/title_activity_register" >
+            android:name="ca.brocku.cosc.flock.LoginActivity"
+            android:label="@string/activity_login" >
+        </activity>
+        <activity
+            android:name="ca.brocku.cosc.flock.SettingsActivity"
+            android:label="@string/activity_settings" >
         </activity>
     </application>
 
