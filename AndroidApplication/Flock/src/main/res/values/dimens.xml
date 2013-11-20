@@ -14,4 +14,7 @@
     <dimen name="text_verticalMargin">15dp</dimen>
     <dimen name="settings_icon_padding">15dp</dimen>
 
+    <dimen name="title_bottomSpace">10dp</dimen>
+    <dimen name="list_horizontalMargin">15dp</dimen>
+
 </resources>

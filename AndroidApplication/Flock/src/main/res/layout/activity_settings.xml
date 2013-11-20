@@ -1,7 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/title_padding"
+        android:background="@color/blue_main"
+        android:textSize="@dimen/title_fontSize"
+        android:text="@string/activity_settings"
+        android:id="@+id/settings_textView"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bottomSpace" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/list_horizontalMargin"
+        android:layout_marginRight="@dimen/list_horizontalMargin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/setting_location_textView"
+                    android:id="@+id/location_textView"/>
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textOn="On"
+                    android:textOff="Off"
+                    android:id="@+id/location_switch"/>
+            </RelativeLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/input_long_verticalMargin"
+                android:text="Logout"
+                android:id="@+id/logout_button"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@color/red_errorMsg"
+                android:text="@string/delete_label"
+                android:id="@+id/delete_button"/>
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

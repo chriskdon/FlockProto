@@ -11,8 +11,12 @@
         android:padding="@dimen/title_padding"
         android:background="@color/blue_main"
         android:textSize="@dimen/title_fontSize"
-        android:text="@string/friends_label"
+        android:text="@string/fragment_friends"
         android:id="@+id/friends_textView"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_bottomSpace" />
 
     <ListView
         android:layout_width="match_parent"

@@ -3,7 +3,6 @@ package ca.brocku.cosc.flock.data.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import ca.brocku.cosc.flock.R;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 
 /**
@@ -49,4 +48,8 @@ public class UserDataManager {
         return secret;
     }
 
+    public void removeUserSecret() {
+        prefsEditor.remove("SECRET");
+        prefsEditor.commit();
+    }
 }
