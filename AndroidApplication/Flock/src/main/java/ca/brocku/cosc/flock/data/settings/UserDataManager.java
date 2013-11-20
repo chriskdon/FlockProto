@@ -31,6 +31,7 @@ public class UserDataManager {
      */
     public void setUserSecret(String secret) {
         prefsEditor.putString("SECRET", secret);
+        prefsEditor.commit();
     }
 
     /**

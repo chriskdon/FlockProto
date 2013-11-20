@@ -12,5 +12,6 @@
     <dimen name="input_long_verticalMargin">30dp</dimen>
 
     <dimen name="text_verticalMargin">15dp</dimen>
+    <dimen name="settings_icon_padding">15dp</dimen>
 
-    </resources>
+</resources>

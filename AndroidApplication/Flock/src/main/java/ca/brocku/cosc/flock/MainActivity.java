@@ -1,6 +1,9 @@
 package ca.brocku.cosc.flock;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +13,11 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
+import ca.brocku.cosc.flock.data.settings.UserDataManager;
+
 public class MainActivity extends FragmentActivity {
+    private String secret;
     private static final int NUM_PAGES = 3;
     private ViewPager pager;
     private MainPagerAdapter pagerAdapter;
@@ -18,6 +25,14 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        try {
+//            secret = new UserDataManager(this).getUserSecret();
+//        } catch (NoUserSecretException e) {
+            finish();
+            startActivity(new Intent(this, RegisterActivity.class));
+//        }
+
         setContentView(R.layout.activity_main);
         getActionBar().hide();
 
