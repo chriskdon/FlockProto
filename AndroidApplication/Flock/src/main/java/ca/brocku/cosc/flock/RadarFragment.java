@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,9 +27,12 @@ import ca.brocku.cosc.flock.radar.RadarMapManager;
  * Created by kubasub on 11/13/2013.
  */
 public class RadarFragment extends Fragment {
-    private ImageView settings;
     private GoogleMap map;
     private RadarMapManager radarMapManager;
+
+    // Controls
+    private ImageView settings;
+    private SeekBar radarZoomSlider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,16 +41,44 @@ public class RadarFragment extends Fragment {
         // Bind Controls
         settings = (ImageView) v.findViewById(R.id.settings_icon);
         map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
-
-        // Bind Listener
-        settings.setOnClickListener(new SettingsIntentHandler());
+        radarZoomSlider = (SeekBar) v.findViewById(R.id.radarZoomSlider);
 
         // Setup Radar Manager
         radarMapManager = new RadarMapManager(getActivity(), map);
 
+        // Configure Defaults
+        radarZoomSlider.setProgress(RadarMapManager.DEFAULT_ZOOM_LEVEL);
+
+        // Bind Listeners
+        settings.setOnClickListener(new SettingsIntentHandler());
+        radarZoomSlider.setOnSeekBarChangeListener(new ZoomHandler());
+
         return v;
     }
 
+    /**
+     * Handles zooming in and out of the map
+     */
+    private class ZoomHandler implements SeekBar.OnSeekBarChangeListener {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            radarMapManager.setZoom(progress);
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    }
+
+    /**
+     * Launches the settings view.
+     */
     private class SettingsIntentHandler implements View.OnClickListener {
         @Override
         public void onClick(View v) {

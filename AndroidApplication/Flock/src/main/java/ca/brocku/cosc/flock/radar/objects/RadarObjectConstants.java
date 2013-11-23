@@ -10,9 +10,10 @@ import android.graphics.Color;
  * Date: 11/23/2013
  */
 public class RadarObjectConstants {
-    public static final int COLOR_CURRENT_USER = Color.rgb(0, 163, 255); // Color for current user
+    public static final int COLOR_CURRENT_USER_VISIBLE = Color.rgb(0, 163, 255); // Color for current user when visible
+    public static final int COLOR_CURRENT_USER_INVISIBLE = Color.rgb(212, 212, 212); // Color for current user when visible
     public static final int COLOR_STROKE = Color.rgb(44,40,41); // Stroke color for circles
 
-    public static final int RADIUS_CIRCLE = 30;
-    public static final int STROKE_WIDTH = 3;
+    public static final int RADIUS_CIRCLE = 40;
+    public static final int STROKE_WIDTH = 5;
 }
