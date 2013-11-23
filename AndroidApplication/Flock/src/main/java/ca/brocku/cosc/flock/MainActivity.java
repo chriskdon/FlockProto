@@ -20,7 +20,6 @@ public class MainActivity extends FragmentActivity {
     private String secret;
     private static final int NUM_PAGES = 3;
     private ViewPager pager;
-    private MainPagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +36,15 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.activity_main);
         getActionBar().hide();
 
-        pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
-
         pager = (ViewPager) findViewById(R.id.main_pager);
         pager.setOffscreenPageLimit(2);
-        pager.setAdapter(pagerAdapter);
+        pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
         pager.setCurrentItem(1);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -71,7 +67,6 @@ public class MainActivity extends FragmentActivity {
      * An adapter for the ViewPager. It populates the different pages that can be swiped through.
      */
     private static class MainPagerAdapter extends FragmentPagerAdapter {
-
         public MainPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }
