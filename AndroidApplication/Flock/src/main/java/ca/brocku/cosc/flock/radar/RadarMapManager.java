@@ -1,11 +1,6 @@
 package ca.brocku.cosc.flock.radar;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.RectF;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -13,13 +8,14 @@ import android.location.LocationManager;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 import ca.brocku.cosc.flock.radar.objects.MarkerFactory;
-import ca.brocku.cosc.flock.radar.objects.RadarObjectConstants;
 
 /**
  * Handles rendering of objects on the map, and any
@@ -36,21 +32,48 @@ public class RadarMapManager {
     private Context context;
     private Marker currentUserMarker;
 
+    private Map<String, Marker> friendMarkers;
+
     private int currentZoomLevel; // Current zoom level
 
+    /**
+     * Instantiate a manger for a map.
+     *
+     * @param context   // The context the map is in.
+     * @param map       // The map to manage as a radar instance.
+     */
     public RadarMapManager(Context context, GoogleMap map) {
         this.context = context;
         this.map = map;
 
-        this.currentZoomLevel = DEFAULT_ZOOM_LEVEL;
+        currentZoomLevel = DEFAULT_ZOOM_LEVEL;
+
+        friendMarkers = new HashMap<String, Marker>();
 
         // Configure Map
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setScrollGesturesEnabled(false);
         map.setMyLocationEnabled(false);
 
-        // Draw Current User
+        // Show Current User
         zoomToUser();
+    }
+
+    /**
+     * Add a marker to the map indicating a friends position.
+     * @param position      The position of the friend marker.
+     * @param id            A unique ID for this marker.
+     * @param friendName    The name of the friend to appear when the marker is clicked on.
+     */
+    public void setFriendMarker(LatLng position, String id, String friendName) {
+        Marker friendMarker = map.addMarker(MarkerFactory.friendMarker(position, friendName));
+
+        Marker old = friendMarkers.put(id, friendMarker);
+
+        // Was there already a marker for that friend
+        if(old != null) {
+            old.remove();
+        }
     }
 
     /**
@@ -66,10 +89,15 @@ public class RadarMapManager {
         map.animateCamera(zoom);
 
         if(currentUserMarker == null) {
-            currentUserMarker = map.addMarker(MarkerFactory.currentUserMarker(getCurrentUserPosition()));
+            currentUserMarker = map.addMarker(MarkerFactory.currentUserVisibleMarker(getCurrentUserPosition()));
         }
     }
 
+    /**
+     * Set the zoom level of the map.
+     *
+     * @param zoom Zoom level.
+     */
     public void setZoom(int zoom) {
         currentZoomLevel = zoom;
 
