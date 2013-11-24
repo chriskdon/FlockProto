@@ -88,7 +88,7 @@ public class RadarMapManager {
         map.animateCamera(zoom);
 
         if(currentUserMarker == null) {
-            currentUserMarker = map.addMarker(MarkerFactory.currentUserInvisibleMarker(getCurrentUserPosition()));
+            currentUserMarker = map.addMarker(MarkerFactory.currentUserVisibleMarker(getCurrentUserPosition()));
         }
     }
 
