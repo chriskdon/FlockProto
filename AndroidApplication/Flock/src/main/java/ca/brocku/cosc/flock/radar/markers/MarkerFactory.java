@@ -1,4 +1,4 @@
-package ca.brocku.cosc.flock.radar.objects;
+package ca.brocku.cosc.flock.radar.markers;
 
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;

@@ -29,7 +29,6 @@ import ca.brocku.cosc.flock.radar.RadarMapManager;
 public class RadarFragment extends Fragment {
     private GoogleMap map;
     private RadarMapManager radarMapManager;
-
     // Controls
     private ImageView settings;
     private SeekBar radarZoomSlider;
@@ -74,14 +73,10 @@ public class RadarFragment extends Fragment {
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
+        public void onStartTrackingTouch(SeekBar seekBar) {}
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-
-        }
+        public void onStopTrackingTouch(SeekBar seekBar) {}
     }
 
     /**

@@ -1,4 +1,4 @@
-package ca.brocku.cosc.flock.radar.objects;
+package ca.brocku.cosc.flock.radar.markers;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

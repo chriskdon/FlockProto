@@ -11,11 +11,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
-import ca.brocku.cosc.flock.radar.objects.MarkerFactory;
+import ca.brocku.cosc.flock.radar.markers.MarkerFactory;
 
 /**
  * Handles rendering of objects on the map, and any
@@ -52,7 +51,7 @@ public class RadarMapManager {
 
         // Configure Map
         map.getUiSettings().setZoomControlsEnabled(false);
-        map.getUiSettings().setScrollGesturesEnabled(false);
+        map.getUiSettings().setAllGesturesEnabled(false); // Manually handled
         map.setMyLocationEnabled(false);
 
         // Show Current User
@@ -89,7 +88,7 @@ public class RadarMapManager {
         map.animateCamera(zoom);
 
         if(currentUserMarker == null) {
-            currentUserMarker = map.addMarker(MarkerFactory.currentUserVisibleMarker(getCurrentUserPosition()));
+            currentUserMarker = map.addMarker(MarkerFactory.currentUserInvisibleMarker(getCurrentUserPosition()));
         }
     }
 
