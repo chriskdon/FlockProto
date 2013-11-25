@@ -9,3 +9,4 @@ Radar
 
 **Resources**
 - Custom popup over marker (http://stackoverflow.com/questions/14123243/google-maps-api-v2-custom-infowindow-like-in-original-android-google-maps/15040761#15040761)
+  - https://developers.google.com/maps/documentation/android/infowindows
