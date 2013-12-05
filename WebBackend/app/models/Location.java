@@ -22,11 +22,11 @@ public class Location extends Model {
 
     @Constraints.Required
     @Column(name="Latitude")
-    public long latitude;
+    public double latitude;
 
     @Constraints.Required
     @Column(name="Longitude")
-    public long longitude;
+    public double longitude;
 
     @Constraints.Required
     @Column(name="Timestamp")
@@ -34,7 +34,7 @@ public class Location extends Model {
 
     public Location() { }
 
-    public Location(long userID,  long latitude, long longitude, Date timestamp) {
+    public Location(long userID,  double latitude, double longitude, Date timestamp) {
         this.userID = userID;
         this.latitude = latitude;
         this.longitude = longitude;

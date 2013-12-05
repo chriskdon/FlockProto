@@ -6,5 +6,5 @@ import api.json.models.UserActionModel;
  * Set a user's location
  */
 public class SetLocationRequestModel extends UserActionModel {
-    public long latitude, longitude;
+    public double latitude, longitude;
 }
