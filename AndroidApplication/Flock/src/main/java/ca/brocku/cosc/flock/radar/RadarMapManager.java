@@ -1,11 +1,15 @@
 package ca.brocku.cosc.flock.radar;
 
 import android.content.Context;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationManager;
+import com.google.android.gms.location.LocationListener;
+import android.os.Bundle;
+import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -24,8 +28,12 @@ import ca.brocku.cosc.flock.radar.markers.MarkerFactory;
  * Student #: 4810800
  * Date: 11/23/2013
  */
-public class RadarMapManager {
+public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFailedListener,
+                                        GooglePlayServicesClient.ConnectionCallbacks,
+                                        LocationListener {
+
     public static final int DEFAULT_ZOOM_LEVEL = 15;
+    private static final int DEFAULT_UPDATE_INTERVAL = 5000;
 
     private GoogleMap map;
     private Context context;
@@ -34,6 +42,9 @@ public class RadarMapManager {
     private Map<String, Marker> friendMarkers;
 
     private int currentZoomLevel; // Current zoom level
+
+    private LocationClient locationClient;
+    private LocationRequest locationRequest;
 
     /**
      * Instantiate a manger for a map.
@@ -54,8 +65,30 @@ public class RadarMapManager {
         map.getUiSettings().setAllGesturesEnabled(false); // Manually handled
         map.setMyLocationEnabled(false);
 
-        // Show Current User
-        zoomToUser();
+        // Setup Location Services
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(DEFAULT_UPDATE_INTERVAL);
+        locationRequest.setFastestInterval(DEFAULT_UPDATE_INTERVAL);
+
+        locationClient = new LocationClient(context, this, this);
+
+    }
+
+    /**
+     * Stop the the Radar manager from responding and updating.
+     * Should be used when the application is backgrounded, or stopped.
+     */
+    // TODO: Call this from the radar activity
+    public void stop() {
+        locationClient.disconnect();
+    }
+
+    /**
+     * Start listening for location updates and drawing the radar.
+     */
+    public void start() {
+        locationClient.connect();
     }
 
     /**
@@ -79,40 +112,85 @@ public class RadarMapManager {
      * Zoom to the position of the current user on the map.
      */
     public void zoomToUser() {
-        LatLng currentPosition = getCurrentUserPosition();
+        updateUserLocation(true);
+        map.animateCamera(CameraUpdateFactory.zoomTo(currentZoomLevel));
+    }
 
-        CameraUpdate moveToUser = CameraUpdateFactory.newLatLng(currentPosition);
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(currentZoomLevel);
+    /**
+     * Update the location of the user and marker position
+     * @param animate
+     */
+    public void updateUserLocation(boolean animate) {
+        // Move Camera
+        if(animate) {
+            animateToLocation(locationClient.getLastLocation());
+        } else {
+            moveToLocation(locationClient.getLastLocation());
+        }
 
-        map.moveCamera(moveToUser);
-        map.animateCamera(zoom);
-
+        // Update Marker
+        Location location = locationClient.getLastLocation();
+        LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
         if(currentUserMarker == null) {
-            currentUserMarker = map.addMarker(MarkerFactory.currentUserVisibleMarker(getCurrentUserPosition()));
+            currentUserMarker = map.addMarker(MarkerFactory.currentUserVisibleMarker(point));
+        } else {
+            currentUserMarker.setPosition(point);
         }
     }
 
     /**
-     * Set the zoom level of the map.
+     * Animate the camera to a location on the map
+     * @param location
+     */
+    private void animateToLocation(Location location) {
+        map.animateCamera(CameraUpdateFactory.newLatLng(
+                new LatLng(location.getLatitude(), location.getLongitude())));
+    }
+
+    /**
+     * Quickly move to a location.
+     * @param location
+     */
+    private void moveToLocation(Location location) {
+        map.moveCamera(CameraUpdateFactory.newLatLng(
+                new LatLng(location.getLatitude(), location.getLongitude())));
+    }
+
+    /**
+     * Set the zoom level of the map on the user.
      *
      * @param zoom Zoom level.
      */
-    public void setZoom(int zoom) {
+    public void setZoomOnUser(int zoom) {
         currentZoomLevel = zoom;
 
         zoomToUser();
     }
 
-    /**
-     * @return The current position of the user.
-     */
-    private LatLng getCurrentUserPosition() {
-        // TODO: Handle case where we can't get a user's position.
+    // -------------------------------------------------
+    // Location Services
+    // -------------------------------------------------
+    @Override
+    public void onConnected(Bundle bundle) {
+        locationClient.requestLocationUpdates(locationRequest, this);
 
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        String provider = locationManager.getBestProvider(new Criteria(), true);
-        Location location = locationManager.getLastKnownLocation(provider);
+        // Show Current User position instantly and zoom to them
+        updateUserLocation(false);
+        zoomToUser();
+    }
 
-        return new LatLng(location.getLatitude(), location.getLongitude());
+    @Override
+    public void onDisconnected() {
+        // TODO: Notify User
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // TODO: Notify User
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        updateUserLocation(false);
     }
 }

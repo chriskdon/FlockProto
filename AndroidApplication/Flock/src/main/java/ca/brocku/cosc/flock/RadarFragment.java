@@ -1,11 +1,6 @@
 package ca.brocku.cosc.flock;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,11 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 
 import ca.brocku.cosc.flock.radar.RadarMapManager;
@@ -64,12 +56,22 @@ public class RadarFragment extends Fragment {
     }
 
     /**
+     * Activity visible
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        radarMapManager.start();
+    }
+
+    /**
      * Handles zooming in and out of the map
      */
     private class ZoomHandler implements SeekBar.OnSeekBarChangeListener {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            radarMapManager.setZoom(progress);
+            radarMapManager.setZoomOnUser(progress);
         }
 
         @Override
