@@ -12,12 +12,14 @@ import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.brocku.cosc.flock.radar.markers.MarkerBitmapFactory;
 import ca.brocku.cosc.flock.radar.markers.MarkerFactory;
 
 /**
@@ -46,6 +48,8 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     private LocationClient locationClient;
     private LocationRequest locationRequest;
 
+    private boolean isVisible;  // Current status of the users visibility
+
     /**
      * Instantiate a manger for a map.
      *
@@ -55,6 +59,8 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     public RadarMapManager(Context context, GoogleMap map) {
         this.context = context;
         this.map = map;
+
+        isVisible = true;
 
         currentZoomLevel = DEFAULT_ZOOM_LEVEL;
 
@@ -92,6 +98,21 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     }
 
     /**
+     * Set the visibility of the marker
+     * @param visible
+     */
+    public void setVisibility(boolean visible) {
+        isVisible = visible;
+
+        // Update marker
+        if(visible) {
+            getUserMarker().setIcon(BitmapDescriptorFactory.fromBitmap(MarkerBitmapFactory.currentUserInvisible()));
+        } else {
+            getUserMarker().setIcon(BitmapDescriptorFactory.fromBitmap(MarkerBitmapFactory.currentUserVisible()));
+        }
+    }
+
+    /**
      * Add a marker to the map indicating a friends position.
      * @param position      The position of the friend marker.
      * @param id            A unique ID for this marker.
@@ -117,6 +138,21 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     }
 
     /**
+     * Get the current instance of the user marker. If one has not been created yet, create one.
+     * @return
+     */
+    private Marker getUserMarker() {
+        if(currentUserMarker == null) {
+            Location location = locationClient.getLastLocation();
+            LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
+            currentUserMarker = map.addMarker(MarkerFactory.currentUserVisibleMarker(point));
+            return currentUserMarker;
+        } else {
+            return currentUserMarker;
+        }
+    }
+
+    /**
      * Update the location of the user and marker position
      * @param animate
      */
@@ -131,11 +167,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         // Update Marker
         Location location = locationClient.getLastLocation();
         LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
-        if(currentUserMarker == null) {
-            currentUserMarker = map.addMarker(MarkerFactory.currentUserVisibleMarker(point));
-        } else {
-            currentUserMarker.setPosition(point);
-        }
+        getUserMarker().setPosition(point);
     }
 
     /**
@@ -170,6 +202,11 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     // -------------------------------------------------
     // Location Services
     // -------------------------------------------------
+
+    /**
+     * The location manager was connected. We can now get locations.
+     * @param bundle
+     */
     @Override
     public void onConnected(Bundle bundle) {
         locationClient.requestLocationUpdates(locationRequest, this);
@@ -189,6 +226,11 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         // TODO: Notify User
     }
 
+    /**
+     * The user has moved and the location has been automatically updated.
+     * Update the user's location on the map.
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         updateUserLocation(false);
