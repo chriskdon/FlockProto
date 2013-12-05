@@ -2,6 +2,8 @@ package ca.brocku.cosc.flock.data.api.actions;
 
 import ca.brocku.cosc.flock.data.api.FlockAPIConnection;
 import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
+import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
+import ca.brocku.cosc.flock.data.api.json.models.user.DeleteUserRequestModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserRequestModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.RegisterUserRequestModel;
@@ -67,5 +69,16 @@ public class FlockUserAPIAction extends FlockAPIAction {
                             FlockAPIResponseHandler<LoginUserResponseModel> responseHandler) {
         FlockAPIConnection.send(API_PATH + "login", loginRequest,
                                 LoginUserResponseModel.class, responseHandler);
+    }
+
+    /**
+     * Delete an existing user.
+     * @param deleteRequest
+     * @param response
+     */
+    public static void delete(DeleteUserRequestModel deleteRequest,
+                              FlockAPIResponseHandler<GenericSuccessModel> response) {
+        FlockAPIConnection.send(API_PATH + "delete", deleteRequest,
+                GenericSuccessModel.class, response);
     }
 }
