@@ -11,4 +11,5 @@
     <string name="sharedPrefsKey">ca.brocku.cosc.flock.SHARED_PREFERENCES_FILE_KEY</string>
     <string name="setting_location_textView">Show my location</string>
     <string name="delete_label">Delete Account</string>
+    <string name="delete_confirmation_message">If you are sure you want to delete your account and related information, enter your password and click Yes.</string>
 </resources>
