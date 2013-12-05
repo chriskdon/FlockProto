@@ -74,11 +74,20 @@ public class FlockUserAPIAction extends FlockAPIAction {
     /**
      * Delete an existing user.
      * @param deleteRequest
-     * @param response
+     * @param responseHandler
      */
     public static void delete(DeleteUserRequestModel deleteRequest,
-                              FlockAPIResponseHandler<GenericSuccessModel> response) {
+                              FlockAPIResponseHandler<GenericSuccessModel> responseHandler) {
         FlockAPIConnection.send(API_PATH + "delete", deleteRequest,
-                GenericSuccessModel.class, response);
+                GenericSuccessModel.class, responseHandler);
+    }
+
+    public static void delete(String secret, String password,
+                              FlockAPIResponseHandler<GenericSuccessModel> responseHandler) {
+        DeleteUserRequestModel req = new DeleteUserRequestModel();
+        req.password = password;
+        req.secret = secret;
+
+        delete(req, responseHandler);
     }
 }
