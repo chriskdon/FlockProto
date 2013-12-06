@@ -1,6 +1,6 @@
 package ca.brocku.cosc.flock.data.api;
 
-import ca.brocku.cosc.flock.data.api.json.models.GenericErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.JsonModelBase;
 
 /**
@@ -23,7 +23,7 @@ public abstract class FlockAPIResponseHandler<TResult extends JsonModelBase> {
      *
      * @param result
      */
-    public void onError(GenericErrorModel result) {
+    public void onError(ErrorModel result) {
         // Do nothing -- can be overridden
     }
 }

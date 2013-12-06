@@ -1,8 +1,9 @@
 package controllers.api;
 
+import api.json.models.ErrorTypes;
+import api.json.models.ErrorModel;
 import api.json.models.connection.ConnectionInvolvingFriendRequest;
 import api.json.models.connection.ResponseFriendRequestModel;
-import api.json.models.GenericErrorModel;
 import api.json.models.GenericSuccessModel;
 import api.json.models.user.UserInformationModel;
 import models.Connection;
@@ -33,11 +34,11 @@ public class ConnectionController extends ApiControllerBase {
                 (new Connection(userID, askModel.friendUserID, false, true)).save(); // Insert new record
                 return ok((new GenericSuccessModel("Friend request sent.")).toJsonString());
             } else {
-                return ok((new GenericErrorModel("Friend request already sent.")).toJsonString());
+                return ok((new ErrorModel("Friend request already sent.", ErrorTypes.ERROR_TYPE_USER)).toJsonString());
             }
         } catch(IOException ex) { }
 
-        return ok((new GenericErrorModel()).toJsonString());
+        return ok((new ErrorModel()).toJsonString());
     }
 
     /**
@@ -59,7 +60,7 @@ public class ConnectionController extends ApiControllerBase {
 
              return ok((new GenericSuccessModel()).toJsonString());
          } catch(Exception ex) {
-             return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+             return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
          }
     }
 
@@ -79,7 +80,7 @@ public class ConnectionController extends ApiControllerBase {
 
             return ok((new GenericSuccessModel("Friend Removed")).toJsonString());
         } catch(Exception ex) {
-            return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
         }
     }
 
@@ -100,7 +101,7 @@ public class ConnectionController extends ApiControllerBase {
 
             return ok(userInfo.toJsonString());
         } catch(Exception ex) {
-            return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
         }
     }
 }

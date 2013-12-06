@@ -12,7 +12,7 @@ import android.widget.TextView;
 import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserRequestModel;
 import ca.brocku.cosc.flock.data.api.actions.FlockUserAPIAction;
-import ca.brocku.cosc.flock.data.api.json.models.GenericErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 
@@ -69,7 +69,7 @@ public class LoginActivity extends Activity {
                     }
 
                     @Override
-                    public void onError(GenericErrorModel errorResponse) {
+                    public void onError(ErrorModel errorResponse) {
                         error.setText(errorResponse.message);
                         error.setVisibility(View.VISIBLE);
                     }

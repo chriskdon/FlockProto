@@ -14,7 +14,9 @@ import android.widget.Toast;
 
 import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
 import ca.brocku.cosc.flock.data.api.actions.FlockUserAPIAction;
-import ca.brocku.cosc.flock.data.api.json.models.GenericErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.ErrorTypes;
 import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
@@ -113,9 +115,14 @@ public class SettingsActivity extends Activity {
                                 }
 
                                 @Override
-                                public void onError(GenericErrorModel genericErrorModel) {
-                                    errorMessage.setText("Could not delete at this time. Try again later.");
-                                    errorMessage.setVisibility(View.VISIBLE);
+                                public void onError(ErrorModel error) {
+                                    if(error.errorType == ErrorTypes.ERROR_TYPE_USER) {
+                                        errorMessage.setText(error.message);
+                                        errorMessage.setVisibility(View.VISIBLE);
+                                    } else {
+                                        errorMessage.setText("Could not delete at this time. Try again later.");
+                                        errorMessage.setVisibility(View.VISIBLE);
+                                    }
                                 }
                             });
                         } catch (NoUserSecretException e) {

@@ -1,12 +1,14 @@
 package controllers.api;
 
-import api.json.models.GenericErrorModel;
+import api.json.models.ErrorTypes;
+import api.json.models.ErrorModel;
 import api.json.models.GenericSuccessModel;
 import api.json.models.UserActionModel;
 import api.json.models.location.FriendLocationRequestModel;
 import api.json.models.location.FriendLocationsListResponseModel;
 import api.json.models.location.SetLocationRequestModel;
 import api.json.models.location.UserLocationModel;
+
 import models.Location;
 import models.User;
 import play.mvc.*;
@@ -37,7 +39,7 @@ public class LocationController extends ApiControllerBase {
 
             return ok((new GenericSuccessModel("Location Updated")).toJsonString());
         } catch(Exception ex) {
-            return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
         }
     }
 
@@ -54,7 +56,7 @@ public class LocationController extends ApiControllerBase {
 
             return ok((new GenericSuccessModel("Location Hidden/Deleted")).toJsonString());
         } catch(Exception ex) {
-            return ok((new GenericErrorModel()).toJsonString());
+            return ok((new ErrorModel()).toJsonString());
         }
     }
 
@@ -72,7 +74,7 @@ public class LocationController extends ApiControllerBase {
 
             return ok((new UserLocationModel(friendLocation)).toJsonString());
         } catch(Exception ex) {
-            return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
         }
     }
 
@@ -97,7 +99,7 @@ public class LocationController extends ApiControllerBase {
 
             return ok(response.toJsonString());
         } catch(Exception ex) {
-            return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
         }
     }
 

@@ -30,14 +30,14 @@ public class UserController extends ApiControllerBase {
             // Check if username is already taken
             boolean usernameTaken = (User.find.where().eq("username",model.username).findRowCount() > 0);
             if(usernameTaken) {
-                return ok((new GenericErrorModel("Username Taken")).toJsonString()); // Error username taken
+                return ok((new ErrorModel("Username Taken", ErrorTypes.ERROR_TYPE_USER)).toJsonString()); // Error username taken
             } else {
                 newUser.save();
             }
 
             return ok((new LoginUserResponseModel(newUser.secret)).toJsonString());
         } catch (IOException ex) {
-            return ok((new GenericErrorModel()).toJsonString());
+            return ok((new ErrorModel()).toJsonString());
         }
     }
 
@@ -55,13 +55,13 @@ public class UserController extends ApiControllerBase {
             if(user != null && auth.checkPassword(user, loginModel.password)) { // user found now test password.
                 return ok((new LoginUserResponseModel(user.secret)).toJsonString());
             } else {
-                return ok((new GenericErrorModel("Login Error").toJsonString()));
+                return ok((new ErrorModel("Invalid Username or Password", ErrorTypes.ERROR_TYPE_USER).toJsonString()));
             }
 
         } catch(IOException ex) { }
 
         // If we got this far an error occurred
-        return ok((new GenericErrorModel()).toJsonString());
+        return ok((new ErrorModel()).toJsonString());
     }
 
     /**
@@ -77,12 +77,12 @@ public class UserController extends ApiControllerBase {
             if(user != null && auth.checkPassword(user, deleteModel.password)) {
                 user.delete();
                 return ok((new GenericSuccessModel("User Deleted")).toJsonString());
-            } else {
-                return ok((new GenericErrorModel("Couldn't Delete user")).toJsonString());
+            } else if(user != null) {
+                return ok((new ErrorModel("Wrong Password", ErrorTypes.ERROR_TYPE_USER)).toJsonString());
             }
         } catch(IOException ex) { }
 
-        return ok((new GenericErrorModel()).toJsonString());
+        return ok((new ErrorModel()).toJsonString());
     }
 
     /**
@@ -108,7 +108,7 @@ public class UserController extends ApiControllerBase {
 
             return ok(response.toJsonString());
         } catch(Exception ex) {
-            return ok((new GenericErrorModel(ex.getMessage())).toJsonString());
+            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
         }
     }
 }

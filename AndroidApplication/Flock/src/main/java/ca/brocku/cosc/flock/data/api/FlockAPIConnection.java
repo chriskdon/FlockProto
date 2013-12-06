@@ -10,7 +10,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import ca.brocku.cosc.flock.data.api.json.models.GenericErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.JsonModelBase;
 
 /**
@@ -30,11 +30,11 @@ public class FlockAPIConnection {
      * @param path
      * @param request
      * @param responseClass
-     * @param responseHandler
+     * @param response
      */
     public static void send(String path, JsonModelBase request,
                             Class<? extends JsonModelBase> responseClass,
-                            FlockAPIResponseHandler responseHandler) {
+                            FlockAPIResponseHandler response) {
 
         // Append slash to front if it is not there
         if(path.length() > 0 && path.charAt(0) != '/') {
@@ -42,7 +42,7 @@ public class FlockAPIConnection {
         }
 
         // Execute request
-        (new FlockApiNetworkThread(path, request, responseHandler, responseClass)).execute();
+        (new FlockApiNetworkThread(path, request, response, responseClass)).execute();
     }
 
     /**
@@ -101,13 +101,11 @@ public class FlockAPIConnection {
          */
         @Override
         protected void onPostExecute(String result) {
-            Log.e("Sdf","MESSAGE: " + result);
-
             try {
                 responseHandler.onResponse(mapper.readValue(result, responseClass));
             } catch(Exception ex) {
                 try {
-                    GenericErrorModel error = mapper.readValue(result, GenericErrorModel.class);
+                    ErrorModel error = mapper.readValue(result, ErrorModel.class);
                     if(error.status == JsonModelBase.STATUS_ERROR) {
                         responseHandler.onError(error);
                         return;

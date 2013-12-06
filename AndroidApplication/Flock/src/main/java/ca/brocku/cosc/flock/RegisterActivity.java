@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
 import ca.brocku.cosc.flock.data.api.actions.FlockUserAPIAction;
-import ca.brocku.cosc.flock.data.api.json.models.GenericErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.RegisterUserRequestModel;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
@@ -65,9 +65,12 @@ public class RegisterActivity extends Activity {
                     !password.isEmpty() && !email.isEmpty()) {
                                                      
 
-                RegisterUserRequestModel newUser = new RegisterUserRequestModel(username, firstName,
-                                                                                lastName, email,
-                                                                                password);
+                RegisterUserRequestModel newUser = new RegisterUserRequestModel();
+                newUser.username = username;
+                newUser.firstname = firstName;
+                newUser.lastname = lastName;
+                newUser.email = email;
+                newUser.password = password;
 
                 // Register user
                 FlockUserAPIAction.register(newUser, new FlockAPIResponseHandler<LoginUserResponseModel>() {
@@ -84,7 +87,7 @@ public class RegisterActivity extends Activity {
                     }
 
                     @Override
-                    public void onError(GenericErrorModel result) {
+                    public void onError(ErrorModel result) {
                         error.setText(result.message);
                         error.setVisibility(View.VISIBLE);
                     }

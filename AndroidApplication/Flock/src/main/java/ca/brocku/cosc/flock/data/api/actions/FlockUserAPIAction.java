@@ -30,7 +30,15 @@ public class FlockUserAPIAction extends FlockAPIAction {
                                 String email, String password,
                                 FlockAPIResponseHandler<LoginUserResponseModel> responseHandler) {
 
-        register(new RegisterUserRequestModel(username, firstname, lastname, email, password), responseHandler);
+        RegisterUserRequestModel request = new RegisterUserRequestModel();
+
+        request.username = username;
+        request.firstname = firstname;
+        request.lastname = lastname;
+        request.email = email;
+        request.password = password;
+
+        register(request, responseHandler);
     }
 
     /**
@@ -56,7 +64,11 @@ public class FlockUserAPIAction extends FlockAPIAction {
     public static void login(String username, String password,
                              FlockAPIResponseHandler<LoginUserResponseModel> responseHandler) {
 
-        login(new LoginUserRequestModel(username, password), responseHandler);
+        LoginUserRequestModel request = new LoginUserRequestModel();
+        request.username = username;
+        request.password = password;
+
+        login(request, responseHandler);
     }
 
     /**
