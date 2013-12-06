@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/input_long_horizontalMargin"
         android:layout_marginRight="@dimen/input_long_horizontalMargin"
+        android:inputType="textPassword"
         android:hint="password"
         android:id="@+id/delete_confirmation_password_input"/>
 

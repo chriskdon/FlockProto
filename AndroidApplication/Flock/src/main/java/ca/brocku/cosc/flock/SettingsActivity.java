@@ -15,7 +15,9 @@ import android.widget.Toast;
 import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
 import ca.brocku.cosc.flock.data.api.actions.FlockUserAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.GenericErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
+import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 
 /**
@@ -92,11 +94,25 @@ public class SettingsActivity extends Activity {
 
                     // Make sure fields aren't empty
                     if (!password.isEmpty()) {
-                        //TODO: delete the user
+                        try {
+                            FlockUserAPIAction.delete(new UserDataManager(SettingsActivity.this).getUserSecret(),password, new FlockAPIResponseHandler<GenericSuccessModel>() {
+                                @Override
+                                public void onResponse(GenericSuccessModel genericSuccessModel) {
+                                    new UserDataManager(getBaseContext()).removeUserSecret();
+                                    finish();
+                                    startActivity(new Intent(SettingsActivity.this, RegisterActivity.class));
+                                }
 
-                        new UserDataManager(getBaseContext()).removeUserSecret();
-                        finish();
-                        startActivity(new Intent(SettingsActivity.this, RegisterActivity.class));
+                                @Override
+                                public void onError(GenericErrorModel genericErrorModel) {
+                                    errorMessage.setText("Could not delete at this time. Try again later.");
+                                    errorMessage.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        } catch (NoUserSecretException e) {
+                            errorMessage.setText("Could not delete at this time. Try again later.");
+                            errorMessage.setVisibility(View.VISIBLE);
+                        }
                     } else { //inform the user that all fields must be filled in
                         errorMessage.setText("Invalid password.");
                         errorMessage.setVisibility(View.VISIBLE);
