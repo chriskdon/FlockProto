@@ -67,6 +67,7 @@ public class MainActivity extends FragmentActivity {
      * An adapter for the ViewPager. It populates the different pages that can be swiped through.
      */
     private static class MainPagerAdapter extends FragmentPagerAdapter {
+
         public MainPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
         }

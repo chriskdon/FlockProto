@@ -48,16 +48,16 @@ public class SettingsActivity extends Activity {
     private class LocationSettingHandler implements CompoundButton.OnCheckedChangeListener {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            //TODO: Add preference to show/hide and ensure that it is refreshed on radar screen
+            new UserDataManager(SettingsActivity.this).setUserVisibility(isChecked);
         }
     }
 
     private class LogoutHandler implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            new UserDataManager(getBaseContext()).removeUserSecret();
+            new UserDataManager(SettingsActivity.this).clearUserData();
             finish();
-            startActivity(new Intent(getBaseContext(), MainActivity.class));
+            startActivity(new Intent(SettingsActivity.this, MainActivity.class));
         }
     }
 
@@ -98,7 +98,7 @@ public class SettingsActivity extends Activity {
                             FlockUserAPIAction.delete(new UserDataManager(SettingsActivity.this).getUserSecret(),password, new FlockAPIResponseHandler<GenericSuccessModel>() {
                                 @Override
                                 public void onResponse(GenericSuccessModel genericSuccessModel) {
-                                    new UserDataManager(getBaseContext()).removeUserSecret();
+                                    new UserDataManager(getBaseContext()).clearUserData();
                                     finish();
                                     startActivity(new Intent(SettingsActivity.this, RegisterActivity.class));
                                 }

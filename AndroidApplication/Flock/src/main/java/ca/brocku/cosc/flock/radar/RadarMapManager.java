@@ -106,9 +106,9 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
         // Update marker
         if(visible) {
-            getUserMarker().setIcon(BitmapDescriptorFactory.fromBitmap(MarkerBitmapFactory.currentUserInvisible()));
-        } else {
             getUserMarker().setIcon(BitmapDescriptorFactory.fromBitmap(MarkerBitmapFactory.currentUserVisible()));
+        } else {
+            getUserMarker().setIcon(BitmapDescriptorFactory.fromBitmap(MarkerBitmapFactory.currentUserInvisible()));
         }
     }
 

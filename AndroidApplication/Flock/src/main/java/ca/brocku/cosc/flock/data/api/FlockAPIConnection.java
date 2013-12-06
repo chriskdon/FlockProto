@@ -101,6 +101,8 @@ public class FlockAPIConnection {
          */
         @Override
         protected void onPostExecute(String result) {
+            Log.e("Sdf","MESSAGE: " + result);
+
             try {
                 responseHandler.onResponse(mapper.readValue(result, responseClass));
             } catch(Exception ex) {

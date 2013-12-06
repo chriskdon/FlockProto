@@ -58,8 +58,10 @@ public class LoginActivity extends Activity {
                 FlockUserAPIAction.login(username, password, new FlockAPIResponseHandler<LoginUserResponseModel>() {
                     @Override
                     public void onResponse(LoginUserResponseModel loginUserResponseModel) {
-                        // Store secret
-                        (new UserDataManager(LoginActivity.this)).setUserSecret(loginUserResponseModel.secret);
+                        // Store secret and visibility
+                        UserDataManager dataManager = new UserDataManager(LoginActivity.this);
+                        dataManager.setUserSecret(loginUserResponseModel.secret);
+                        dataManager.setUserVisibility(false);
 
                         // Start Main Activity
                         finish();

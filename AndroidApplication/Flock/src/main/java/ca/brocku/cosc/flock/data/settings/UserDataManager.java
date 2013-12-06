@@ -49,6 +49,7 @@ public class UserDataManager {
         return secret;
     }
 
+    //TODO: possibly delete removeUserSecret as it may be replaced by clearUserData method
     /**
      * Remove the user's secret token. They must login
      * again to get a new token.
@@ -67,5 +68,30 @@ public class UserDataManager {
         } catch(Exception ex) {
             return false;
         }
+    }
+
+    /**
+     * Sets whether a user can be seen by his/her friends
+     *
+     * @param visibility whether or not the use is visible
+     */
+    public void setUserVisibility(boolean visibility) {
+        prefsEditor.putBoolean("VISIBLE", visibility);
+        prefsEditor.commit();
+    }
+
+    /**
+     * Returns whether or not a user can be seen by his/her friends
+     */
+    public boolean getUserVisibility() {
+        return prefs.getBoolean("VISIBLE", false);
+    }
+
+    /**
+     * Remove all of a users local data. Useful upon deauthentication.
+     */
+    public void clearUserData() {
+        prefsEditor.clear();
+        prefsEditor.commit();
     }
 }

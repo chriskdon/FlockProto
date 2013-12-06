@@ -73,8 +73,10 @@ public class RegisterActivity extends Activity {
                 FlockUserAPIAction.register(newUser, new FlockAPIResponseHandler<LoginUserResponseModel>() {
                     @Override
                     public void onResponse(LoginUserResponseModel loginUserResponseModel) {
-                        // Store Secret
-                        (new UserDataManager(RegisterActivity.this)).setUserSecret(loginUserResponseModel.secret);
+                        // Store Secret and visibility
+                        UserDataManager dataManager = new UserDataManager(RegisterActivity.this);
+                        dataManager.setUserSecret(loginUserResponseModel.secret);
+                        dataManager.setUserVisibility(false);
 
                         // Launch Main Activity
                         finish();
