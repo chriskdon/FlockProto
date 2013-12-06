@@ -218,7 +218,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
             zoomToUser();
         } else {
             // TODO: Replace with failed callback
-            Toast.makeText(context, "Location Not Enabled", Toast.LENGTH_LONG);
+            Toast.makeText(context, "Location Not Enabled", Toast.LENGTH_LONG).show();
         }
     }
 
