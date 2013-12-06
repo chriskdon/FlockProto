@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
+import ca.brocku.cosc.flock.radar.callbacks.RadarConnected;
 import ca.brocku.cosc.flock.radar.markers.MarkerBitmapFactory;
 import ca.brocku.cosc.flock.radar.markers.MarkerFactory;
 
@@ -51,6 +52,8 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
     private boolean isVisible;  // Current status of the users visibility
 
+    RadarConnected connectedCallback; // Fired when the radar connects
+
     /**
      * Instantiate a manger for a map.
      *
@@ -81,6 +84,10 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
         locationClient = new LocationClient(context, this, this);
 
+    }
+
+    public void setOnConnected(RadarConnected onConnected) {
+        this.connectedCallback = onConnected;
     }
 
     /**
@@ -214,6 +221,10 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         locationClient.requestLocationUpdates(locationRequest, this);
 
         if(locationClient.getLastLocation() != null) {
+            if(connectedCallback != null) {
+                connectedCallback.onConnected();
+            }
+
             // Show Current User position instantly and zoom to them
             updateUserLocation(false);
             zoomToUser();

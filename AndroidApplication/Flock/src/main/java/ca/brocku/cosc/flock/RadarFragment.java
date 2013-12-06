@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 import ca.brocku.cosc.flock.radar.RadarMapManager;
+import ca.brocku.cosc.flock.radar.callbacks.RadarConnected;
 
 /**
  * Created by kubasub on 11/13/2013.
@@ -53,27 +54,17 @@ public class RadarFragment extends Fragment {
         radarMapManager.setFriendMarker(new LatLng(43.130420, -79.239272), "4", "Jim John");
         // ------------
 
+        // Check visibility
+        radarMapManager.setOnConnected(new RadarConnectedHandler());
+
         return v;
     }
 
-    /**
-     * Activity visible
-     */
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        radarMapManager.start();
-    }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        //TODO: this line is causing an issue due to RadarMapManager.getUserMarker (line: 148)
-        //      when this line is runnable, the icon should change according to Preferences set
-        //      http://stackoverflow.com/questions/19125368/new-location-api-android-error-call-connect-and-wait-for-onconnected-to-be
-        //radarMapManager.setVisibility(new UserDataManager(getActivity()).getUserVisibility());
+        radarMapManager.start();
     }
 
 
@@ -100,6 +91,16 @@ public class RadarFragment extends Fragment {
         @Override
         public void onClick(View v) {
             startActivity(new Intent(getActivity(), SettingsActivity.class));
+        }
+    }
+
+    /**
+     * When connecting check the current status of the visibility setting.
+     */
+    private class RadarConnectedHandler implements RadarConnected {
+        @Override
+        public void onConnected() {
+            radarMapManager.setVisibility(new UserDataManager(getActivity()).getUserVisibility());
         }
     }
 }
