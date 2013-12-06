@@ -24,7 +24,7 @@
         android:layout_alignParentRight="true"
         android:paddingRight="@dimen/settings_icon_padding"
         android:paddingTop="@dimen/settings_icon_padding"
-        android:src="@drawable/layer__0001s_0000_settings"
+        android:src="@drawable/gear"
         android:id="@+id/settings_icon"/>
 
     <SeekBar

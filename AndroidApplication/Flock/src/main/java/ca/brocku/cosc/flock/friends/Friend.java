@@ -9,11 +9,11 @@ package ca.brocku.cosc.flock.friends;
  * Date: 12/5/2013
  */
 public class Friend {
-    public String title;
-    public String description;
+    public String fullName;
+    public String username;
 
     public Friend() {
-        this.title = "Title";
-        this.description = "description";
+        this.fullName = "Full Name";
+        this.username = "username";
     }
 }
