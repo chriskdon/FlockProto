@@ -9,7 +9,8 @@ import java.util.Date;
  * Represents a user's location
  */
 public class UserLocationModel extends JsonModelBase {
-    public long userID, latitude, longitude;
+    public long userID;
+    public double latitude, longitude;
     public Date timestamp;
 
     public UserLocationModel() { }
