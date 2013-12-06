@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import ca.brocku.cosc.flock.data.settings.UserDataManager;
 import ca.brocku.cosc.flock.radar.RadarMapManager;
 
 /**
@@ -68,6 +69,11 @@ public class RadarFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        //TODO: this line is causing an issue due to RadarMapManager.getUserMarker (line: 148)
+        //      when this line is runnable, the icon should change according to Preferences set
+        //      http://stackoverflow.com/questions/19125368/new-location-api-android-error-call-connect-and-wait-for-onconnected-to-be
+        //radarMapManager.setVisibility(new UserDataManager(getActivity()).getUserVisibility());
     }
 
 

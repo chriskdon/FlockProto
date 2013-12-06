@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.Marker;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.brocku.cosc.flock.data.settings.UserDataManager;
 import ca.brocku.cosc.flock.radar.markers.MarkerBitmapFactory;
 import ca.brocku.cosc.flock.radar.markers.MarkerFactory;
 
@@ -60,7 +61,8 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         this.context = context;
         this.map = map;
 
-        isVisible = true;
+        //Get visibility setting from the data manager
+        isVisible = new UserDataManager(context).getUserVisibility();
 
         currentZoomLevel = DEFAULT_ZOOM_LEVEL;
 
@@ -145,7 +147,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         if(currentUserMarker == null) {
             Location location = locationClient.getLastLocation();
             LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
-            currentUserMarker = map.addMarker(MarkerFactory.currentUserVisibleMarker(point));
+            currentUserMarker = map.addMarker(MarkerFactory.currentUserInvisibleMarker(point));
             return currentUserMarker;
         } else {
             return currentUserMarker;

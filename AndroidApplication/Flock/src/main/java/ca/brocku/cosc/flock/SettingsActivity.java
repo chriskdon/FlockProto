@@ -43,6 +43,15 @@ public class SettingsActivity extends Activity {
         logoutButton.setOnClickListener(new LogoutHandler());
         deleteAccountButton.setOnClickListener(new DeleteAccountHandler());
 
+        locationSwitch.setChecked(new UserDataManager(this).getUserVisibility());
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        locationSwitch.setChecked(new UserDataManager(this).getUserVisibility());
     }
 
     private class LocationSettingHandler implements CompoundButton.OnCheckedChangeListener {
