@@ -12,7 +12,11 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
+import ca.brocku.cosc.flock.data.api.actions.FlockUserAPIAction;
+import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 

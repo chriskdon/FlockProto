@@ -72,11 +72,11 @@ public class UserController extends ApiControllerBase {
     public static Result delete() {
         try {
             DeleteUserRequestModel deleteModel = mapper.readValue(request().body().asJson(), DeleteUserRequestModel.class);
-            User user = User.find.where().eq("UserHash",deleteModel.secret).findUnique();
+            User user = User.findBySecret(deleteModel.secret);
 
             if(user != null && auth.checkPassword(user, deleteModel.password)) {
                 user.delete();
-                return ok((new GenericSuccessModel("user Deleted")).toJsonString());
+                return ok((new GenericSuccessModel("User Deleted")).toJsonString());
             } else {
                 return ok((new GenericErrorModel("Couldn't Delete user")).toJsonString());
             }

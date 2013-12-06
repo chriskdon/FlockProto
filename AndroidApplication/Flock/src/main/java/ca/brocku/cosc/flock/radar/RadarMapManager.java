@@ -213,7 +213,6 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     public void onConnected(Bundle bundle) {
         locationClient.requestLocationUpdates(locationRequest, this);
 
-
         if(locationClient.getLastLocation() != null) {
             // Show Current User position instantly and zoom to them
             updateUserLocation(false);
