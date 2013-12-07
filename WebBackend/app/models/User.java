@@ -63,6 +63,10 @@ public class User extends Model {
         return find.where().eq("Secret", secret).findUnique();
     }
 
+    public static User findByUsername(String username) {
+        return find.where().eq("Username", username).findUnique();
+    }
+
     /**
      * Search for users with the `usernameQuery` text in they're username.
      *

@@ -3,6 +3,7 @@ package controllers.api;
 import api.json.models.ErrorTypes;
 import api.json.models.ErrorModel;
 import api.json.models.connection.ConnectionInvolvingFriendRequest;
+import api.json.models.connection.FriendRequest;
 import api.json.models.connection.ResponseFriendRequestModel;
 import api.json.models.GenericSuccessModel;
 import api.json.models.user.UserInformationModel;
@@ -25,13 +26,19 @@ public class ConnectionController extends ApiControllerBase {
      */
     public static Result ask() {
         try {
-            ConnectionInvolvingFriendRequest askModel = mapper.readValue(request().body().asJson(), ConnectionInvolvingFriendRequest.class);
+            FriendRequest askModel = mapper.readValue(request().body().asJson(), FriendRequest.class);
 
             long userID = User.findBySecret(askModel.secret).id;
+            User friend = User.findByUsername(askModel.friendUsername);
+
+            // User doesn't exist
+            if(friend == null) {
+                return ok((new ErrorModel("Invalid Username", ErrorTypes.ERROR_TYPE_USER, 1)).toJsonString());
+            }
 
             // Make sure they aren't already friends
-            if(userID != askModel.friendUserID && !Connection.alreadyExists(userID, askModel.friendUserID)) {
-                (new Connection(userID, askModel.friendUserID, false, true)).save(); // Insert new record
+            if(userID != friend.id && !Connection.alreadyExists(userID, friend.id)) {
+                (new Connection(userID, friend.id, false, true)).save(); // Insert new record
                 return ok((new GenericSuccessModel("Friend request sent.")).toJsonString());
             } else {
                 return ok((new ErrorModel("Friend request already sent.", ErrorTypes.ERROR_TYPE_USER)).toJsonString());
@@ -104,4 +111,6 @@ public class ConnectionController extends ApiControllerBase {
             return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
         }
     }
+
+
 }

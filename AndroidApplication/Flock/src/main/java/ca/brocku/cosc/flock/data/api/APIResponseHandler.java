@@ -10,7 +10,7 @@ import ca.brocku.cosc.flock.data.api.json.models.JsonModelBase;
  * Student #: 4810800
  * Date: 11/17/2013
  */
-public abstract class FlockAPIResponseHandler<TResult extends JsonModelBase> {
+public abstract class APIResponseHandler<TResult extends JsonModelBase> {
     /**
      * Fires when a response has completed.
      *

@@ -9,8 +9,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
-import ca.brocku.cosc.flock.data.api.actions.FlockUserAPIAction;
+import ca.brocku.cosc.flock.data.api.APIResponseHandler;
+import ca.brocku.cosc.flock.data.api.actions.UserAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.RegisterUserRequestModel;
@@ -73,7 +73,7 @@ public class RegisterActivity extends Activity {
                 newUser.password = password;
 
                 // Register user
-                FlockUserAPIAction.register(newUser, new FlockAPIResponseHandler<LoginUserResponseModel>() {
+                UserAPIAction.register(newUser, new APIResponseHandler<LoginUserResponseModel>() {
                     @Override
                     public void onResponse(LoginUserResponseModel loginUserResponseModel) {
                         // Store Secret and visibility

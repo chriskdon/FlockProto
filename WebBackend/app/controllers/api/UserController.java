@@ -28,7 +28,7 @@ public class UserController extends ApiControllerBase {
                                     auth.generateSalt());
 
             // Check if username is already taken
-            boolean usernameTaken = (User.find.where().eq("username",model.username).findRowCount() > 0);
+            boolean usernameTaken = (User.findByUsername(model.username) != null);
             if(usernameTaken) {
                 return ok((new ErrorModel("Username Taken", ErrorTypes.ERROR_TYPE_USER)).toJsonString()); // Error username taken
             } else {
@@ -76,7 +76,7 @@ public class UserController extends ApiControllerBase {
 
             if(user != null && auth.checkPassword(user, deleteModel.password)) {
                 user.delete();
-                return ok((new GenericSuccessModel("User Deleted")).toJsonString());
+                return ok((new GenericSuccessModel("user Deleted")).toJsonString());
             } else if(user != null) {
                 return ok((new ErrorModel("Wrong Password", ErrorTypes.ERROR_TYPE_USER)).toJsonString());
             }

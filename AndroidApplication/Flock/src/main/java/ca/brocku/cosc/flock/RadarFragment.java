@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import ca.brocku.cosc.flock.data.api.actions.LocationAPIAction;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 import ca.brocku.cosc.flock.radar.RadarMapManager;
 import ca.brocku.cosc.flock.radar.callbacks.RadarConnected;

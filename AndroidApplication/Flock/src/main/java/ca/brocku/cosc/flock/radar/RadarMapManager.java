@@ -1,6 +1,7 @@
 package ca.brocku.cosc.flock.radar;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import com.google.android.gms.location.LocationListener;
 import android.os.Bundle;
@@ -19,6 +20,11 @@ import com.google.android.gms.maps.model.Marker;
 import java.util.HashMap;
 import java.util.Map;
 
+import ca.brocku.cosc.flock.LoginActivity;
+import ca.brocku.cosc.flock.data.api.APIResponseHandler;
+import ca.brocku.cosc.flock.data.api.actions.LocationAPIAction;
+import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
+import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 import ca.brocku.cosc.flock.radar.callbacks.RadarConnected;
 import ca.brocku.cosc.flock.radar.markers.MarkerBitmapFactory;
@@ -40,7 +46,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     private static final int DEFAULT_UPDATE_INTERVAL = 5000;
 
     private GoogleMap map;
-    private Context context;
+    private Activity activity;
     private Marker currentUserMarker;
 
     private Map<String, Marker> friendMarkers;
@@ -57,15 +63,15 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     /**
      * Instantiate a manger for a map.
      *
-     * @param context   // The context the map is in.
+     * @param activity  // The activity the map is in.
      * @param map       // The map to manage as a radar instance.
      */
-    public RadarMapManager(Context context, GoogleMap map) {
-        this.context = context;
+    public RadarMapManager(Activity activity, GoogleMap map) {
+        this.activity = activity;
         this.map = map;
 
         //Get visibility setting from the data manager
-        isVisible = new UserDataManager(context).getUserVisibility();
+        isVisible = new UserDataManager(this.activity).getUserVisibility();
 
         currentZoomLevel = DEFAULT_ZOOM_LEVEL;
 
@@ -82,7 +88,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         locationRequest.setInterval(DEFAULT_UPDATE_INTERVAL);
         locationRequest.setFastestInterval(DEFAULT_UPDATE_INTERVAL);
 
-        locationClient = new LocationClient(context, this, this);
+        locationClient = new LocationClient(this.activity, this, this);
 
     }
 
@@ -208,6 +214,29 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         zoomToUser();
     }
 
+    /**
+     * Update the server with the location of the user
+     * @param location
+     */
+    private void updateLocationOnServer(Location location) {
+        if(isVisible) {
+            // Update on server end
+            try {
+                String secret = new UserDataManager(activity).getUserSecret();
+                LocationAPIAction.setLocation(secret, location, new APIResponseHandler<GenericSuccessModel>() {
+                    @Override
+                    public void onResponse(GenericSuccessModel genericSuccessModel) {
+                        // Do Nothing
+                        // TODO: Possibly remove if not needed
+                    }
+                });
+            } catch (NoUserSecretException e) {
+                // Couldn't login
+                activity.startActivity(new Intent(activity, LoginActivity.class));
+            }
+        }
+    }
+
     // -------------------------------------------------
     // Location Services
     // -------------------------------------------------
@@ -228,9 +257,10 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
             // Show Current User position instantly and zoom to them
             updateUserLocation(false);
             zoomToUser();
+            updateLocationOnServer(locationClient.getLastLocation());
         } else {
             // TODO: Replace with failed callback
-            Toast.makeText(context, "Location Not Enabled", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "Location Not Enabled", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -251,6 +281,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
      */
     @Override
     public void onLocationChanged(Location location) {
-        updateUserLocation(false);
+        updateUserLocation(false); // Drawing
+        updateLocationOnServer(location);
     }
 }

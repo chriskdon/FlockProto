@@ -12,7 +12,7 @@ import ca.brocku.cosc.flock.data.api.json.models.user.RegisterUserRequestModel;
  * Student #: 4810800
  * Date: 11/17/2013
  */
-public class FlockAPIAction {
+public class APIAction {
     protected static final ObjectMapper mapper = new ObjectMapper();
 
 }

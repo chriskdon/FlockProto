@@ -10,15 +10,12 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
-import ca.brocku.cosc.flock.data.api.actions.FlockUserAPIAction;
-import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
+import ca.brocku.cosc.flock.data.api.APIResponseHandler;
+import ca.brocku.cosc.flock.data.api.actions.UserAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorTypes;
 import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
-import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 
@@ -106,7 +103,7 @@ public class SettingsActivity extends Activity {
                     // Make sure fields aren't empty
                     if (!password.isEmpty()) {
                         try {
-                            FlockUserAPIAction.delete(new UserDataManager(SettingsActivity.this).getUserSecret(),password, new FlockAPIResponseHandler<GenericSuccessModel>() {
+                            UserAPIAction.delete(new UserDataManager(SettingsActivity.this).getUserSecret(), password, new APIResponseHandler<GenericSuccessModel>() {
                                 @Override
                                 public void onResponse(GenericSuccessModel genericSuccessModel) {
                                     new UserDataManager(getBaseContext()).clearUserData();
@@ -116,7 +113,7 @@ public class SettingsActivity extends Activity {
 
                                 @Override
                                 public void onError(ErrorModel error) {
-                                    if(error.errorType == ErrorTypes.ERROR_TYPE_USER) {
+                                    if (error.errorType == ErrorTypes.ERROR_TYPE_USER) {
                                         errorMessage.setText(error.message);
                                         errorMessage.setVisibility(View.VISIBLE);
                                     } else {

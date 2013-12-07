@@ -9,9 +9,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
-import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserRequestModel;
-import ca.brocku.cosc.flock.data.api.actions.FlockUserAPIAction;
+import ca.brocku.cosc.flock.data.api.APIResponseHandler;
+import ca.brocku.cosc.flock.data.api.actions.UserAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
@@ -55,7 +54,7 @@ public class LoginActivity extends Activity {
 
             // Make sure fields aren't empty
             if (!username.isEmpty() && !password.isEmpty()) {
-                FlockUserAPIAction.login(username, password, new FlockAPIResponseHandler<LoginUserResponseModel>() {
+                UserAPIAction.login(username, password, new APIResponseHandler<LoginUserResponseModel>() {
                     @Override
                     public void onResponse(LoginUserResponseModel loginUserResponseModel) {
                         // Store secret and visibility

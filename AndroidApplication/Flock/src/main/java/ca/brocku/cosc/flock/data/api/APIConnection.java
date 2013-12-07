@@ -20,7 +20,7 @@ import ca.brocku.cosc.flock.data.api.json.models.JsonModelBase;
  * Student #: 4810800
  * Date: 11/17/2013
  */
-public class FlockAPIConnection {
+public class APIConnection {
     private static final String DEBUG_TAG = "FLOCK_API_CONNECTION";
     private static final String SERVER_ADDRESS = "http://216.121.182.110:9999"; // Flock API Server
 
@@ -34,7 +34,7 @@ public class FlockAPIConnection {
      */
     public static void send(String path, JsonModelBase request,
                             Class<? extends JsonModelBase> responseClass,
-                            FlockAPIResponseHandler response) {
+                            APIResponseHandler response) {
 
         // Append slash to front if it is not there
         if(path.length() > 0 && path.charAt(0) != '/') {
@@ -53,7 +53,7 @@ public class FlockAPIConnection {
 
         private JsonModelBase request;
         private String path;
-        private FlockAPIResponseHandler responseHandler;
+        private APIResponseHandler responseHandler;
         private Class<? extends JsonModelBase> responseClass;   // Response class type.
 
         /**
@@ -64,7 +64,7 @@ public class FlockAPIConnection {
          * @param responseHandler
          * @param responseClass
          */
-        public FlockApiNetworkThread(String path, JsonModelBase request, FlockAPIResponseHandler responseHandler, Class<? extends JsonModelBase> responseClass) {
+        public FlockApiNetworkThread(String path, JsonModelBase request, APIResponseHandler responseHandler, Class<? extends JsonModelBase> responseClass) {
             this.request = request;
             this.path = path;
             this.responseHandler = responseHandler;
@@ -72,7 +72,7 @@ public class FlockAPIConnection {
         }
 
         /**
-         * Make the request to the FlockAPIAction Server
+         * Make the request to the APIAction Server
          *
          * @param params
          * @return

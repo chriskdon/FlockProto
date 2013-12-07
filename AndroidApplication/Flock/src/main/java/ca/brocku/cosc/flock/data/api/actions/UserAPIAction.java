@@ -1,19 +1,21 @@
 package ca.brocku.cosc.flock.data.api.actions;
 
-import ca.brocku.cosc.flock.data.api.FlockAPIConnection;
-import ca.brocku.cosc.flock.data.api.FlockAPIResponseHandler;
+import ca.brocku.cosc.flock.data.api.APIConnection;
+import ca.brocku.cosc.flock.data.api.APIResponseHandler;
 import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.DeleteUserRequestModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserRequestModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.RegisterUserRequestModel;
+import ca.brocku.cosc.flock.data.api.json.models.user.SearchUserRequestModel;
+import ca.brocku.cosc.flock.data.api.json.models.user.SearchUserResponseModel;
 
 /**
  * Author: Chris Kellendonk
  * Student #: 4810800
  * Date: 11/17/2013
  */
-public class FlockUserAPIAction extends FlockAPIAction {
+public class UserAPIAction extends APIAction {
     private static final String API_PATH = "/api/users/";
 
     /**
@@ -28,7 +30,7 @@ public class FlockUserAPIAction extends FlockAPIAction {
      */
     public static void register(String username, String firstname, String lastname,
                                 String email, String password,
-                                FlockAPIResponseHandler<LoginUserResponseModel> responseHandler) {
+                                APIResponseHandler<LoginUserResponseModel> responseHandler) {
 
         RegisterUserRequestModel request = new RegisterUserRequestModel();
 
@@ -48,10 +50,10 @@ public class FlockUserAPIAction extends FlockAPIAction {
      * @param responseHandler
      */
     public static void register(RegisterUserRequestModel registrationRequest,
-                                FlockAPIResponseHandler<LoginUserResponseModel> responseHandler) {
+                                APIResponseHandler<LoginUserResponseModel> responseHandler) {
 
-        FlockAPIConnection.send(API_PATH + "register", registrationRequest,
-                                LoginUserResponseModel.class, responseHandler);
+        APIConnection.send(API_PATH + "register", registrationRequest,
+                LoginUserResponseModel.class, responseHandler);
     }
 
     /**
@@ -62,7 +64,7 @@ public class FlockUserAPIAction extends FlockAPIAction {
      * @param responseHandler
      */
     public static void login(String username, String password,
-                             FlockAPIResponseHandler<LoginUserResponseModel> responseHandler) {
+                             APIResponseHandler<LoginUserResponseModel> responseHandler) {
 
         LoginUserRequestModel request = new LoginUserRequestModel();
         request.username = username;
@@ -78,9 +80,9 @@ public class FlockUserAPIAction extends FlockAPIAction {
      * @param responseHandler
      */
     public static void login(LoginUserRequestModel loginRequest,
-                            FlockAPIResponseHandler<LoginUserResponseModel> responseHandler) {
-        FlockAPIConnection.send(API_PATH + "login", loginRequest,
-                                LoginUserResponseModel.class, responseHandler);
+                            APIResponseHandler<LoginUserResponseModel> responseHandler) {
+        APIConnection.send(API_PATH + "login", loginRequest,
+                LoginUserResponseModel.class, responseHandler);
     }
 
     /**
@@ -89,17 +91,49 @@ public class FlockUserAPIAction extends FlockAPIAction {
      * @param responseHandler
      */
     public static void delete(DeleteUserRequestModel deleteRequest,
-                              FlockAPIResponseHandler<GenericSuccessModel> responseHandler) {
-        FlockAPIConnection.send(API_PATH + "delete", deleteRequest,
+                              APIResponseHandler<GenericSuccessModel> responseHandler) {
+        APIConnection.send(API_PATH + "delete", deleteRequest,
                 GenericSuccessModel.class, responseHandler);
     }
 
+    /**
+     * Delete user.
+     * @param secret
+     * @param password
+     * @param responseHandler
+     */
     public static void delete(String secret, String password,
-                              FlockAPIResponseHandler<GenericSuccessModel> responseHandler) {
+                              APIResponseHandler<GenericSuccessModel> responseHandler) {
         DeleteUserRequestModel req = new DeleteUserRequestModel();
         req.password = password;
         req.secret = secret;
 
         delete(req, responseHandler);
+    }
+
+    /**
+     * Search for users by username
+     * @param request
+     * @param response
+     */
+    public static void search(SearchUserRequestModel request,
+                              APIResponseHandler<SearchUserResponseModel> response) {
+
+        APIConnection.send(API_PATH + "search", request, SearchUserRequestModel.class, response);
+    }
+
+    /**
+     * Search for users by username
+     * @param usernameQuery
+     * @param response
+     */
+    public static void search(String usernameQuery,
+                              APIResponseHandler<SearchUserResponseModel> response) {
+
+        SearchUserRequestModel request = new SearchUserRequestModel();
+
+        request.usernameQuery = usernameQuery;
+
+        search(request, response);
     }
 }

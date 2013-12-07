@@ -170,4 +170,6 @@ public class Connection extends Model {
 
         return (conn != null && conn.visible);
     }
+
+
 }
