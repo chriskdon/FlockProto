@@ -232,9 +232,14 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                 });
             } catch (NoUserSecretException e) {
                 // Couldn't login
-                activity.startActivity(new Intent(activity, LoginActivity.class));
+                //activity.startActivity(new Intent(activity, LoginActivity.class));
+                // TODO: Fix this
             }
         }
+    }
+
+    public boolean isConnected() {
+        return locationClient.isConnected();
     }
 
     // -------------------------------------------------

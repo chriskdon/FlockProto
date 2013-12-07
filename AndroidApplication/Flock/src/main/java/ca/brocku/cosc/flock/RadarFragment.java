@@ -65,7 +65,10 @@ public class RadarFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        radarMapManager.start();
+
+        if(!radarMapManager.isConnected()) {
+            radarMapManager.start();
+        }
     }
 
 

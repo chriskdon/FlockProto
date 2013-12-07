@@ -5,7 +5,6 @@ import com.avaje.ebean.Expression;
 import com.avaje.ebean.ExpressionList;
 import play.data.validation.Constraints;
 import play.db.ebean.Model;
-import scala.annotation.unchecked.uncheckedStable;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,16 +15,18 @@ import java.util.List;
 @Entity
 @Table(name="Connections")
 public class Connection extends Model {
-    private static Finder<Long, Connection> find = new Finder<Long, Connection>(Long.class, Connection.class);
+    public static Finder<Long, Connection> find = new Finder<Long, Connection>(Long.class, Connection.class);
+
+    @Id
+    @Column(name="ID")
+    public Long ID;
 
     // ===== DATABASE COLUMNS =====
-    @Id
     @Column(name ="UserA")
-    public Long userAID;
+    public Long userA;
 
-    @Id
     @Column(name ="UserB")
-    public Long userBID;
+    public Long userB;
 
     @Constraints.Required
     @Column(name ="Accepted")
@@ -37,9 +38,9 @@ public class Connection extends Model {
     // =============================
 
     public Connection() { }
-    public Connection(long userAID, long userBID, boolean accepted, boolean visible) {
-        this.userAID = userAID;
-        this.userBID = userBID;
+    public Connection(long userA, long userB, boolean accepted, boolean visible) {
+        this.userA = userA;
+        this.userB = userB;
         this.accepted = accepted;
         this.visible = visible;
     }
@@ -170,6 +171,5 @@ public class Connection extends Model {
 
         return (conn != null && conn.visible);
     }
-
 
 }
