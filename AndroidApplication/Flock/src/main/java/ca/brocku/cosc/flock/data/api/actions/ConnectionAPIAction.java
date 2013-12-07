@@ -3,8 +3,10 @@ package ca.brocku.cosc.flock.data.api.actions;
 import ca.brocku.cosc.flock.data.api.APIConnection;
 import ca.brocku.cosc.flock.data.api.APIResponseHandler;
 import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
+import ca.brocku.cosc.flock.data.api.json.models.UserActionModel;
 import ca.brocku.cosc.flock.data.api.json.models.connection.ConnectionInvolvingFriendRequest;
 import ca.brocku.cosc.flock.data.api.json.models.connection.FriendRequest;
+import ca.brocku.cosc.flock.data.api.json.models.connection.PendingFriendsResponse;
 import ca.brocku.cosc.flock.data.api.json.models.connection.ResponseFriendRequestModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.UserInformationModel;
 
@@ -130,5 +132,30 @@ public class ConnectionAPIAction extends APIAction {
         request.friendUserID = friendUserID;
 
         getInformation(request, response);
+    }
+
+    /**
+     * List pending friend requests.
+     * @param request
+     * @param response
+     */
+    public static void getPendingConnections(UserActionModel request,
+                                             APIResponseHandler<PendingFriendsResponse> response) {
+
+        APIConnection.send(API_PATH + "pending", request, PendingFriendsResponse.class, response);
+    }
+
+    /**
+     * List pending friend requests.
+     * @param secret
+     * @param response
+     */
+    public static void getPendingConnections(String secret,
+                                             APIResponseHandler<PendingFriendsResponse> response) {
+
+        UserActionModel request = new UserActionModel();
+        request.secret = secret;
+
+        getPendingConnections(request, response);
     }
 }

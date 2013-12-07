@@ -10,6 +10,10 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import ca.brocku.cosc.flock.data.api.APIResponseHandler;
+import ca.brocku.cosc.flock.data.api.actions.ConnectionAPIAction;
+import ca.brocku.cosc.flock.data.api.actions.UserAPIAction;
+import ca.brocku.cosc.flock.data.api.json.models.connection.PendingFriendsResponse;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 

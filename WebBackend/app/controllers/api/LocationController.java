@@ -39,7 +39,7 @@ public class LocationController extends ApiControllerBase {
 
             return ok((new GenericSuccessModel("Location Updated")).toJsonString());
         } catch(Exception ex) {
-            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
+            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
         }
     }
 
@@ -74,7 +74,7 @@ public class LocationController extends ApiControllerBase {
 
             return ok((new UserLocationModel(friendLocation)).toJsonString());
         } catch(Exception ex) {
-            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
+            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
         }
     }
 
@@ -99,7 +99,7 @@ public class LocationController extends ApiControllerBase {
 
             return ok(response.toJsonString());
         } catch(Exception ex) {
-            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
+            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
         }
     }
 

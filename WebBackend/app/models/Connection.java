@@ -58,6 +58,8 @@ public class Connection extends Model {
         if(conn == null) { throw new Exception("Invalid connection"); }
 
         conn.accepted = true;
+        conn.visible = true;
+
         conn.save();
     }
 
@@ -98,6 +100,16 @@ public class Connection extends Model {
         Expression b = Expr.and(Expr.eq("UserB", userAID), Expr.eq("UserA", userBID));
 
         return find.where().or(a, b);
+    }
+
+    /**
+     * Get the pending requests for a connection for a friend.
+     * (i.e. connections that aren't accepted)
+     * @param userID
+     * @return
+     */
+    public static List<Connection> getPendingConnections(long userID) {
+        return find.where().eq("UserB", userID).eq("Accepted", false).findList();
     }
 
     /**

@@ -108,7 +108,7 @@ public class UserController extends ApiControllerBase {
 
             return ok(response.toJsonString());
         } catch(Exception ex) {
-            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_LOGIC)).toJsonString());
+            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
         }
     }
 }

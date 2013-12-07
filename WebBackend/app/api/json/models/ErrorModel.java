@@ -8,7 +8,7 @@ public class ErrorModel extends JsonModelBase {
     public int errorType;   // The type of error that occurred (USER/LOGIC/?)
     public int errorCode;   // Custom codes so that application can handle things differently if need be
 
-    public ErrorModel() { this(null, ErrorTypes.ERROR_TYPE_LOGIC, 0); }
+    public ErrorModel() { this(null, ErrorTypes.ERROR_TYPE_FATAL, 0); }
 
     public ErrorModel(int errorType) {
         this(null, errorType, 0);
