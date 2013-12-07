@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:background="@color/blue_unsaturated">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="15dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/input_long_horizontalMargin"
+        android:layout_marginRight="@dimen/input_long_horizontalMargin"
+        android:hint="username"
+        android:id="@+id/addFriend_usernameInput"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/text_horizontal_padding"
+        android:gravity="center_horizontal"
+        android:textColor="@color/red_errorMsg"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        android:id="@+id/addFriend_errorMessage"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:text="Cancel"
+            android:id="@+id/cancelFriend_dialogButton" />
+
+        <ImageView
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/black"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:text="Add"
+            android:id="@+id/addFriend_dialogButton" />
+
+    </LinearLayout>
+
+</LinearLayout>
