@@ -123,8 +123,8 @@ public class SettingsActivity extends Activity {
                                 }
                             });
                         } catch (NoUserSecretException e) {
-                            errorMessage.setText("Could not delete at this time. Try again later.");
-                            errorMessage.setVisibility(View.VISIBLE);
+                            finish();
+                            startActivity(new Intent(SettingsActivity.this, RegisterActivity.class));
                         }
                     } else { //inform the user that all fields must be filled in
                         errorMessage.setText("Invalid password.");

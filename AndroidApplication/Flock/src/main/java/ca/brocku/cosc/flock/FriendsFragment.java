@@ -106,6 +106,8 @@ public class FriendsFragment extends Fragment {
                             ConnectionAPIAction.initiateFriendRequest(new UserDataManager(getActivity()).getUserSecret(),username, new APIResponseHandler<GenericSuccessModel>() {
                                 @Override
                                 public void onResponse(GenericSuccessModel genericSuccessModel) {
+                                    usernameInput.setText("");
+                                    dialog.hide();
                                     Toast.makeText(getActivity(), "Friend request sent.", Toast.LENGTH_SHORT);
                                 }
 
@@ -121,6 +123,7 @@ public class FriendsFragment extends Fragment {
                                 }
                             });
                         } catch (NoUserSecretException e) {
+                            getActivity().finish();
                             startActivity(new Intent(getActivity(), LoginActivity.class));
                         }
 
