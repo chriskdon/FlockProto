@@ -18,9 +18,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_bottomSpace" />
 
-    <ListView
+    <ExpandableListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/friendsList"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="0dp"
+        android:groupIndicator="@null"
+        android:id="@+id/friends_list" />
 </LinearLayout>
