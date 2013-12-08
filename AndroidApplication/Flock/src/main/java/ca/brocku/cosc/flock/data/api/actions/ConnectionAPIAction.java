@@ -5,8 +5,8 @@ import ca.brocku.cosc.flock.data.api.APIResponseHandler;
 import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
 import ca.brocku.cosc.flock.data.api.json.models.UserActionModel;
 import ca.brocku.cosc.flock.data.api.json.models.connection.ConnectionInvolvingFriendRequest;
+import ca.brocku.cosc.flock.data.api.json.models.connection.ConnectionListResponse;
 import ca.brocku.cosc.flock.data.api.json.models.connection.FriendRequest;
-import ca.brocku.cosc.flock.data.api.json.models.connection.PendingFriendsResponse;
 import ca.brocku.cosc.flock.data.api.json.models.connection.ResponseFriendRequestModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.UserInformationModel;
 
@@ -58,7 +58,7 @@ public class ConnectionAPIAction extends APIAction {
     public static void responseToFriendRequest(ResponseFriendRequestModel request,
                                                APIResponseHandler<GenericSuccessModel> response) {
 
-        APIConnection.send(API_PATH + "response", request, GenericSuccessModel.class, response);
+        APIConnection.send(API_PATH + "respond", request, GenericSuccessModel.class, response);
     }
 
     /**
@@ -140,9 +140,9 @@ public class ConnectionAPIAction extends APIAction {
      * @param response
      */
     public static void getPendingConnections(UserActionModel request,
-                                             APIResponseHandler<PendingFriendsResponse> response) {
+                                             APIResponseHandler<ConnectionListResponse> response) {
 
-        APIConnection.send(API_PATH + "pending", request, PendingFriendsResponse.class, response);
+        APIConnection.send(API_PATH + "pending", request, ConnectionListResponse.class, response);
     }
 
     /**
@@ -151,11 +151,36 @@ public class ConnectionAPIAction extends APIAction {
      * @param response
      */
     public static void getPendingConnections(String secret,
-                                             APIResponseHandler<PendingFriendsResponse> response) {
+                                             APIResponseHandler<ConnectionListResponse> response) {
 
         UserActionModel request = new UserActionModel();
         request.secret = secret;
 
         getPendingConnections(request, response);
+    }
+
+    /**
+     * List friends
+     * @param request
+     * @param response
+     */
+    public static void getFriends(UserActionModel request,
+                                  APIResponseHandler<ConnectionListResponse> response) {
+
+        APIConnection.send(API_PATH + "friends", request, ConnectionListResponse.class, response);
+    }
+
+    /**
+     * List pending friend requests.
+     * @param secret
+     * @param response
+     */
+    public static void getFriends(String secret,
+                                             APIResponseHandler<ConnectionListResponse> response) {
+
+        UserActionModel request = new UserActionModel();
+        request.secret = secret;
+
+        getFriends(request, response);
     }
 }

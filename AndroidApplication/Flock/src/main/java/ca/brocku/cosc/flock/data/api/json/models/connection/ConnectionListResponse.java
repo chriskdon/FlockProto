@@ -9,12 +9,12 @@ import ca.brocku.cosc.flock.data.api.json.models.JsonModelBase;
  * Student #: 4810800
  * Date: 12/6/2013.
  */
-public class PendingFriendsResponse extends JsonModelBase {
+public class ConnectionListResponse extends JsonModelBase {
     public List<Connection> connections;
 
-    public PendingFriendsResponse() {}
+    public ConnectionListResponse() {}
 
-    public PendingFriendsResponse(List<Connection> list) {
+    public ConnectionListResponse(List<Connection> list) {
         this.connections = list;
     }
 }

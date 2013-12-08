@@ -16,14 +16,14 @@ public abstract class APIResponseHandler<TResult extends JsonModelBase> {
      *
      * @param result The result data from the server.
      */
-    public abstract void onResponse(TResult result);
+    public void onResponse(TResult result) {
+        // Do Nothing
+    }
 
     /**
      * Fires when there is an error with the API request.
      *
      * @param result
      */
-    public void onError(ErrorModel result) {
-        // Do nothing -- can be overridden
-    }
+    public abstract void onError(ErrorModel result);
 }

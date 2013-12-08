@@ -94,4 +94,21 @@ public class UserDataManager {
         prefsEditor.clear();
         prefsEditor.commit();
     }
+
+    /**
+     * Get google cloud messaging registration ID
+     * @return
+     */
+    public String getGCMRegistrationID() {
+        return prefs.getString("GCM_REGISTRATION_ID", "");
+    }
+
+    /**
+     * Set the Google Cloud Messaging registration ID
+     * @param value
+     */
+    public void setGCMRegistrationID(String value) {
+        prefsEditor.putString("GCM_REGISTRATION_ID", value);
+        prefsEditor.commit();
+    }
 }

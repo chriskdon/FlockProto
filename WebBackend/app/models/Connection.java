@@ -77,7 +77,6 @@ public class Connection extends Model {
         conn.delete();
     }
 
-
     /**
      * Is this friend request already in the database.
      *
@@ -110,6 +109,10 @@ public class Connection extends Model {
      */
     public static List<Connection> getPendingConnections(long userID) {
         return find.where().eq("UserB", userID).eq("Accepted", false).findList();
+    }
+
+    public static List<Connection> getFriends(User user) {
+        return find.where().or(Expr.eq("UserA", user.id), Expr.eq("UserB", user.id)).eq("Accepted", true).findList();
     }
 
     /**

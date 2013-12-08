@@ -43,6 +43,9 @@ public class User extends Model {
     @Constraints.Required
     @Column(name ="Secret")
     public String secret;
+
+    @Column(name = "GCMRegistrationID")
+    public String gcmRegistrationID;
     // =========================
 
     public User() {}

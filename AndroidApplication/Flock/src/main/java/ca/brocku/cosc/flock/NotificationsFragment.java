@@ -15,7 +15,7 @@ import ca.brocku.cosc.flock.data.api.APIResponseHandler;
 import ca.brocku.cosc.flock.data.api.actions.ConnectionAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.connection.Connection;
-import ca.brocku.cosc.flock.data.api.json.models.connection.PendingFriendsResponse;
+import ca.brocku.cosc.flock.data.api.json.models.connection.ConnectionListResponse;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 import ca.brocku.cosc.flock.notifications.Notification;
@@ -25,7 +25,7 @@ import ca.brocku.cosc.flock.notifications.adapters.NotificationAdapter;
  * Created by kubasub on 11/18/2013.
  */
 public class NotificationsFragment extends Fragment {
-    private List<Notification> notificationList;
+    private List<Notification> notificationList;        // TODO: Do we need this? Doesn't adapter hold it
     private NotificationAdapter notificationAdapter;
     private ListView notificationsListView;
 
@@ -33,48 +33,55 @@ public class NotificationsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_notifications, container, false);
 
-        //Populates the list with friend requests
-        notificationList = new ArrayList<Notification>();
-        populateList();
-
-        //Creates the list adapter
-        notificationAdapter = new NotificationAdapter(getActivity(), notificationList);
-
         //Sets the list adapter for the list view
         notificationsListView = (ListView) v.findViewById(R.id.notifications_listView);
-        notificationsListView.setAdapter(notificationAdapter);
+
+        //Populates the list with friend requests
+        notificationList = new ArrayList<Notification>();
+
+        // TODO: Set a flag in settings or somewhere from the push notification intent
+        // TODO: Need to repopulate list whenever we look at notifications
+        populateList(); // When we go to the view check for new friend requests
 
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    /**
+     * Populate the notification list with the notifications
+     */
     private void populateList() {
         try {
-            ConnectionAPIAction.getPendingConnections(new UserDataManager(getActivity()).getUserSecret(), new APIResponseHandler<PendingFriendsResponse>() {
+            ConnectionAPIAction.getPendingConnections(new UserDataManager(getActivity()).getUserSecret(), new APIResponseHandler<ConnectionListResponse>() {
                 @Override
-                public void onResponse(PendingFriendsResponse pendingFriendsResponse) {
-                    List<Connection> connectionList = pendingFriendsResponse.connections;
+                public void onResponse(ConnectionListResponse connectionListResponse) {
+                    List<Connection> connectionList = connectionListResponse.connections;
 
+                    notificationList.clear(); // We don't want duplicates
                     for(Connection connection : connectionList) {
-                        //Sets variables for a notification row
-                        long friendUserID = connection.friendUserID;
-                        String username = connection.username;
-                        String firstName = connection.firstname;
-                        String lastName = connection.lastname;
-                        String message = username+" would like to be friends.";
+                        String message = connection.username + " would like to be friends.";
 
                         //Adds a new notification to the list
                         notificationList.add(new Notification(Notification.FRIEND_REQUEST,
-                                                              friendUserID,
-                                                              username,
-                                                              firstName,
-                                                              lastName,
-                                                              message));
+                                connection.friendUserID,
+                                connection.username,
+                                connection.firstname,
+                                connection.lastname,
+                                message));
+
+                        // Fill the list
+                        notificationAdapter = new NotificationAdapter(getActivity(), notificationList);
+                        notificationsListView.setAdapter(notificationAdapter);
                     }
                 }
 
                 @Override
                 public void onError(ErrorModel result) {
-                    super.onError(result);
+                    // TODO: handle error
                 }
             });
         } catch (NoUserSecretException e) {

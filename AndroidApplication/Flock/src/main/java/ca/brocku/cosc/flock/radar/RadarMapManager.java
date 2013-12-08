@@ -23,6 +23,7 @@ import java.util.Map;
 import ca.brocku.cosc.flock.LoginActivity;
 import ca.brocku.cosc.flock.data.api.APIResponseHandler;
 import ca.brocku.cosc.flock.data.api.actions.LocationAPIAction;
+import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
@@ -225,9 +226,8 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                 String secret = new UserDataManager(activity).getUserSecret();
                 LocationAPIAction.setLocation(secret, location, new APIResponseHandler<GenericSuccessModel>() {
                     @Override
-                    public void onResponse(GenericSuccessModel genericSuccessModel) {
-                        // Do Nothing
-                        // TODO: Possibly remove if not needed
+                    public void onError(ErrorModel result) {
+                        // TODO: Handle This
                     }
                 });
             } catch (NoUserSecretException e) {

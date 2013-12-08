@@ -10,39 +10,57 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import ca.brocku.cosc.flock.data.api.APIResponseHandler;
-import ca.brocku.cosc.flock.data.api.actions.ConnectionAPIAction;
-import ca.brocku.cosc.flock.data.api.actions.UserAPIAction;
-import ca.brocku.cosc.flock.data.api.json.models.connection.PendingFriendsResponse;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
+import ca.brocku.cosc.flock.gcm.*;
 
 public class MainActivity extends FragmentActivity {
-    private String secret;
-    private static final int NUM_PAGES = 3;
-    private ViewPager pager;
+    private static final int PLAY_REQUEST = 9000;
+
+    private String secret;                      // User's secret
+    private static final int NUM_PAGES = 3;     // Number of view pager pages
+    private ViewPager pager;                    // The view pager
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //go to the Registration Activity if there is no secret set on this device
-        try {
-            secret = new UserDataManager(this).getUserSecret();
-        } catch (NoUserSecretException e) {
-            finish();
-            startActivity(new Intent(this, RegisterActivity.class));
+        // Is play services installed?
+        if(doesUserHavePlayServicesInstalled()) {
+            // TODO: Don't crash on no internet
+
+            //go to the Registration Activity if there is no secret set on this device
+            try {
+                secret = new UserDataManager(this).getUserSecret();
+            } catch (NoUserSecretException e) {
+                finish();
+                startActivity(new Intent(this, RegisterActivity.class));
+            }
+
+            setContentView(R.layout.activity_main);
+            getActionBar().hide();
+
+            pager = (ViewPager) findViewById(R.id.main_pager);
+            pager.setOffscreenPageLimit(2);
+            pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+            pager.setCurrentItem(1);
+
+            // Register for GCM
+            new UserDataManager(this).setGCMRegistrationID(null);
+            if((new UserDataManager(this)).getGCMRegistrationID().isEmpty()) {
+                GCMManager.getRegistrationIDAsync(this);
+            }
         }
-
-        setContentView(R.layout.activity_main);
-        getActionBar().hide();
-
-        pager = (ViewPager) findViewById(R.id.main_pager);
-        pager.setOffscreenPageLimit(2);
-        pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
-        pager.setCurrentItem(1);
     }
 
+    @Override
+    protected  void onResume() {
+        super.onResume();
+        doesUserHavePlayServicesInstalled();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,6 +80,23 @@ public class MainActivity extends FragmentActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Check if Google Play Services are installed
+     * @return
+     */
+    protected boolean doesUserHavePlayServicesInstalled() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_REQUEST).show();
+            } else {
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 
     /**

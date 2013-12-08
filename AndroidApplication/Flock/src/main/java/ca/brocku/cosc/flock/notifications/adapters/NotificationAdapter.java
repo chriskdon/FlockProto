@@ -53,6 +53,14 @@ public class NotificationAdapter extends BaseAdapter {
         return position;
     }
 
+    /**
+     * The row that will appear in the list.
+     *
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Notification notification = notificationList.get(position);
@@ -80,7 +88,6 @@ public class NotificationAdapter extends BaseAdapter {
 
                 @Override
                 public void onClick(final View v) {
-
                     try {
                         ConnectionAPIAction.responseToFriendRequest(new UserDataManager(activity).getUserSecret(), notification.getFriendUserID(), true, new APIResponseHandler<GenericSuccessModel>() {
                             @Override
@@ -99,7 +106,7 @@ public class NotificationAdapter extends BaseAdapter {
 
                             @Override
                             public void onError(ErrorModel result) {
-                                Toast.makeText(activity, "Could not process request. Try again later.", Toast.LENGTH_SHORT);
+                                Toast.makeText(activity, "Could not process request. Try again later.", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } catch (NoUserSecretException e) {
@@ -108,6 +115,7 @@ public class NotificationAdapter extends BaseAdapter {
                     }
                 }
             });
+
             declineButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
@@ -129,7 +137,7 @@ public class NotificationAdapter extends BaseAdapter {
 
                             @Override
                             public void onError(ErrorModel result) {
-                                Toast.makeText(activity, "Could not process request. Try again later.", Toast.LENGTH_SHORT);
+                                Toast.makeText(activity, "Could not process request. Try again later.", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } catch (NoUserSecretException e) {
@@ -141,9 +149,7 @@ public class NotificationAdapter extends BaseAdapter {
                 }
             });
 
-
             message.setText(notification.getMessage());
-
         } else {
             rowView = null;
         }

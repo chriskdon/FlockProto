@@ -21,6 +21,8 @@ import ca.brocku.cosc.flock.data.api.actions.ConnectionAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorTypes;
 import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
+import ca.brocku.cosc.flock.data.api.json.models.connection.Connection;
+import ca.brocku.cosc.flock.data.api.json.models.connection.ConnectionListResponse;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 import ca.brocku.cosc.flock.friends.Friend;
@@ -38,18 +40,12 @@ public class FriendsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_friends, container, false);
 
-        //Bind Controls
+        // Bind Controls
         addFriendButton = (ImageButton) v.findViewById(R.id.add_friend_button);
         friendsList = (ExpandableListView) v.findViewById(R.id.friends_list);
 
-        // TODO: Replace with friends list
-        ArrayList<Friend> test = new ArrayList<Friend>();
-        Friend x = new Friend(); x.fullName = "John Smith"; x.username = "johnsmith";
-        Friend y = new Friend(); y.fullName = "Chris Kellendonk"; y.username = "iswearimnotgay";
-        test.add(x); test.add(y);
-
-        friendsAdapter = new FriendsAdapter(getActivity(), test);
-        friendsList.setAdapter(friendsAdapter);
+        // Populate Friends
+        populateFriendsList();
 
         friendsList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
@@ -69,6 +65,44 @@ public class FriendsFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Populate the users friends list
+     */
+    protected void populateFriendsList() {
+        try {
+            String secret = (new UserDataManager(getActivity())).getUserSecret();
+
+            ConnectionAPIAction.getFriends(secret, new APIResponseHandler<ConnectionListResponse>() {
+                /**
+                 * Fires when a response has completed.
+                 *
+                 * @param connectionListResponse The result data from the server.
+                 */
+                @Override
+                public void onResponse(ConnectionListResponse connectionListResponse) {
+                    ArrayList<Friend> friendsArrayList = new ArrayList<Friend>(connectionListResponse.connections.size());
+                    for(Connection c : connectionListResponse.connections) {
+                        friendsArrayList.add(new Friend(c.firstname, c.lastname, c.username, c.friendUserID));
+                    }
+
+                    friendsAdapter = new FriendsAdapter(getActivity(), friendsArrayList);
+                    friendsList.setAdapter(friendsAdapter);
+                }
+
+                @Override
+                public void onError(ErrorModel result) {
+                    // TODO: Handle
+                }
+            });
+        } catch(NoUserSecretException ex) {
+            getActivity().finish();
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+        }
+    }
+
+    /**
+     * Add a new friend based on there username
+     */
     private class AddFriendHandler implements View.OnClickListener {
         private Dialog dialog;
         private Button cancelButton, addButton;

@@ -4,8 +4,8 @@ import api.json.models.ErrorTypes;
 import api.json.models.ErrorModel;
 import api.json.models.UserActionModel;
 import api.json.models.connection.ConnectionInvolvingFriendRequest;
+import api.json.models.connection.ConnectionListResponse;
 import api.json.models.connection.FriendRequest;
-import api.json.models.connection.PendingFriendsResponse;
 import api.json.models.connection.ResponseFriendRequestModel;
 import api.json.models.GenericSuccessModel;
 import api.json.models.user.UserInformationModel;
@@ -129,14 +129,50 @@ public class ConnectionController extends ApiControllerBase {
                 return ok((new ErrorModel("Invalid User", ErrorTypes.ERROR_TYPE_USER)).toJsonString());
             }
 
+            System.out.println("RESPOND: " + user.id);
+
             ArrayList<api.json.models.connection.Connection> result = new ArrayList<api.json.models.connection.Connection>();
             for(Connection c : Connection.getPendingConnections(user.id)) {
                 User u = User.find.byId(c.userA);
                 result.add(new api.json.models.connection.Connection(c.userA, u.username, u.firstname, u.lastname));
             }
 
-            return ok((new PendingFriendsResponse(result)).toJsonString());
+            return ok((new ConnectionListResponse(result)).toJsonString());
         } catch (Exception ex) {
+            return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
+        }
+    }
+
+    public static Result friends() {
+        try {
+            UserActionModel request = mapper.readValue(jsonBody(), UserActionModel.class);
+
+            User user = User.findBySecret(request.secret);
+
+            if(user == null) {
+                return ok((new ErrorModel("Invalid Secret", ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
+            }
+
+            ArrayList<api.json.models.connection.Connection> result = new ArrayList<api.json.models.connection.Connection>();
+            for(Connection c : Connection.getFriends(user)) {
+                User info = null;
+                if(c.userA == user.id) {
+                    info = User.find.byId(c.userB);
+                } else {
+                    info = User.find.byId(c.userA);
+                }
+
+                api.json.models.connection.Connection friend = new api.json.models.connection.Connection();
+                friend.firstname = info.firstname;
+                friend.lastname = info.lastname;
+                friend.username = info.username;
+                friend.friendUserID = info.id;
+
+                result.add(friend);
+            }
+
+            return ok((new ConnectionListResponse(result)).toJsonString());
+        } catch(Exception ex) {
             return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
         }
     }
