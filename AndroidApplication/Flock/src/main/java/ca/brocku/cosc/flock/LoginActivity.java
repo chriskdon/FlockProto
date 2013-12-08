@@ -61,10 +61,7 @@ public class LoginActivity extends Activity {
                         // Store secret and visibility
                         UserDataManager dataManager = new UserDataManager(LoginActivity.this);
                         dataManager.setUserSecret(loginUserResponseModel.secret);
-                        dataManager.setUserVisibility(false, new TryCallback() {
-                            @Override
-                            public void success() { /* Do Nothing */ }
-                        });
+                        dataManager.setUserVisibility(false, null);
 
                         // Start Main Activity
                         finish();
