@@ -48,14 +48,6 @@ public class RadarFragment extends Fragment {
         settings.setOnClickListener(new SettingsIntentHandler());
         radarZoomSlider.setOnSeekBarChangeListener(new ZoomHandler());
 
-        // Test
-        //  TODO: REMOVE -- THIS IS TEST
-        radarMapManager.setFriendMarker(new LatLng(43.128439, -79.239203), "1", "Billy Bob");
-        radarMapManager.setFriendMarker(new LatLng(43.129649, -79.241209), "2", "Franky Joe");
-        radarMapManager.setFriendMarker(new LatLng(43.130236, -79.240673), "3", "Billy Bob");
-        radarMapManager.setFriendMarker(new LatLng(43.130420, -79.239272), "4", "Jim John");
-        // ------------
-
         // Check visibility
         radarMapManager.setOnConnected(new RadarConnectedHandler());
 

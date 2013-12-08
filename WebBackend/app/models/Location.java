@@ -42,7 +42,7 @@ public class Location extends Model {
     }
 
     public Location(SqlRow row) {
-        this(row.getLong("UserID"), row.getLong("Latitude"), row.getLong("Longitude"), row.getDate("Timestamp"));
+        this(row.getLong("UserID"), row.getDouble("Latitude"), row.getDouble("Longitude"), row.getDate("Timestamp"));
     }
 
     /**

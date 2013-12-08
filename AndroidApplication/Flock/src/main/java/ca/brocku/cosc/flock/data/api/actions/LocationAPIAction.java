@@ -1,12 +1,14 @@
 package ca.brocku.cosc.flock.data.api.actions;
 
 import android.location.Location;
+import android.util.Log;
 
 import ca.brocku.cosc.flock.data.api.APIConnection;
 import ca.brocku.cosc.flock.data.api.APIResponseHandler;
 import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
 import ca.brocku.cosc.flock.data.api.json.models.UserActionModel;
 import ca.brocku.cosc.flock.data.api.json.models.location.FriendLocationRequestModel;
+import ca.brocku.cosc.flock.data.api.json.models.location.FriendLocationsListResponseModel;
 import ca.brocku.cosc.flock.data.api.json.models.location.SetLocationRequestModel;
 import ca.brocku.cosc.flock.data.api.json.models.location.UserLocationModel;
 
@@ -99,8 +101,8 @@ public class LocationAPIAction extends APIAction {
      * @param response
      */
     public static void friendLocations(UserActionModel request,
-                                       APIResponseHandler<UserActionModel> response) {
-        APIConnection.send(API_PATH + "friends", request, UserActionModel.class, response);
+                                       APIResponseHandler<FriendLocationsListResponseModel> response) {
+        APIConnection.send(API_PATH + "friends", request, FriendLocationsListResponseModel.class, response);
     }
 
     /**
@@ -110,7 +112,7 @@ public class LocationAPIAction extends APIAction {
      * @param response
      */
     public static void friendLocations(String secret,
-                                       APIResponseHandler<UserActionModel> response) {
+                                       APIResponseHandler<FriendLocationsListResponseModel> response) {
         UserActionModel request = new UserActionModel();
         request.secret = secret;
         friendLocations(request, response);

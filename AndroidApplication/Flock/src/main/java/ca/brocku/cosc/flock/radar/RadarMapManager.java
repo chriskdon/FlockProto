@@ -2,6 +2,7 @@ package ca.brocku.cosc.flock.radar;
 
 import android.app.Activity;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -23,6 +24,9 @@ import ca.brocku.cosc.flock.data.api.APIResponseHandler;
 import ca.brocku.cosc.flock.data.api.actions.LocationAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
+import ca.brocku.cosc.flock.data.api.json.models.UserActionModel;
+import ca.brocku.cosc.flock.data.api.json.models.location.FriendLocationsListResponseModel;
+import ca.brocku.cosc.flock.data.api.json.models.location.UserLocationModel;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 import ca.brocku.cosc.flock.radar.callbacks.RadarConnected;
@@ -82,9 +86,12 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         locationRequest.setFastestInterval(DEFAULT_UPDATE_INTERVAL);
 
         locationClient = new LocationClient(this.activity, this, this);
-
     }
 
+    /**
+     * Set the event handler for when the location services is connected
+     * @param onConnected Callback
+     */
     public void setOnConnected(RadarConnected onConnected) {
         this.connectedCallback = onConnected;
     }
@@ -267,8 +274,42 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         zoomToUser();
     }
 
+    /**
+     * Is the location service connected
+     * @return
+     */
     public boolean isConnected() {
         return locationClient.isConnected();
+    }
+
+    /**
+     * Get the position of ALL friends.
+     */
+    public void updateAllFriendPositions() {
+        try {
+            String secret = new UserDataManager(activity).getUserSecret();
+
+            LocationAPIAction.friendLocations(secret, new APIResponseHandler<FriendLocationsListResponseModel>() {
+                /**
+                 * Fires when a response has completed.
+                 *
+                 * @param response The result data from the server.
+                 */
+                @Override
+                public void onResponse(FriendLocationsListResponseModel response) {
+                    for(UserLocationModel f : response.friendLocations) {
+                        setFriendMarker(new LatLng(f.latitude, f.longitude), Long.toString(f.userID), Long.toString(f.userID));
+                    }
+                }
+
+                @Override
+                public void onError(ErrorModel result) {
+                    // Do Nothing - Can't update friends
+                }
+            });
+        } catch(NoUserSecretException ex) {
+            // TODO: Add
+        }
     }
 
     // -------------------------------------------------
@@ -289,12 +330,15 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                 connectedCallback.onConnected();
             }
 
-            // Set Visibility
+            // Make sure visibility is set
             setVisibility(new UserDataManager(activity).getUserVisibility());
 
             // Show Current User position instantly and zoom to them
             updateUserLocation(false);
             zoomToUser();
+
+            // Get Friends
+            new UpdateFriendsLocations().execute();
         } else {
             // TODO: Replace with failed callback
             Toast.makeText(activity, "Location Not Enabled", Toast.LENGTH_LONG).show();
@@ -321,5 +365,20 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     public void onLocationChanged(Location location) {
         updateUserLocation(false); // Drawing
         updateLocationOnServer(location);
+    }
+
+    private class UpdateFriendsLocations extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... params) {
+            while(true) {
+                try {
+                    updateAllFriendPositions();
+
+                    Thread.sleep(5000);
+                } catch(InterruptedException ex) {
+                    return null;
+                }
+            }
+        }
     }
 }
