@@ -10,14 +10,17 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ca.brocku.cosc.flock.data.api.APIResponseHandler;
+import ca.brocku.cosc.flock.data.api.actions.LocationAPIAction;
 import ca.brocku.cosc.flock.data.api.actions.UserAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorTypes;
 import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
+import ca.brocku.cosc.flock.utils.TryCallback;
 
 /**
  * Created by kubasub on 11/20/2013.
@@ -43,7 +46,6 @@ public class SettingsActivity extends Activity {
         deleteAccountButton.setOnClickListener(new DeleteAccountHandler());
 
         locationSwitch.setChecked(new UserDataManager(this).getUserVisibility());
-
     }
 
     @Override
@@ -55,8 +57,8 @@ public class SettingsActivity extends Activity {
 
     private class LocationSettingHandler implements CompoundButton.OnCheckedChangeListener {
         @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            new UserDataManager(SettingsActivity.this).setUserVisibility(isChecked);
+        public void onCheckedChanged(final CompoundButton buttonView, final boolean isVisible) {
+            new UserDataManager(SettingsActivity.this).setUserVisibility(isVisible, null);
         }
     }
 

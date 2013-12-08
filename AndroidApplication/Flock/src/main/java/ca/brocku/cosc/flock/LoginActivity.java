@@ -14,6 +14,7 @@ import ca.brocku.cosc.flock.data.api.actions.UserAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.user.LoginUserResponseModel;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
+import ca.brocku.cosc.flock.utils.TryCallback;
 
 public class LoginActivity extends Activity {
     private FrameLayout registerWrapper;
@@ -60,7 +61,10 @@ public class LoginActivity extends Activity {
                         // Store secret and visibility
                         UserDataManager dataManager = new UserDataManager(LoginActivity.this);
                         dataManager.setUserSecret(loginUserResponseModel.secret);
-                        dataManager.setUserVisibility(false);
+                        dataManager.setUserVisibility(false, new TryCallback() {
+                            @Override
+                            public void success() { /* Do Nothing */ }
+                        });
 
                         // Start Main Activity
                         finish();

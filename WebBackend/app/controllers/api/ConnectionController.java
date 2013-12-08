@@ -129,8 +129,6 @@ public class ConnectionController extends ApiControllerBase {
                 return ok((new ErrorModel("Invalid User", ErrorTypes.ERROR_TYPE_USER)).toJsonString());
             }
 
-            System.out.println("RESPOND: " + user.id);
-
             ArrayList<api.json.models.connection.Connection> result = new ArrayList<api.json.models.connection.Connection>();
             for(Connection c : Connection.getPendingConnections(user.id)) {
                 User u = User.find.byId(c.userA);

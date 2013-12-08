@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:orientation="vertical"
+    android:baselineAligned="false"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SettingsActivity">
@@ -34,7 +35,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -48,6 +50,7 @@
                     android:layout_alignParentRight="true"
                     android:textOn="On"
                     android:textOff="Off"
+                    android:background="@color/grey_noraml"
                     android:id="@+id/location_switch"/>
             </RelativeLayout>
 
@@ -56,16 +59,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/input_long_verticalMargin"
                 android:text="Logout"
+                android:background="@color/grey_noraml"
+                android:layout_marginBottom="100dp"
                 android:id="@+id/logout_button"/>
 
             <Button
+                android:layout_gravity="bottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:background="@color/red_errorMsg"
                 android:text="@string/delete_label"
                 android:id="@+id/delete_button"/>
-
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

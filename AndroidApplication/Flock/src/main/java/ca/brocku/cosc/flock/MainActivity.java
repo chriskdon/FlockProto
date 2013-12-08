@@ -32,9 +32,11 @@ public class MainActivity extends FragmentActivity {
         if(doesUserHavePlayServicesInstalled()) {
             // TODO: Don't crash on no internet
 
+            UserDataManager udm = new UserDataManager(this);
+
             //go to the Registration Activity if there is no secret set on this device
             try {
-                secret = new UserDataManager(this).getUserSecret();
+                secret = udm.getUserSecret();
             } catch (NoUserSecretException e) {
                 finish();
                 startActivity(new Intent(this, RegisterActivity.class));
@@ -49,8 +51,7 @@ public class MainActivity extends FragmentActivity {
             pager.setCurrentItem(1);
 
             // Register for GCM
-            new UserDataManager(this).setGCMRegistrationID(null);
-            if((new UserDataManager(this)).getGCMRegistrationID().isEmpty()) {
+            if(udm.getGCMRegistrationID().isEmpty()) {
                 GCMManager.getRegistrationIDAsync(this);
             }
         }

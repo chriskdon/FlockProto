@@ -1,10 +1,19 @@
 package ca.brocku.cosc.flock.data.settings;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
+import ca.brocku.cosc.flock.LoginActivity;
 import ca.brocku.cosc.flock.R;
+import ca.brocku.cosc.flock.data.api.APIResponseHandler;
+import ca.brocku.cosc.flock.data.api.actions.LocationAPIAction;
+import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
+import ca.brocku.cosc.flock.utils.TryCallback;
 
 /**
  * Store and retrieve application specific settings.
@@ -73,11 +82,53 @@ public class UserDataManager {
     /**
      * Sets whether a user can be seen by his/her friends
      *
-     * @param visibility whether or not the use is visible
+     * @param isVisible whether or not the use is visible
      */
-    public void setUserVisibility(boolean visibility) {
-        prefsEditor.putBoolean("VISIBLE", visibility);
-        prefsEditor.commit();
+    public void setUserVisibility(final boolean isVisible, final TryCallback tryCallback) {
+        if(isVisible) {
+            prefsEditor.putBoolean("VISIBLE", true);
+            prefsEditor.commit();
+
+            if(tryCallback != null) {
+                tryCallback.success();
+            }
+        } else {
+            // Update the server so they are hidden
+            try {
+                String secret = getUserSecret();
+
+                LocationAPIAction.hide(secret, new APIResponseHandler<GenericSuccessModel>() {
+                    /**
+                     * Made them invisible
+                     *
+                     * @param genericSuccessModel The result data from the server.
+                     */
+                    @Override
+                    public void onResponse(GenericSuccessModel genericSuccessModel) {
+                        prefsEditor.putBoolean("VISIBLE", false);
+                        prefsEditor.commit();
+
+                        if(tryCallback != null) {
+                            tryCallback.success();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ErrorModel result) {
+                        prefsEditor.putBoolean("VISIBLE", true); // Couldn't change status
+                        prefsEditor.commit();
+
+                        if(tryCallback != null) {
+                            tryCallback.failure();
+                        }
+                    }
+                });
+            } catch(NoUserSecretException ex) {
+                if(tryCallback != null) {
+                    tryCallback.failure();
+                }
+            }
+        }
     }
 
     /**

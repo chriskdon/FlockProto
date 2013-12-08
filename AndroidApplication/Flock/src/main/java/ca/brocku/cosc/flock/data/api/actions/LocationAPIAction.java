@@ -50,9 +50,9 @@ public class LocationAPIAction extends APIAction {
      * @param response
      */
     public static void hide(UserActionModel request,
-                            APIResponseHandler<UserActionModel> response) {
+                            APIResponseHandler<GenericSuccessModel> response) {
 
-        APIConnection.send(API_PATH + "hide", request, UserActionModel.class, response);
+        APIConnection.send(API_PATH + "hide", request, GenericSuccessModel.class, response);
     }
 
     /**
@@ -60,7 +60,7 @@ public class LocationAPIAction extends APIAction {
      * @param secret
      * @param response
      */
-    public static void hide(String secret, APIResponseHandler<UserActionModel> response) {
+    public static void hide(String secret, APIResponseHandler<GenericSuccessModel> response) {
         UserActionModel req = new UserActionModel();
         req.secret = secret;
         hide(req, response);

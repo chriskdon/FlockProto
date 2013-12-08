@@ -22,6 +22,7 @@ import ca.brocku.cosc.flock.radar.callbacks.RadarConnected;
  * Created by kubasub on 11/13/2013.
  */
 public class RadarFragment extends Fragment {
+    private static final int REQUEST_CODE_SETTINGS = 1;
     private GoogleMap map;
     private RadarMapManager radarMapManager;
     // Controls
@@ -61,7 +62,6 @@ public class RadarFragment extends Fragment {
         return v;
     }
 
-
     @Override
     public void onResume() {
         super.onResume();
@@ -71,6 +71,21 @@ public class RadarFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_SETTINGS) { // Coming back from settings
+            checkRadarVisibility();
+        }
+    }
+
+    /**
+     * Check the user preferences to see if the radar visibility setting has changed.
+     */
+    protected void checkRadarVisibility() {
+        radarMapManager.setVisibility(new UserDataManager(getActivity()).getUserVisibility());
+    }
 
     /**
      * Handles zooming in and out of the map
@@ -94,7 +109,8 @@ public class RadarFragment extends Fragment {
     private class SettingsIntentHandler implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            startActivity(new Intent(getActivity(), SettingsActivity.class));
+            startActivityForResult(new Intent(getActivity(), SettingsActivity.class),
+                    REQUEST_CODE_SETTINGS);
         }
     }
 
@@ -104,7 +120,7 @@ public class RadarFragment extends Fragment {
     private class RadarConnectedHandler implements RadarConnected {
         @Override
         public void onConnected() {
-            radarMapManager.setVisibility(new UserDataManager(getActivity()).getUserVisibility());
+            checkRadarVisibility();
         }
     }
 }

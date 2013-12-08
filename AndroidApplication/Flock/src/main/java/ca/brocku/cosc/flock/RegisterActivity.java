@@ -79,7 +79,7 @@ public class RegisterActivity extends Activity {
                         // Store Secret and visibility
                         UserDataManager dataManager = new UserDataManager(RegisterActivity.this);
                         dataManager.setUserSecret(loginUserResponseModel.secret);
-                        dataManager.setUserVisibility(false);
+                        dataManager.setUserVisibility(false, null);
 
                         // Launch Main Activity
                         finish();
