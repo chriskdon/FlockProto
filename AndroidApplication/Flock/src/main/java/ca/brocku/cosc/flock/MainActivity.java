@@ -51,6 +51,7 @@ public class MainActivity extends FragmentActivity {
             pager.setCurrentItem(1);
 
             // Register for GCM
+            // TODO: Check if they have a google account
             if(udm.getGCMRegistrationID().isEmpty()) {
                 GCMManager.getRegistrationIDAsync(this);
             }
@@ -95,9 +96,11 @@ public class MainActivity extends FragmentActivity {
             } else {
                 finish();
             }
-            return false;
+
+            return false; // Not Installed
         }
-        return true;
+
+        return true; // Installed
     }
 
     /**
