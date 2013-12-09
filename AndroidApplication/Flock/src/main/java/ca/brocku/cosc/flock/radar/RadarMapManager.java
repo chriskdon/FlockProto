@@ -2,14 +2,12 @@ package ca.brocku.cosc.flock.radar;
 
 import android.app.Activity;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.games.Player;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -21,17 +19,12 @@ import com.google.android.gms.maps.model.Marker;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import ca.brocku.cosc.flock.data.api.APIResponseHandler;
 import ca.brocku.cosc.flock.data.api.actions.LocationAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
-import ca.brocku.cosc.flock.data.api.json.models.UserActionModel;
 import ca.brocku.cosc.flock.data.api.json.models.location.FriendLocationsListResponseModel;
 import ca.brocku.cosc.flock.data.api.json.models.location.UserLocationModel;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
@@ -57,7 +50,6 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
     public static final int DEFAULT_ZOOM_LEVEL = 15;
     private static final int DEFAULT_UPDATE_INTERVAL = 5000; // 5 Seconds
-
     private RadarConnected connectedCallback; // Fired when the radar connects
     private GoogleMap map;
     private Activity activity;
@@ -67,7 +59,6 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     private LocationClient locationClient;
     private LocationRequest locationRequest;
     private boolean isVisible;
-
     private GCMActionEvent friendLocationPushHandler;
 
     /**
@@ -79,8 +70,6 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     public RadarMapManager(Activity activity, GoogleMap map) {
         this.activity = activity;
         this.map = map;
-
-        //this.map.setOnMarkerClickListener(new MarkerClickHandler());
 
         currentZoomLevel = DEFAULT_ZOOM_LEVEL;
 
@@ -110,6 +99,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
     /**
      * Set the event handler for when the location services is connected
+     *
      * @param onConnected Callback
      */
     public void setOnConnected(RadarConnected onConnected) {
@@ -139,7 +129,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     public void setVisibility(boolean visible) {
         UserDataManager udm = new UserDataManager(activity);
 
-        if(visible) {
+        if (visible) {
             udm.setUserVisibility(true, new TryCallback() {
                 @Override
                 public void success() {
@@ -161,11 +151,11 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     /**
      * Update a users location on the server.
      *
-     * @param location      The location to update to. If null the user will be set invisible
+     * @param location The location to update to. If null the user will be set invisible
      */
     protected void updateLocationOnServer(Location location) {
         Log.e("FLOCK_CONN", "TRYING");
-        if(isVisible) {
+        if (isVisible) {
             Log.e("FLOCK_CONN", "UPDATING");
 
             // Update on server end
@@ -193,9 +183,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                     }
                 });
             } catch (NoUserSecretException e) {
-                // Couldn't login
-                //activity.startActivity(new Intent(activity, LoginActivity.class));
-                // TODO: Fix this
+
             }
         }
     }
@@ -287,6 +275,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
     /**
      * Is the location service connected
+     *
      * @return
      */
     public boolean isConnected() {
@@ -308,11 +297,11 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                  */
                 @Override
                 public void onResponse(FriendLocationsListResponseModel response) {
-                    for(Marker old : friendMarkers) {
+                    for (Marker old : friendMarkers) {
                         old.remove();
                     }
 
-                    for(UserLocationModel f : response.friendLocations) {
+                    for (UserLocationModel f : response.friendLocations) {
                         setFriendMarker(new LatLng(f.latitude, f.longitude), f.userID, f.username);
                         Log.e("FLOCK_PUSH", "EVENT");
                     }
@@ -323,7 +312,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                     Log.e("FLOCK_PUSH", "ERROR");
                 }
             });
-        } catch(NoUserSecretException ex) {
+        } catch (NoUserSecretException ex) {
 
         }
     }
@@ -359,7 +348,6 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
             // Register for friend location push updates
             GCMMessanger.getInstance().register(GCMMessanger.ACTION_LOCATION_UPDATE, friendLocationPushHandler);
         } else {
-            // TODO: Replace with failed callback
             Toast.makeText(activity, "Location Not Enabled", Toast.LENGTH_LONG).show();
         }
     }
@@ -384,37 +372,5 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     public void onLocationChanged(Location location) {
         updateUserLocation(false); // Drawing
         updateLocationOnServer(location);
-        //updateAllFriendPositions();
     }
-
-    /**
-     * Absorb marker events so that the map doesn't move
-     */
-    private class MarkerClickHandler implements GoogleMap.OnMarkerClickListener {
-        private Marker currentOpenMarker = null;
-
-        /**
-         * Don't move map to marker
-         * @param marker
-         * @return
-         */
-        @Override
-        public boolean onMarkerClick(Marker marker) {
-            if(currentOpenMarker != null) {
-                currentOpenMarker.hideInfoWindow(); // Close popup
-
-                // Closing marker
-                if(currentOpenMarker.equals(marker)) {
-                    currentOpenMarker = null;
-                }
-            }  else {
-                currentOpenMarker = marker;
-                marker.showInfoWindow();
-            }
-
-            return true;
-        }
-    }
-
-
 }

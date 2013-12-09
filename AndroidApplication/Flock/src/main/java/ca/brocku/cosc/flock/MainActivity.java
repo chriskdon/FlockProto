@@ -9,59 +9,59 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
-import ca.brocku.cosc.flock.gcm.*;
-import android.support.v4.app.Fragment;
+import ca.brocku.cosc.flock.gcm.GCMManager;
 
 public class MainActivity extends FragmentActivity {
     private static final int PLAY_REQUEST = 9000;
-
-    private String secret;                      // User's secret
     private static final int NUM_PAGES = 3;     // Number of view pager pages
+    private String secret;                      // User's secret
     private ViewPager pager;                    // The view pager
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            // Is play services installed?
+            if (doesUserHavePlayServicesInstalled()) {
+                UserDataManager udm = new UserDataManager(this);
 
-        // Is play services installed?
-        if(doesUserHavePlayServicesInstalled()) {
-            // TODO: Don't crash on no internet
+                //go to the Registration Activity if there is no secret set on this device
+                try {
+                    secret = udm.getUserSecret();
+                } catch (NoUserSecretException e) {
+                    finish();
+                    startActivity(new Intent(this, RegisterActivity.class));
+                }
 
-            UserDataManager udm = new UserDataManager(this);
+                setContentView(R.layout.activity_main);
+                getActionBar().hide();
 
-            //go to the Registration Activity if there is no secret set on this device
-            try {
-                secret = udm.getUserSecret();
-            } catch (NoUserSecretException e) {
-                finish();
-                startActivity(new Intent(this, RegisterActivity.class));
+                pager = (ViewPager) findViewById(R.id.main_pager);
+                pager.setOffscreenPageLimit(2);
+                MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+                pager.setAdapter(pagerAdapter);
+                pager.setOnPageChangeListener(pagerAdapter);
+                pager.setCurrentItem(1);
+
+                // Register for GCM
+                if (udm.getGCMRegistrationID().isEmpty()) {
+                    GCMManager.getRegistrationIDAsync(this);
+                }
             }
-
-            setContentView(R.layout.activity_main);
-            getActionBar().hide();
-
-            pager = (ViewPager) findViewById(R.id.main_pager);
-            pager.setOffscreenPageLimit(2);
-            MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
-            pager.setAdapter(pagerAdapter);
-            pager.setOnPageChangeListener(pagerAdapter);
-            pager.setCurrentItem(1);
-
-            // Register for GCM
-            if(udm.getGCMRegistrationID().isEmpty()) {
-                GCMManager.getRegistrationIDAsync(this);
-            }
+        } catch (Exception ex) {
+            Toast.makeText(this, "Your device is not supported", Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
-    protected  void onResume() {
+    protected void onResume() {
         super.onResume();
         doesUserHavePlayServicesInstalled();
     }
@@ -88,6 +88,7 @@ public class MainActivity extends FragmentActivity {
 
     /**
      * Check if Google Play Services are installed
+     *
      * @return
      */
     protected boolean doesUserHavePlayServicesInstalled() {
@@ -109,7 +110,7 @@ public class MainActivity extends FragmentActivity {
      * An adapter for the ViewPager. It populates the different pages that can be swiped through.
      */
     private static class MainPagerAdapter extends FragmentPagerAdapter
-                                            implements ViewPager.OnPageChangeListener {
+            implements ViewPager.OnPageChangeListener {
 
         PageFragment[] pages;
 

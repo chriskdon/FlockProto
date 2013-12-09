@@ -61,18 +61,13 @@ public class GCMManager {
                     GCMAPIAction.register(secret, registrationId, new APIResponseHandler<GenericSuccessModel>() {
                         @Override
                         public void onResponse(GenericSuccessModel genericSuccessModel) {
-                            Log.e("TEST", genericSuccessModel.message);
                         }
 
                         @Override
                         public void onError(ErrorModel result) {
-                        // TODO: Handle error
-                            Log.e("GCM", result.message);
                         }
                     });
                 } catch(NoUserSecretException ex) {
-                    Log.e("GCM", ex.getMessage());
-                    // TODO: Take me to login
                 }
 
 
@@ -83,7 +78,7 @@ public class GCMManager {
                 // Persist the regID - no need to register again.
                         (new UserDataManager(context)).setGCMRegistrationID(registrationId);
             } catch (IOException ex) {
-                // TODO: Handle not being able to register
+
             }
 
             return registrationId;
