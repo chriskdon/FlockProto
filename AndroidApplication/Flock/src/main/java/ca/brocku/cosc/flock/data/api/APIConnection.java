@@ -79,7 +79,6 @@ public class APIConnection {
          */
         @Override
         protected String doInBackground(Void... params) {
-            Log.i("THREAD_THINGYYYY", "teehee blueh");
             // Make Request
             try {
                 HttpPost post = new HttpPost(SERVER_ADDRESS + path);
