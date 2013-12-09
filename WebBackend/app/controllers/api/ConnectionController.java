@@ -60,12 +60,12 @@ public class ConnectionController extends ApiControllerBase {
              ResponseFriendRequestModel responseModel = mapper.readValue(request().body().asJson(),
                                                                          ResponseFriendRequestModel.class);
 
-             User userA = User.findBySecret(responseModel.secret);
+             User userB = User.findBySecret(responseModel.secret);
 
              if(responseModel.accept) {
-                Connection.acceptConnection(userA.id, responseModel.friendUserID);
+                Connection.acceptConnection(userB.id, responseModel.friendUserID);
              } else {
-                Connection.declineConnection(userA.id, responseModel.friendUserID);
+                Connection.declineConnection(userB.id, responseModel.friendUserID);
              }
 
              return ok((new GenericSuccessModel()).toJsonString());

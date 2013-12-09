@@ -1,6 +1,7 @@
 package ca.brocku.cosc.flock.data.api;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.util.Log;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,9 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
 import ca.brocku.cosc.flock.data.api.json.models.JsonModelBase;
@@ -42,7 +46,14 @@ public class APIConnection {
         }
 
         // Execute request
-        (new FlockApiNetworkThread(path, request, response, responseClass)).execute();
+        FlockApiNetworkThread thread = new FlockApiNetworkThread(path, request, response, responseClass);
+
+        // Try to execute threads in the thread pool if possible
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            thread.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            thread.execute();
+        }
     }
 
     /**

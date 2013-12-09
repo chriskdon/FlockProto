@@ -39,10 +39,6 @@ public class NotificationsFragment extends PageFragment {
         //Populates the list with friend requests
         notificationList = new ArrayList<Notification>();
 
-        // TODO: Set a flag in settings or somewhere from the push notification intent
-        // TODO: Need to repopulate list whenever we look at notifications
-        populateList(); // When we go to the view check for new friend requests
-
         return v;
     }
 

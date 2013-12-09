@@ -136,14 +136,18 @@ public class MainActivity extends FragmentActivity {
 
         @Override
         public void onPageScrolled(int i, float v, int i2) {
+
+        }
+
+        @Override
+        public void onPageSelected(int i) {
             pages[i].onPageVisible();
         }
 
         @Override
-        public void onPageSelected(int i) {}
+        public void onPageScrollStateChanged(int i) {
 
-        @Override
-        public void onPageScrollStateChanged(int i) {}
+        }
     }
 
 }
