@@ -9,19 +9,6 @@
     android:paddingTop="@dimen/friendChild_verticalMargin"
     android:paddingBottom="@dimen/friendChild_verticalMargin">
 
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:paddingTop="@dimen/imageButton_verticalPadding"
-        android:paddingBottom="@dimen/imageButton_verticalPadding"
-        android:src="@drawable/location"
-        android:background="@color/blue_unsaturated"
-        android:id="@+id/routeFriend_button" />
-
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
