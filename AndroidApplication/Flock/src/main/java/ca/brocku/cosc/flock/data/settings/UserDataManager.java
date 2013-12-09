@@ -114,12 +114,7 @@ public class UserDataManager {
 
                     @Override
                     public void onError(ErrorModel result) {
-                        prefsEditor.putBoolean("VISIBLE", true); // Couldn't change status
-                        prefsEditor.commit();
 
-                        if(tryCallback != null) {
-                            tryCallback.failure();
-                        }
                     }
                 });
             } catch(NoUserSecretException ex) {

@@ -154,10 +154,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
      * @param location The location to update to. If null the user will be set invisible
      */
     protected void updateLocationOnServer(Location location) {
-        Log.e("FLOCK_CONN", "TRYING");
         if (isVisible) {
-            Log.e("FLOCK_CONN", "UPDATING");
-
             // Update on server end
             try {
                 String secret = new UserDataManager(activity).getUserSecret();
@@ -171,8 +168,6 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                      */
                     @Override
                     public void onResponse(GenericSuccessModel genericSuccessModel) {
-                        Log.e("FLOCK_CONN", "UPDATED");
-
                         // Change the marker to indicate their visibility status has changed
                         getUserMarker().setIcon(BitmapDescriptorFactory.fromBitmap(MarkerBitmapFactory.currentUserVisible()));
                     }
