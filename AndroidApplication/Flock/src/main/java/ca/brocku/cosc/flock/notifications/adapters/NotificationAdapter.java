@@ -69,13 +69,7 @@ public class NotificationAdapter extends BaseAdapter {
 
         int notificationType = notification.getType();
 
-        if(notificationType == Notification.PECK) { //make Peck view
-            rowView = inflater.inflate(R.layout.notification_peck_row, null);
-
-            TextView message = (TextView) rowView.findViewById(R.id.notification_peck_message);
-            message.setText(notification.getMessage());
-
-        } else if(notificationType == Notification.FRIEND_REQUEST) { //make Friend Request view
+        if(notificationType == Notification.FRIEND_REQUEST) { //make Friend Request view
             rowView = inflater.inflate(R.layout.notification_friend_request_row, null);
 
             //Bind Controls

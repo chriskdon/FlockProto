@@ -4,7 +4,6 @@ package ca.brocku.cosc.flock.notifications;
  * Created by kubasub on 12/6/2013.
  */
 public class Notification {
-    public static final int PECK = 0;
     public static final int FRIEND_REQUEST = 1;
 
     private int type;
