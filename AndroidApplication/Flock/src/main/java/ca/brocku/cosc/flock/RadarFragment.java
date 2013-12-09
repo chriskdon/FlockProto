@@ -21,7 +21,7 @@ import ca.brocku.cosc.flock.radar.callbacks.RadarConnected;
 /**
  * Created by kubasub on 11/13/2013.
  */
-public class RadarFragment extends Fragment {
+public class RadarFragment extends PageFragment {
     private static final int REQUEST_CODE_SETTINGS = 1;
     private GoogleMap map;
     private RadarMapManager radarMapManager;

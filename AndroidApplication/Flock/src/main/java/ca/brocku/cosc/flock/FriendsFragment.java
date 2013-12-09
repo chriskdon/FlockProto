@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +32,21 @@ import ca.brocku.cosc.flock.friends.adapters.FriendsAdapter;
 /**
  * Created by kubasub on 11/18/2013.
  */
-public class FriendsFragment extends Fragment {
+public class FriendsFragment extends PageFragment {
     private ImageButton addFriendButton;
     private FriendsAdapter friendsAdapter;
     private ExpandableListView friendsList;
+
+    /**
+     * Fired when the page becomes visible
+     */
+    @Override
+    public void onPageVisible() {
+        super.onPageVisible();
+
+        // Populate Friends
+        populateFriendsList();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,9 +55,6 @@ public class FriendsFragment extends Fragment {
         // Bind Controls
         addFriendButton = (ImageButton) v.findViewById(R.id.add_friend_button);
         friendsList = (ExpandableListView) v.findViewById(R.id.friends_list);
-
-        // Populate Friends
-        populateFriendsList();
 
         friendsList.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
             @Override
