@@ -122,7 +122,7 @@ public class APIConnection {
                         return;
                     }
                 } catch (Exception ex2) {
-                    throw new RuntimeException(ex2);
+                    // Do nothing
                 }
             }
         }

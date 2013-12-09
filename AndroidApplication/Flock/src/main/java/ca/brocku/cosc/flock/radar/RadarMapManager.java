@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -49,7 +50,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
     public static final int DEFAULT_ZOOM_LEVEL = 15;
     private static final int DEFAULT_UPDATE_INTERVAL = 5000; // 5 Seconds
-    private static final int CONSECUTIVE_ERRORS_LIMIT = 10;
+
     private RadarConnected connectedCallback; // Fired when the radar connects
     private GoogleMap map;
     private Activity activity;
@@ -59,10 +60,6 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     private LocationClient locationClient;
     private LocationRequest locationRequest;
     private boolean isVisible;
-    private int consecutiveErrorsUpdating = 0;
-
-    private boolean locationUpdateLock = false;
-    private boolean friendsUpdateLock = false;
 
     /**
      * Instantiate a manger for a map.
@@ -148,8 +145,10 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
      * @param location      The location to update to. If null the user will be set invisible
      */
     protected void updateLocationOnServer(Location location) {
-        if(isVisible && !locationUpdateLock) {
-            locationUpdateLock = true;
+        Log.e("FLOCK_CONN", "TRYING");
+        if(isVisible) {
+            Log.e("FLOCK_CONN", "UPDATING");
+
             // Update on server end
             try {
                 String secret = new UserDataManager(activity).getUserSecret();
@@ -163,8 +162,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                      */
                     @Override
                     public void onResponse(GenericSuccessModel genericSuccessModel) {
-                        locationUpdateLock = false;
-                        consecutiveErrorsUpdating = 0;
+                        Log.e("FLOCK_CONN", "UPDATED");
 
                         // Change the marker to indicate their visibility status has changed
                         getUserMarker().setIcon(BitmapDescriptorFactory.fromBitmap(MarkerBitmapFactory.currentUserVisible()));
@@ -172,17 +170,10 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
                     @Override
                     public void onError(ErrorModel result) {
-                        locationUpdateLock = false;
-                        consecutiveErrorsUpdating++;
 
-                        // Too many errors trying to set location
-                        if(consecutiveErrorsUpdating == CONSECUTIVE_ERRORS_LIMIT) {
-                            setVisibility(false);
-                        }
                     }
                 });
             } catch (NoUserSecretException e) {
-                locationUpdateLock = false;
                 // Couldn't login
                 //activity.startActivity(new Intent(activity, LoginActivity.class));
                 // TODO: Fix this
@@ -294,9 +285,8 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
      * Get the position of ALL friends.
      */
     public void updateAllFriendPositions() {
-        if(!friendsUpdateLock) {
+
             try {
-                friendsUpdateLock = true;
                 String secret = new UserDataManager(activity).getUserSecret();
 
                 LocationAPIAction.friendLocations(secret, new APIResponseHandler<FriendLocationsListResponseModel>() {
@@ -323,20 +313,18 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                                 value.getValue().remove();
                             }
                         }
-
-                        friendsUpdateLock = false;
                     }
 
                     @Override
                     public void onError(ErrorModel result) {
-                        friendsUpdateLock = false;
+                     //TODO: FIx
                     }
                 });
             } catch(NoUserSecretException ex) {
-                friendsUpdateLock = false;
+
                 // TODO: Add
             }
-        }
+
     }
 
     // -------------------------------------------------
