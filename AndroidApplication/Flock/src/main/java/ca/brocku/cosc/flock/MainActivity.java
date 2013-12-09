@@ -52,9 +52,9 @@ public class MainActivity extends FragmentActivity {
 
             // Register for GCM
             // TODO: Check if they have a google account
-            if(udm.getGCMRegistrationID().isEmpty()) {
-                GCMManager.getRegistrationIDAsync(this);
-            }
+//            if(udm.getGCMRegistrationID().isEmpty()) {
+//                GCMManager.getRegistrationIDAsync(this);
+//            }
         }
     }
 

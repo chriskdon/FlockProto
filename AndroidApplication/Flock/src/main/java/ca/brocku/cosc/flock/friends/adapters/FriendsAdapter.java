@@ -14,6 +14,12 @@ import android.widget.Toast;
 import java.util.List;
 
 import ca.brocku.cosc.flock.R;
+import ca.brocku.cosc.flock.data.api.APIResponseHandler;
+import ca.brocku.cosc.flock.data.api.actions.ConnectionAPIAction;
+import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
+import ca.brocku.cosc.flock.data.api.json.models.GenericSuccessModel;
+import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
+import ca.brocku.cosc.flock.data.settings.UserDataManager;
 import ca.brocku.cosc.flock.friends.Friend;
 
 /**
@@ -82,24 +88,15 @@ public class FriendsAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.friend_row_child, null);
         }
 
         //Bind Controls
-        ImageButton routeButton = (ImageButton) convertView.findViewById(R.id.routeFriend_button);
         ImageButton messageButton = (ImageButton) convertView.findViewById(R.id.messageFriend_button);
         ImageButton deleteButton = (ImageButton) convertView.findViewById(R.id.deleteFriend_button);
-
-        //Bind Handlers
-        routeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: add routing functionality
-            }
-        });
 
         messageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,11 +111,25 @@ public class FriendsAdapter extends BaseExpandableListAdapter {
             }
         });
 
+        final View finalConvertView = convertView;
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: add dialog confirmation
-                //TODO: add functionality to delete friend
+                try {
+                    ConnectionAPIAction.removeFriend(new UserDataManager(context).getUserSecret(), friends.get(groupPosition).userID, new APIResponseHandler<GenericSuccessModel>() {
+                        @Override
+                        public void onResponse(GenericSuccessModel genericSuccessModel) {
+                            finalConvertView.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError(ErrorModel result) {
+                            Toast.makeText(context, "Could not delete user at this time. Try again later.", Toast.LENGTH_SHORT);
+                        }
+                    });
+                } catch (NoUserSecretException e) {
+                    Toast.makeText(context, "Could not delete user at this time. Try again later.", Toast.LENGTH_SHORT);
+                }
             }
         });
 
