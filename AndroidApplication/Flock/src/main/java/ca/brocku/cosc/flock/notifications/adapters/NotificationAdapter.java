@@ -62,10 +62,10 @@ public class NotificationAdapter extends BaseAdapter {
      * @return
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
         final Notification notification = notificationList.get(position);
         final LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView;
+        final View rowView;
 
         int notificationType = notification.getType();
 
@@ -86,16 +86,7 @@ public class NotificationAdapter extends BaseAdapter {
                         ConnectionAPIAction.responseToFriendRequest(new UserDataManager(activity).getUserSecret(), notification.getFriendUserID(), true, new APIResponseHandler<GenericSuccessModel>() {
                             @Override
                             public void onResponse(GenericSuccessModel genericSuccessModel) {
-                                View currentView = v.getRootView();
-                                ViewGroup parent =  (ViewGroup) currentView.getParent();
-                                parent.removeView(currentView);
-
-                                currentView = inflater.inflate(R.layout.notification_friend_request_actioned_row, null);
-
-                                TextView messageTextView = (TextView) currentView.findViewById(R.id.notification_friend_request_actioned_message);
-                                messageTextView.setText("You and "+notification.getUsername()+" are now friends.");
-
-                                parent.addView(currentView);
+                                rowView.setVisibility(View.GONE);
                             }
 
                             @Override
@@ -117,16 +108,7 @@ public class NotificationAdapter extends BaseAdapter {
                         ConnectionAPIAction.responseToFriendRequest(new UserDataManager(activity).getUserSecret(), notification.getFriendUserID(), false, new APIResponseHandler<GenericSuccessModel>() {
                             @Override
                             public void onResponse(GenericSuccessModel genericSuccessModel) {
-                                View currentView = v.getRootView();
-                                ViewGroup parent =  (ViewGroup) currentView.getParent();
-                                parent.removeView(currentView);
-
-                                currentView = inflater.inflate(R.layout.notification_friend_request_actioned_row, null);
-
-                                TextView messageTextView = (TextView) currentView.findViewById(R.id.notification_friend_request_actioned_message);
-                                messageTextView.setText("You have declined a friend request from "+notification.getUsername()+".");
-
-                                parent.addView(currentView);
+                                rowView.setVisibility(View.GONE);
                             }
 
                             @Override
