@@ -51,9 +51,11 @@ public class MainActivity extends FragmentActivity {
             pager.setCurrentItem(1);
 
             // Register for GCM
-            if(udm.getGCMRegistrationID().isEmpty()) {
-                GCMManager.getRegistrationIDAsync(this);
-            }
+            try {
+//                if(udm.getGCMRegistrationID().isEmpty()) {
+//                    GCMManager.getRegistrationIDAsync(this);
+//                }
+            } catch(Exception e) {}
         }
     }
 

@@ -90,7 +90,6 @@ public class FriendsAdapter extends BaseExpandableListAdapter {
 
         //Bind Controls
         ImageButton routeButton = (ImageButton) convertView.findViewById(R.id.routeFriend_button);
-        ImageButton peckButton = (ImageButton) convertView.findViewById(R.id.peckFriend_button);
         ImageButton messageButton = (ImageButton) convertView.findViewById(R.id.messageFriend_button);
         ImageButton deleteButton = (ImageButton) convertView.findViewById(R.id.deleteFriend_button);
 
@@ -99,13 +98,6 @@ public class FriendsAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 //TODO: add routing functionality
-            }
-        });
-
-        peckButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: add pecking functionality
             }
         });
 

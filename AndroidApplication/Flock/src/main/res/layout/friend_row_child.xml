@@ -30,18 +30,6 @@
         android:layout_marginRight="3dp"
         android:paddingTop="@dimen/imageButton_verticalPadding"
         android:paddingBottom="@dimen/imageButton_verticalPadding"
-        android:src="@drawable/beak"
-        android:background="@color/blue_unsaturated"
-        android:id="@+id/peckFriend_button" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        android:paddingTop="@dimen/imageButton_verticalPadding"
-        android:paddingBottom="@dimen/imageButton_verticalPadding"
         android:src="@drawable/chat_bubble"
         android:background="@color/blue_unsaturated"
         android:id="@+id/messageFriend_button" />
