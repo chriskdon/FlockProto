@@ -58,7 +58,6 @@ public class UserDataManager {
         return secret;
     }
 
-    //TODO: possibly delete removeUserSecret as it may be replaced by clearUserData method
     /**
      * Remove the user's secret token. They must login
      * again to get a new token.

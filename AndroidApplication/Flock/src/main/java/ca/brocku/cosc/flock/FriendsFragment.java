@@ -101,7 +101,7 @@ public class FriendsFragment extends PageFragment {
 
                 @Override
                 public void onError(ErrorModel result) {
-                    // TODO: Handle
+                    Toast.makeText(getActivity(), "Could not load friends. Please try again later.", Toast.LENGTH_LONG).show();
                 }
             });
         } catch(NoUserSecretException ex) {

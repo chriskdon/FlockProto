@@ -3,13 +3,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/blue_unsaturated">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="5dp"
         android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:textSize="20sp"
         android:id="@+id/notification_friend_request_message"/>
+
+    <ImageView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="@color/black"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,15 +29,24 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="0dp"
             android:layout_weight="1"
+            android:background="@null"
             android:text="Accept"
             android:textSize="15sp"
             android:id="@+id/friendRequest_acceptButton"/>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"/>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="0dp"
             android:layout_weight="1"
+            android:background="@null"
             android:text="Decline"
             android:textSize="15sp"
             android:id="@+id/friendRequest_declineButton"/>

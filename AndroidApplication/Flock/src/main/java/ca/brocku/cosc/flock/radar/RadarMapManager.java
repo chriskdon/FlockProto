@@ -1,6 +1,7 @@
 package ca.brocku.cosc.flock.radar;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +23,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import ca.brocku.cosc.flock.RegisterActivity;
+import ca.brocku.cosc.flock.SettingsActivity;
 import ca.brocku.cosc.flock.data.api.APIResponseHandler;
 import ca.brocku.cosc.flock.data.api.actions.LocationAPIAction;
 import ca.brocku.cosc.flock.data.api.json.models.ErrorModel;
@@ -174,9 +177,9 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                     }
                 });
             } catch (NoUserSecretException e) {
-                // Couldn't login
-                //activity.startActivity(new Intent(activity, LoginActivity.class));
-                // TODO: Fix this
+                locationClient.disconnect();
+                activity.finish();
+                activity.startActivity(new Intent(activity, RegisterActivity.class));
             }
         }
     }
@@ -317,12 +320,12 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
                     @Override
                     public void onError(ErrorModel result) {
-                     //TODO: FIx
+                        Toast.makeText(activity, "Friends were not loaded. Could not connect to server.", Toast.LENGTH_LONG).show();
                     }
                 });
             } catch(NoUserSecretException ex) {
-
-                // TODO: Add
+                activity.finish();
+                activity.startActivity(new Intent(activity, RegisterActivity.class));
             }
 
     }
