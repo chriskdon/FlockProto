@@ -337,8 +337,6 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
             updateUserLocation(false);
             zoomToUser();
 
-            // Get Friends
-            new UpdateFriendsLocations().execute();
         } else {
             // TODO: Replace with failed callback
             Toast.makeText(activity, "Location Not Enabled", Toast.LENGTH_LONG).show();
@@ -365,20 +363,6 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     public void onLocationChanged(Location location) {
         updateUserLocation(false); // Drawing
         updateLocationOnServer(location);
-    }
-
-    private class UpdateFriendsLocations extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            while(true) {
-                try {
-                    updateAllFriendPositions();
-
-                    Thread.sleep(5000);
-                } catch(InterruptedException ex) {
-                    return null;
-                }
-            }
-        }
+        updateAllFriendPositions();
     }
 }
