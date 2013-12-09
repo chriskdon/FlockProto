@@ -24,7 +24,7 @@ import ca.brocku.cosc.flock.notifications.adapters.NotificationAdapter;
 /**
  * Created by kubasub on 11/18/2013.
  */
-public class NotificationsFragment extends Fragment {
+public class NotificationsFragment extends PageFragment {
     private List<Notification> notificationList;        // TODO: Do we need this? Doesn't adapter hold it
     private NotificationAdapter notificationAdapter;
     private ListView notificationsListView;
@@ -46,9 +46,15 @@ public class NotificationsFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Fired when the page becomes visible
+     */
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onPageVisible() {
+        super.onPageVisible();
+
+        // Populate Friends
+        populateList();
     }
 
     /**

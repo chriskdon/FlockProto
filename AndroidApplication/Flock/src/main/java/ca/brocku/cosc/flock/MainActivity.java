@@ -16,6 +16,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
 import ca.brocku.cosc.flock.gcm.*;
+import android.support.v4.app.Fragment;
 
 public class MainActivity extends FragmentActivity {
     private static final int PLAY_REQUEST = 9000;
@@ -47,7 +48,9 @@ public class MainActivity extends FragmentActivity {
 
             pager = (ViewPager) findViewById(R.id.main_pager);
             pager.setOffscreenPageLimit(2);
-            pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+            MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+            pager.setAdapter(pagerAdapter);
+            pager.setOnPageChangeListener(pagerAdapter);
             pager.setCurrentItem(1);
 
             // Register for GCM
@@ -106,30 +109,41 @@ public class MainActivity extends FragmentActivity {
     /**
      * An adapter for the ViewPager. It populates the different pages that can be swiped through.
      */
-    private static class MainPagerAdapter extends FragmentPagerAdapter {
+    private static class MainPagerAdapter extends FragmentPagerAdapter
+                                            implements ViewPager.OnPageChangeListener {
+
+        PageFragment[] pages;
 
         public MainPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
+
+            // Create pages
+            pages = new PageFragment[NUM_PAGES];
+            pages[0] = new NotificationsFragment();
+            pages[1] = new RadarFragment();
+            pages[2] = new FriendsFragment();
         }
 
         @Override
         public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new NotificationsFragment();
-                case 1:
-                    return new RadarFragment();
-                case 2:
-                    return new FriendsFragment();
-                default:
-                    return new RadarFragment();
-            }
+            return pages[position];
         }
 
         @Override
         public int getCount() {
             return NUM_PAGES;
         }
+
+        @Override
+        public void onPageScrolled(int i, float v, int i2) {
+            pages[i].onPageVisible();
+        }
+
+        @Override
+        public void onPageSelected(int i) {}
+
+        @Override
+        public void onPageScrollStateChanged(int i) {}
     }
 
 }
