@@ -120,8 +120,6 @@ public class NotificationAdapter extends BaseAdapter {
                         activity.finish();
                         activity.startActivity(new Intent(activity, LoginActivity.class));
                     }
-
-                    //TODO: change the view
                 }
             });
 

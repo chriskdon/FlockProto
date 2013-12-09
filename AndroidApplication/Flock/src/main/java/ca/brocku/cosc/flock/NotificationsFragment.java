@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ import ca.brocku.cosc.flock.notifications.adapters.NotificationAdapter;
  * Created by kubasub on 11/18/2013.
  */
 public class NotificationsFragment extends PageFragment {
-    private List<Notification> notificationList;        // TODO: Do we need this? Doesn't adapter hold it
+    private List<Notification> notificationList;
     private NotificationAdapter notificationAdapter;
     private ListView notificationsListView;
 
@@ -83,7 +84,7 @@ public class NotificationsFragment extends PageFragment {
 
                 @Override
                 public void onError(ErrorModel result) {
-                    // TODO: handle error
+                    Toast.makeText(getActivity(), "Could not load notifications. Please try again later.", Toast.LENGTH_LONG).show();
                 }
             });
         } catch (NoUserSecretException e) {

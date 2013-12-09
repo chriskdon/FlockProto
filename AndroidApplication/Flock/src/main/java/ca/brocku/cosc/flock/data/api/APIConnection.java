@@ -117,7 +117,6 @@ public class APIConnection {
                     }
                 } catch (Exception ex2) {
                     // Do nothing
-                    throw new RuntimeException(ex2);
                 }
             }
         }
