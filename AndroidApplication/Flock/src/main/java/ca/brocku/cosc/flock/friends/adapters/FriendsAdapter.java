@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import ca.brocku.cosc.flock.FriendsFragment;
 import ca.brocku.cosc.flock.R;
 import ca.brocku.cosc.flock.data.api.APIResponseHandler;
 import ca.brocku.cosc.flock.data.api.actions.ConnectionAPIAction;
@@ -28,10 +29,12 @@ import ca.brocku.cosc.flock.friends.Friend;
  * Date: 12/5/2013
  */
 public class FriendsAdapter extends BaseExpandableListAdapter {
+    private final FriendsFragment friendsFragment;
     private final Context context;
     private final List<Friend> friends;
 
-    public FriendsAdapter(Context context, List<Friend> itemsArrayList) {
+    public FriendsAdapter(FriendsFragment friendsFragment, Context context, List<Friend> itemsArrayList) {
+        this.friendsFragment = friendsFragment;
         this.context = context;
         this.friends = itemsArrayList;
     }
@@ -88,7 +91,7 @@ public class FriendsAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.friend_row_child, null);
@@ -119,7 +122,8 @@ public class FriendsAdapter extends BaseExpandableListAdapter {
                     ConnectionAPIAction.removeFriend(new UserDataManager(context).getUserSecret(), friends.get(groupPosition).userID, new APIResponseHandler<GenericSuccessModel>() {
                         @Override
                         public void onResponse(GenericSuccessModel genericSuccessModel) {
-                            finalConvertView.setVisibility(View.GONE);
+                            //finalConvertView.setVisibility(View.GONE);
+                            friendsFragment.remove(groupPosition);
                         }
 
                         @Override

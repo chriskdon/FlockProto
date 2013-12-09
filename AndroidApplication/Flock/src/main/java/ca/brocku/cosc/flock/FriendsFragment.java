@@ -36,6 +36,7 @@ public class FriendsFragment extends PageFragment {
     private ImageButton addFriendButton;
     private FriendsAdapter friendsAdapter;
     private ExpandableListView friendsList;
+    private ArrayList<Friend> friendsArrayList;
 
     /**
      * Fired when the page becomes visible
@@ -89,12 +90,12 @@ public class FriendsFragment extends PageFragment {
                  */
                 @Override
                 public void onResponse(ConnectionListResponse connectionListResponse) {
-                    ArrayList<Friend> friendsArrayList = new ArrayList<Friend>(connectionListResponse.connections.size());
+                    friendsArrayList = new ArrayList<Friend>(connectionListResponse.connections.size());
                     for(Connection c : connectionListResponse.connections) {
                         friendsArrayList.add(new Friend(c.firstname, c.lastname, c.username, c.friendUserID));
                     }
 
-                    friendsAdapter = new FriendsAdapter(getActivity(), friendsArrayList);
+                    friendsAdapter = new FriendsAdapter(FriendsFragment.this, getActivity(), friendsArrayList);
                     friendsList.setAdapter(friendsAdapter);
                 }
 
@@ -107,6 +108,12 @@ public class FriendsFragment extends PageFragment {
             getActivity().finish();
             startActivity(new Intent(getActivity(), LoginActivity.class));
         }
+    }
+
+    public void remove(int groupPosition) {
+        friendsArrayList.remove(groupPosition);
+        friendsAdapter = new FriendsAdapter(this, this.getActivity(), friendsArrayList);
+        friendsList.setAdapter(friendsAdapter);
     }
 
     /**
