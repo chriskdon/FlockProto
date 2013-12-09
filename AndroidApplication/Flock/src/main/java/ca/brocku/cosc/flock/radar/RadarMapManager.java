@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import ca.brocku.cosc.flock.data.api.APIResponseHandler;
@@ -48,7 +49,8 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
     public static final int DEFAULT_ZOOM_LEVEL = 15;
     private static final int DEFAULT_UPDATE_INTERVAL = 5000; // 5 Seconds
-    RadarConnected connectedCallback; // Fired when the radar connects
+    private static final int CONSECUTIVE_ERRORS_LIMIT = 10;
+    private RadarConnected connectedCallback; // Fired when the radar connects
     private GoogleMap map;
     private Activity activity;
     private Marker currentUserMarker;
@@ -58,7 +60,9 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     private LocationRequest locationRequest;
     private boolean isVisible;
     private int consecutiveErrorsUpdating = 0;
-    private static final int CONSECUTIVE_ERRORS_LIMIT = 10;
+
+    private boolean locationUpdateLock = false;
+    private boolean friendsUpdateLock = false;
 
     /**
      * Instantiate a manger for a map.
@@ -144,7 +148,8 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
      * @param location      The location to update to. If null the user will be set invisible
      */
     protected void updateLocationOnServer(Location location) {
-        if(isVisible) {
+        if(isVisible && !locationUpdateLock) {
+            locationUpdateLock = true;
             // Update on server end
             try {
                 String secret = new UserDataManager(activity).getUserSecret();
@@ -158,6 +163,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                      */
                     @Override
                     public void onResponse(GenericSuccessModel genericSuccessModel) {
+                        locationUpdateLock = false;
                         consecutiveErrorsUpdating = 0;
 
                         // Change the marker to indicate their visibility status has changed
@@ -166,6 +172,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
                     @Override
                     public void onError(ErrorModel result) {
+                        locationUpdateLock = false;
                         consecutiveErrorsUpdating++;
 
                         // Too many errors trying to set location
@@ -175,6 +182,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
                     }
                 });
             } catch (NoUserSecretException e) {
+                locationUpdateLock = false;
                 // Couldn't login
                 //activity.startActivity(new Intent(activity, LoginActivity.class));
                 // TODO: Fix this
@@ -286,29 +294,48 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
      * Get the position of ALL friends.
      */
     public void updateAllFriendPositions() {
-        try {
-            String secret = new UserDataManager(activity).getUserSecret();
+        if(!friendsUpdateLock) {
+            try {
+                friendsUpdateLock = true;
+                String secret = new UserDataManager(activity).getUserSecret();
 
-            LocationAPIAction.friendLocations(secret, new APIResponseHandler<FriendLocationsListResponseModel>() {
-                /**
-                 * Fires when a response has completed.
-                 *
-                 * @param response The result data from the server.
-                 */
-                @Override
-                public void onResponse(FriendLocationsListResponseModel response) {
-                    for(UserLocationModel f : response.friendLocations) {
-                        setFriendMarker(new LatLng(f.latitude, f.longitude), Long.toString(f.userID), Long.toString(f.userID));
+                LocationAPIAction.friendLocations(secret, new APIResponseHandler<FriendLocationsListResponseModel>() {
+                    /**
+                     * Fires when a response has completed.
+                     *
+                     * @param response The result data from the server.
+                     */
+                    @Override
+                    public void onResponse(FriendLocationsListResponseModel response) {
+                        Map<String, Boolean> updated = new HashMap<String, Boolean>();
+
+                        for(UserLocationModel f : response.friendLocations) {
+                            setFriendMarker(new LatLng(f.latitude, f.longitude), Long.toString(f.userID), Long.toString(f.userID));
+                            updated.put(Long.toString(f.userID), true);
+                        }
+
+                        // Remove friends that we couldn't update location for
+                        Iterator it = friendMarkers.entrySet().iterator();
+                        while(it.hasNext()) {
+                            Map.Entry<String, Marker> value = (Map.Entry<String, Marker>)it.next();
+
+                            if(!updated.containsKey(value.getKey())) {
+                                value.getValue().remove();
+                            }
+                        }
+
+                        friendsUpdateLock = false;
                     }
-                }
 
-                @Override
-                public void onError(ErrorModel result) {
-                    // Do Nothing - Can't update friends
-                }
-            });
-        } catch(NoUserSecretException ex) {
-            // TODO: Add
+                    @Override
+                    public void onError(ErrorModel result) {
+                        friendsUpdateLock = false;
+                    }
+                });
+            } catch(NoUserSecretException ex) {
+                friendsUpdateLock = false;
+                // TODO: Add
+            }
         }
     }
 
