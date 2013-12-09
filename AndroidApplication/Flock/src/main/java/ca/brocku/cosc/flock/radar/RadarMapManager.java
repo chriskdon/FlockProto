@@ -74,6 +74,8 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         this.activity = activity;
         this.map = map;
 
+        this.map.setOnMarkerClickListener(new MarkerClickHandler());
+
         currentZoomLevel = DEFAULT_ZOOM_LEVEL;
 
         friendMarkers = new HashMap<String, Marker>();
@@ -355,6 +357,8 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
             updateUserLocation(false);
             zoomToUser();
 
+            // Update
+            updateAllFriendPositions();
         } else {
             // TODO: Replace with failed callback
             Toast.makeText(activity, "Location Not Enabled", Toast.LENGTH_LONG).show();
@@ -382,5 +386,34 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         updateUserLocation(false); // Drawing
         updateLocationOnServer(location);
         updateAllFriendPositions();
+    }
+
+    /**
+     * Absorb marker events so that the map doesn't move
+     */
+    private class MarkerClickHandler implements GoogleMap.OnMarkerClickListener {
+        private Marker currentOpenMarker = null;
+
+        /**
+         * Don't move map to marker
+         * @param marker
+         * @return
+         */
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            if(currentOpenMarker != null) {
+                currentOpenMarker.hideInfoWindow(); // Close popup
+
+                // Closing marker
+                if(currentOpenMarker.equals(marker)) {
+                    currentOpenMarker = null;
+                }
+            }  else {
+                currentOpenMarker = marker;
+                marker.showInfoWindow();
+            }
+
+            return true;
+        }
     }
 }
