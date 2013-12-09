@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.games.Player;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
@@ -18,9 +19,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import ca.brocku.cosc.flock.data.api.APIResponseHandler;
 import ca.brocku.cosc.flock.data.api.actions.LocationAPIAction;
@@ -31,6 +36,8 @@ import ca.brocku.cosc.flock.data.api.json.models.location.FriendLocationsListRes
 import ca.brocku.cosc.flock.data.api.json.models.location.UserLocationModel;
 import ca.brocku.cosc.flock.data.exceptions.NoUserSecretException;
 import ca.brocku.cosc.flock.data.settings.UserDataManager;
+import ca.brocku.cosc.flock.gcm.GCMActionEvent;
+import ca.brocku.cosc.flock.gcm.GCMMessanger;
 import ca.brocku.cosc.flock.radar.callbacks.RadarConnected;
 import ca.brocku.cosc.flock.radar.markers.MarkerBitmapFactory;
 import ca.brocku.cosc.flock.radar.markers.MarkerFactory;
@@ -55,11 +62,13 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     private GoogleMap map;
     private Activity activity;
     private Marker currentUserMarker;
-    private Map<String, Marker> friendMarkers;
+    private List<Marker> friendMarkers;
     private int currentZoomLevel; // Current zoom level
     private LocationClient locationClient;
     private LocationRequest locationRequest;
     private boolean isVisible;
+
+    private GCMActionEvent friendLocationPushHandler;
 
     /**
      * Instantiate a manger for a map.
@@ -71,11 +80,11 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         this.activity = activity;
         this.map = map;
 
-        this.map.setOnMarkerClickListener(new MarkerClickHandler());
+        //this.map.setOnMarkerClickListener(new MarkerClickHandler());
 
         currentZoomLevel = DEFAULT_ZOOM_LEVEL;
 
-        friendMarkers = new HashMap<String, Marker>();
+        friendMarkers = Collections.synchronizedList(new ArrayList<Marker>());
 
         // Configure Map
         map.getUiSettings().setZoomControlsEnabled(false);
@@ -89,6 +98,14 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
         locationRequest.setFastestInterval(DEFAULT_UPDATE_INTERVAL);
 
         locationClient = new LocationClient(this.activity, this, this);
+
+        // Update friends when location is pushed to them
+        friendLocationPushHandler = new GCMActionEvent() {
+            @Override
+            public void onEvent() {
+                updateAllFriendPositions();
+            }
+        };
     }
 
     /**
@@ -190,15 +207,8 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
      * @param id         A unique ID for this marker.
      * @param friendName The name of the friend to appear when the marker is clicked on.
      */
-    public void setFriendMarker(LatLng position, String id, String friendName) {
-        Marker friendMarker = map.addMarker(MarkerFactory.friendMarker(position, friendName));
-
-        Marker old = friendMarkers.put(id, friendMarker);
-
-        // Was there already a marker for that friend
-        if (old != null) {
-            old.remove();
-        }
+    public void setFriendMarker(LatLng position, long id, String friendName) {
+        friendMarkers.add(map.addMarker(MarkerFactory.friendMarker(position, friendName)));
     }
 
     /**
@@ -287,46 +297,35 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
      * Get the position of ALL friends.
      */
     public void updateAllFriendPositions() {
+        try {
+            String secret = new UserDataManager(activity).getUserSecret();
 
-            try {
-                String secret = new UserDataManager(activity).getUserSecret();
-
-                LocationAPIAction.friendLocations(secret, new APIResponseHandler<FriendLocationsListResponseModel>() {
-                    /**
-                     * Fires when a response has completed.
-                     *
-                     * @param response The result data from the server.
-                     */
-                    @Override
-                    public void onResponse(FriendLocationsListResponseModel response) {
-                        Map<String, Boolean> updated = new HashMap<String, Boolean>();
-
-                        for(UserLocationModel f : response.friendLocations) {
-                            setFriendMarker(new LatLng(f.latitude, f.longitude), Long.toString(f.userID), Long.toString(f.userID));
-                            updated.put(Long.toString(f.userID), true);
-                        }
-
-                        // Remove friends that we couldn't update location for
-                        Iterator it = friendMarkers.entrySet().iterator();
-                        while(it.hasNext()) {
-                            Map.Entry<String, Marker> value = (Map.Entry<String, Marker>)it.next();
-
-                            if(!updated.containsKey(value.getKey())) {
-                                value.getValue().remove();
-                            }
-                        }
+            LocationAPIAction.friendLocations(secret, new APIResponseHandler<FriendLocationsListResponseModel>() {
+                /**
+                 * Fires when a response has completed.
+                 *
+                 * @param response The result data from the server.
+                 */
+                @Override
+                public void onResponse(FriendLocationsListResponseModel response) {
+                    for(Marker old : friendMarkers) {
+                        old.remove();
                     }
 
-                    @Override
-                    public void onError(ErrorModel result) {
-                     //TODO: FIx
+                    for(UserLocationModel f : response.friendLocations) {
+                        setFriendMarker(new LatLng(f.latitude, f.longitude), f.userID, f.username);
+                        Log.e("FLOCK_PUSH", "EVENT");
                     }
-                });
-            } catch(NoUserSecretException ex) {
+                }
 
-                // TODO: Add
-            }
+                @Override
+                public void onError(ErrorModel result) {
+                    Log.e("FLOCK_PUSH", "ERROR");
+                }
+            });
+        } catch(NoUserSecretException ex) {
 
+        }
     }
 
     // -------------------------------------------------
@@ -356,6 +355,9 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
             // Update
             updateAllFriendPositions();
+
+            // Register for friend location push updates
+            GCMMessanger.getInstance().register(GCMMessanger.ACTION_LOCATION_UPDATE, friendLocationPushHandler);
         } else {
             // TODO: Replace with failed callback
             Toast.makeText(activity, "Location Not Enabled", Toast.LENGTH_LONG).show();
@@ -364,12 +366,12 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
 
     @Override
     public void onDisconnected() {
-        // TODO: Notify User
+        GCMMessanger.getInstance().unregister(GCMMessanger.ACTION_LOCATION_UPDATE, friendLocationPushHandler);
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        // TODO: Notify User
+
     }
 
     /**
@@ -382,7 +384,7 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
     public void onLocationChanged(Location location) {
         updateUserLocation(false); // Drawing
         updateLocationOnServer(location);
-        updateAllFriendPositions();
+        //updateAllFriendPositions();
     }
 
     /**
@@ -413,4 +415,6 @@ public class RadarMapManager implements GooglePlayServicesClient.OnConnectionFai
             return true;
         }
     }
+
+
 }

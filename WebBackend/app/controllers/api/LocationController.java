@@ -9,12 +9,15 @@ import api.json.models.location.FriendLocationsListResponseModel;
 import api.json.models.location.SetLocationRequestModel;
 import api.json.models.location.UserLocationModel;
 
+import gcm.GcmManager;
+import models.Connection;
 import models.Location;
 import models.User;
 import play.mvc.*;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -31,12 +34,33 @@ public class LocationController extends ApiControllerBase {
             SetLocationRequestModel setRequest = mapper.readValue(request().body().asJson(),
                                                                   SetLocationRequestModel.class);
 
-            Location location = new Location(User.findBySecret(setRequest.secret).id,
+            User user = User.findBySecret(setRequest.secret);
+
+            if(user == null) {
+                return ok((new ErrorModel("Invalid Secret", ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
+            }
+
+            Location location = new Location(user.id,
                                              setRequest.latitude, setRequest.longitude,
                                              Calendar.getInstance().getTime());
 
             location.save();
 
+            // Do GCM Push notification
+            List<Connection> friends = Connection.getFriends(user);
+            HashSet<String> gcmIds = new HashSet<String>();
+
+            for(Connection c : friends) {
+                if(c.userA == user.id) {
+                    gcmIds.add(User.find.byId(c.userB).gcmRegistrationID);
+                } else {
+                    gcmIds.add(User.find.byId(c.userA).gcmRegistrationID);
+                }
+            }
+
+            GcmManager.send(gcmIds, "FLOCK_NEW_FRIEND_LOCATION");
+
+            // Return
             return ok((new GenericSuccessModel("Location Updated")).toJsonString());
         } catch(Exception ex) {
             return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
@@ -69,10 +93,17 @@ public class LocationController extends ApiControllerBase {
             FriendLocationRequestModel request = mapper.readValue(request().body().asJson(),
                                                                   FriendLocationRequestModel.class);
 
+            User friend = User.find.byId(request.friendUserID);
+
+            if(friend == null) {
+                return ok((new ErrorModel("Invalid Friend", ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
+            }
+
             Location friendLocation = Location.getFriendLocation(User.findBySecret(request.secret).id,
                                                                  request.friendUserID);
 
-            return ok((new UserLocationModel(friendLocation)).toJsonString());
+
+            return ok((new UserLocationModel(friend.username, friendLocation)).toJsonString());
         } catch(Exception ex) {
             return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
         }
@@ -92,7 +123,8 @@ public class LocationController extends ApiControllerBase {
             // Set Locations
             ArrayList<UserLocationModel> resultList = new ArrayList<UserLocationModel>(locations.size());
             for(Location l : locations) {
-                resultList.add(new UserLocationModel(l));
+                User u = User.find.byId(l.userID);
+                resultList.add(new UserLocationModel(u.username, l));
             }
 
             FriendLocationsListResponseModel response = new FriendLocationsListResponseModel(resultList);

@@ -47,13 +47,7 @@ public class APIConnection {
 
         // Execute request
         FlockApiNetworkThread thread = new FlockApiNetworkThread(path, request, response, responseClass);
-
-        // Try to execute threads in the thread pool if possible
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            thread.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } else {
-            thread.execute();
-        }
+        thread.execute();
     }
 
     /**
@@ -123,6 +117,7 @@ public class APIConnection {
                     }
                 } catch (Exception ex2) {
                     // Do nothing
+                    throw new RuntimeException(ex2);
                 }
             }
         }

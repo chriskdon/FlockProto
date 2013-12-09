@@ -11,11 +11,13 @@ import java.util.Date;
 public class UserLocationModel extends JsonModelBase {
     public long userID;
     public double latitude, longitude;
+    public String username;
     public Date timestamp;
 
     public UserLocationModel() { }
 
-    public UserLocationModel(Location location) {
+    public UserLocationModel(String username, Location location) {
+        this.username = username;
         this.userID = location.userID;
         this.latitude = location.latitude;
         this.longitude = location.longitude;

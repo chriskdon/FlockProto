@@ -45,19 +45,4 @@ public class GCMController extends ApiControllerBase {
             return ok((new ErrorModel(ex.getMessage(), ErrorTypes.ERROR_TYPE_FATAL)).toJsonString());
         }
     }
-
-    public static Result test() {
-        ArrayList<String> test = new ArrayList<String>();
-        test.add("APA91bHZn-GlFl6G77CUVIgyQlhUa3y5R-dhkx69JKgA2kdhr4a7I12TbylO4vftN1ow0Ic82qLc1HR0WKNBrb9nHBxiiI9-i8a_r0DPU4TUI1QvvNoKunbLwjkuiGlUByww7RYkbOY8y2PcQCoH0j6gnxk-GVP60Q");
-
-        ObjectNode node = mapper.createObjectNode();
-        node.put("HelloWorld", "Hello Android, from Flock Server");
-
-        return async(GcmManager.send(test, node).map(new F.Function<WS.Response, Result>() {
-            @Override
-            public Result apply(WS.Response response) throws Throwable {
-                return ok("STATUS: " + response.getBody());
-            }
-        }));
-    }
 }

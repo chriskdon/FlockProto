@@ -29,19 +29,17 @@ public class GCMIntentServiceHandler extends IntentService {
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         String messageType = gcm.getMessageType(intent);
 
+
         if(!extras.isEmpty()) {
             if(GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
                 // ERROR
             } else if(GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
                 // DELETED
             } else if(GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-                // TODO: Do something with message data
                 String action = extras.getString("action");
 
-                if(action.equals("FLOCK_NEW_FRIEND_REQUEST")) {
-                    // TODO: Update friends Table
-                } else if(action.equals("FLOCK_NEW_FRIEND_LOCATION")) {
-                    // TODO: Update friends location
+                if(action.equals("FLOCK_NEW_FRIEND_LOCATION")) {
+                    GCMMessanger.getInstance().fireAction(GCMMessanger.ACTION_LOCATION_UPDATE);
                 }
             }
         }
